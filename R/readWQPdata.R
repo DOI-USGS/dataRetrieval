@@ -41,6 +41,10 @@
 #' }
 #'
 #'
+#' If you experience unexpected errors, check the
+#' [WQP Status Page](https://rconnect.usgs.gov/wqp-status/) for current
+#' service health information.
+#'
 #' @param \dots see <https://www.waterqualitydata.us/webservices_documentation> for a complete list of options.
 #' A list of arguments can also be supplied. For more information see the above
 #' description for this help file. One way to figure out how to construct a WQP query is to go to the "Advanced"

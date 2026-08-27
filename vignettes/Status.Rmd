@@ -59,27 +59,34 @@ df <- data.frame(
     "`read_waterdata_field_measurements`",
     "`read_waterdata_field_measurements`, `read_waterdata_channel`",
     "`read_waterdata`",
-    "`read_waterdata_continuous`", 
+    "`read_waterdata_continuous`",
     "`read_waterdata_rating`", #rating
     "`read_waterdata_stats_por`, `read_waterdata_stats_daterange`",
     "`read_waterdata_peaks`",
     "",
     "`read_waterdata_ts_meta`, `read_waterdata_field_meta`, `read_waterdata_combined_meta`"
   ),
-  "Available on (branch)" = c(rep("main (CRAN)", 6), 
-                              "main (CRAN)",
-                              "main (CRAN)",
-                              "main (CRAN)",
-                              "develop",
-                              "main (CRAN)", 
-                              "develop",
-                              "",
-                              "main (CRAN)")
-
+  "Available on (branch)" = c(
+    rep("main (CRAN)", 6),
+    "main (CRAN)",
+    "main (CRAN)",
+    "main (CRAN)",
+    "develop",
+    "main (CRAN)",
+    "develop",
+    "",
+    "main (CRAN)"
+  )
 )
 
-knitr::kable(df, col.names = c("WaterServices (legacy) function", "Water Data (new) function", "Available on (branch name)"))
-
+knitr::kable(
+  df,
+  col.names = c(
+    "WaterServices (legacy) function",
+    "Water Data (new) function",
+    "Available on (branch name)"
+  )
+)
 ```
 
 If you want to learn more about the new water data APIs, check out the ["What's new with WDFN APIs?" blog post](https://waterdata.usgs.gov/blog/api-whats-new-wdfn-apis/), as well as the [documentation](https://api.waterdata.usgs.gov/docs/) available on api.waterdata.usgs.gov. 
@@ -91,7 +98,7 @@ Do you regularly use `dataRetrieval`? As you switch your workflows over to the n
 One you have your API key, add it to your `.Renviron` file like this:
 
 ```{r}
-API_USGS_PAT = "[your api key]"
+API_USGS_PAT <- "[your api key]"
 ```
 
 Replace [your api key] with the alphanumeric code provided by the sign-up page. That's it! `dataRetrieval` will look for an `.Renviron` file in your directories and use it for making web service calls.
@@ -116,26 +123,33 @@ Read more about it in the vignette, [Introducing read_waterdata_samples](https:/
 
 `dataRetrieval` WQP functions continue to default to the legacy system (that does not include post-March 2024 USGS discrete sample data). The new replacement services aren't currently set as the default because the WQP team still considers these services "beta", and therefore performance is not guaranteed. Users may encounter bugs or identify issues with the implementation of the new services: we welcome (and encourage!) your feedback to help improve these offerings, just send an email to WQX@epa.gov.
 
+For real-time information on WQP service availability, visit the [WQP Status Page](https://rconnect.usgs.gov/wqp-status/). The status page shows the success/failure of a set of test queries to both the legacy and beta WQP services, updated every 10 minutes.
+
 The table below provides a summary of the current state of WQP functions in `dataRetrieval`.
 
 ```{r echo=FALSE}
-df <- data.frame(Function = c("readWQPdata",
-                              "readWQPqw",
-                              "whatWQPsites",
-                              "whatWQPmetrics",
-                              "whatWQPsamples",
-                              "whatWQPdata",
-                              "readWQPsummary",
-                              "whatNWISdata"),
-                 Status = c("Set to legacy options by default. WQX3 options available.",
-                            "Set to legacy options by default. WQX3 options available.", 
-                            "Set to legacy options by default. WQX3 options available.",
-                            rep("Currently only available via legacy services.", 3),
-                            "Does not have accurate information for USGS data.",
-                            "Does not have accurate information for qw data."))
+df <- data.frame(
+  Function = c(
+    "readWQPdata",
+    "readWQPqw",
+    "whatWQPsites",
+    "whatWQPmetrics",
+    "whatWQPsamples",
+    "whatWQPdata",
+    "readWQPsummary",
+    "whatNWISdata"
+  ),
+  Status = c(
+    "Set to legacy options by default. WQX3 options available.",
+    "Set to legacy options by default. WQX3 options available.",
+    "Set to legacy options by default. WQX3 options available.",
+    rep("Currently only available via legacy services.", 3),
+    "Does not have accurate information for USGS data.",
+    "Does not have accurate information for qw data."
+  )
+)
 
 knitr::kable(df)
-
 ```
 
 ### Leveraging the beta WQP services
@@ -155,18 +169,22 @@ The beta WQP offers data in the "WQX version 3.0 format" (WQX = [Water Quality E
 If you wish to leverage a specific "ResultWQX3" data profile using the beta services, your code might look something like this, using the very flexible `readWQPdata` function:
 
 ```{r, eval = FALSE}
-data_full <- readWQPdata(siteid = "USGS-04024315",
-                         characteristicName = "pH",
-                         dataProfile = "fullPhysChem",
-                         service = "ResultWQX3")
+data_full <- readWQPdata(
+  siteid = "USGS-04024315",
+  characteristicName = "pH",
+  dataProfile = "fullPhysChem",
+  service = "ResultWQX3"
+)
 ```
 
 On the other hand, the "StationWQX3" service requires no `dataProfile` argument:
 
 ```{r, eval = FALSE}
-data_station <- readWQPdata(siteid = "USGS-04024315",
-                           characteristicName = "pH",
-                           service = "StationWQX3")
+data_station <- readWQPdata(
+  siteid = "USGS-04024315",
+  characteristicName = "pH",
+  service = "StationWQX3"
+)
 ```
 
 Guidance on how to use the new web page and web services are available in the [User Guide](https://www.waterqualitydata.us/beta/portal_userguide/) and [Web Services Guide](https://www.waterqualitydata.us/beta/webservices_documentation/). Additional profiles will continue to be added over time. 
