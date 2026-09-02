@@ -11,8 +11,8 @@
 #' `r get_ogc_params("sites", base = "NGWMN")$monitoring_location_number$description`
 #' @param altitude
 #' `r get_ogc_params("sites", base = "NGWMN")$altitude$description`
-#' @param national_aquifer_code
-#' `r get_ogc_params("sites", base = "NGWMN")$national_aquifer_code$description`
+#' @param national_aquifer_code Code for U.S. Principal Aquifer. A list of values
+#' can be passed for this field, separated by commas.
 #' @param national_aquifer_description
 #' `r get_ogc_params("sites", base = "NGWMN")$national_aquifer_description$description`
 #' @param country_code

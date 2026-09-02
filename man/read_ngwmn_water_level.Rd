@@ -24,9 +24,9 @@ read_ngwmn_water_level(
 )
 }
 \arguments{
-\item{monitoring_location_id}{This field is required. Combined site identifier of agency code and site number (format of  \code{{agency_code}}-\code{{monitoring_location_number}}). A list of values can be passed for this field, seperated by commas.}
+\item{monitoring_location_id}{This field is required. Combined site identifier of agency code and site number (format of  \code{{agency_code}}-\code{{monitoring_location_number}}). A list of values can be passed for this field, separated by commas.}
 
-\item{monitoring_location_obs_number}{Number of observation for given site. A list of values can be passed for this field, seperated by commas.}
+\item{monitoring_location_obs_number}{Number of observation for given site. A list of values can be passed for this field, separated by commas.}
 
 \item{sample_time}{The date of an observation. Date and time expressions adhere to RFC 3339. Intervals may be bounded or half-bounded (double-dots at start or end).
 Examples:

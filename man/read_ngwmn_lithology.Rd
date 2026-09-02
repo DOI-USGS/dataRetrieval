@@ -17,9 +17,9 @@ read_ngwmn_lithology(
 )
 }
 \arguments{
-\item{monitoring_location_id}{This field is required. Combined site identifier of agency code and site number (format of \code{{agency_code}}-\code{{monitoring_location_number}}). A list of values can be passed for this field, seperated by commas.}
+\item{monitoring_location_id}{This field is required. Combined site identifier of agency code and site number (format of \code{{agency_code}}-\code{{monitoring_location_number}}). A list of values can be passed for this field, separated by commas.}
 
-\item{monitoring_location_obs_number}{Number of observation for given site. A list of values can be passed for this field, seperated by commas.}
+\item{monitoring_location_obs_number}{Number of observation for given site. A list of values can be passed for this field, separated by commas.}
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:

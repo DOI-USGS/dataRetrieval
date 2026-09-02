@@ -18,9 +18,9 @@ read_ngwmn_providers(
 )
 }
 \arguments{
-\item{state}{State code for provider. A list of values can be passed for this field, seperated by commas.}
+\item{state}{State code for provider. A list of values can be passed for this field, separated by commas.}
 
-\item{agency_code}{Code for the name of the agency or organization that owns the site and/or contributed it to the network. A list of values can be passed for this field, seperated by commas.}
+\item{agency_code}{Code for the name of the agency or organization that owns the site and/or contributed it to the network. A list of values can be passed for this field, separated by commas.}
 
 \item{organization_type}{Type of organization of data provider.}
 

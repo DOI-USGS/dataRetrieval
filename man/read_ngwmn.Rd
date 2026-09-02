@@ -31,7 +31,7 @@ See also Details below for more information.}
 
 \item{CQL}{A string in a Common Query Language format.}
 
-\item{monitoring_location_id}{This field is required. Combined site identifier of agency code and site number (format of  \code{{agency_code}}-\code{{monitoring_location_number}}). A list of values can be passed for this field, seperated by commas.}
+\item{monitoring_location_id}{This field is required. Combined site identifier of agency code and site number (format of  \code{{agency_code}}-\code{{monitoring_location_number}}). A list of values can be passed for this field, separated by commas.}
 
 \item{\dots}{Additional arguments to send to the request.}
 

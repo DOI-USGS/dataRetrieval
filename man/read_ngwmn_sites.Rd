@@ -42,33 +42,34 @@ read_ngwmn_sites(
 )
 }
 \arguments{
-\item{monitoring_location_id}{Site identifier, combination of agency code and site number (format \code{agency_code}- \code{monitoring_location_number}). A list of values can be passed for this field, seperated by commas.}
+\item{monitoring_location_id}{Site identifier, combination of agency code and site number (format \code{agency_code}- \code{monitoring_location_number}). A list of values can be passed for this field, separated by commas.}
 
-\item{agency_code}{Code for the name of the agency or organization that owns the site and/or contributed it to the network. A list of values can be passed for this field, seperated by commas.}
+\item{agency_code}{Code for the name of the agency or organization that owns the site and/or contributed it to the network. A list of values can be passed for this field, separated by commas.}
 
-\item{monitoring_location_number}{Local, unique well or spring identification number or code. A list of values can be passed for this field, seperated by commas.}
+\item{monitoring_location_number}{Local, unique well or spring identification number or code. A list of values can be passed for this field, separated by commas.}
 
 \item{altitude}{Elevation of the land surface at the site.}
 
-\item{national_aquifer_code}{Code for U.S. Pricinpal Aquifer, lookup \href{https://www.usgs.gov/mission-areas/water-resources/science/national-aquifer-code-reference-list}{here}. A list of values can be passed for this field, seperated by commas.}
+\item{national_aquifer_code}{Code for U.S. Principal Aquifer. A list of values
+can be passed for this field, separated by commas.}
 
-\item{national_aquifer_description}{Name for U.S. Principal Aquifer, lookup \href{https://www.usgs.gov/mission-areas/water-resources/science/national-aquifer-code-reference-list}{here}. A list of values can be passed for this field, seperated by commas.}
+\item{national_aquifer_description}{Name for U.S. Principal Aquifer, lookup \href{https://www.usgs.gov/mission-areas/water-resources/science/national-aquifer-code-reference-list}{here}. A list of values can be passed for this field, separated by commas.}
 
-\item{country_code}{Abbreviation of country of site location. A list of values can be passed for this field, seperated by commas.}
+\item{country_code}{Abbreviation of country of site location. A list of values can be passed for this field, separated by commas.}
 
 \item{country_name}{Name of country of site location.}
 
-\item{state_name}{Name of state of site location. A list of values can be passed for this field, seperated by commas.}
+\item{state_name}{Name of state of site location. A list of values can be passed for this field, separated by commas.}
 
-\item{county_name}{Name of county of site location. A list of values can be passed for this field, seperated by commas.}
+\item{county_name}{Name of county of site location. A list of values can be passed for this field, separated by commas.}
 
-\item{aquifer_name}{Name of local aquifer of site. A list of values can be passed for this field, seperated by commas.}
+\item{aquifer_name}{Name of local aquifer of site. A list of values can be passed for this field, separated by commas.}
 
 \item{site_type}{Type of groundwater site (Spring or Well).}
 
 \item{aquifer_type_code}{Characteristic of the type of aquifer that the well is completed in (Confined or Unconfined). For NGWMN, shallow semi-confined wells can be considered unconfined if they respond to climatic fluctuations in a relatively short period of time.}
 
-\item{qw_sys_name}{The system from which water quality data from the well or spring is served to the portal. A list of values can be passed for this field, seperated by commas.}
+\item{qw_sys_name}{The system from which water quality data from the well or spring is served to the portal. A list of values can be passed for this field, separated by commas.}
 
 \item{qw_sn_flag}{Flag for whether the well or spring is part of the NGWMN water-quality network.}
 
@@ -80,7 +81,7 @@ read_ngwmn_sites(
 
 \item{qw_well_purpose}{Description of the prupose of conducting QW monitoring of the well or spring.}
 
-\item{wl_sys_name}{The system from which water level data from the well or spring is served to the portal. A list of values can be passed for this field, seperated by commas.}
+\item{wl_sys_name}{The system from which water level data from the well or spring is served to the portal. A list of values can be passed for this field, separated by commas.}
 
 \item{wl_sn_flag}{Flag for whether the well or spring is part of the NGWMN water-level network.}
 

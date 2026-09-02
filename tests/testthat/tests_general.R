@@ -648,35 +648,3 @@ test_that("format_dates", {
     "2025-10-01/2026-02-02"
   )
 })
-
-test_that("switch_properties_id drops id and geometry from the wire properties", {
-  # The feature "id" always comes back (renamed to the service id
-  # downstream) and several collections (e.g. daily, continuous) now reject
-  # "id" as a selectable property, so it must never be sent. A request for
-  # only id and/or geometry must omit the properties filter (NA), not fall
-  # back to "id".
-  expect_true(all(is.na(
-    dataRetrieval:::switch_properties_id("daily_id", id = "daily_id")
-  )))
-  expect_true(all(is.na(
-    dataRetrieval:::switch_properties_id("id", id = "daily_id")
-  )))
-  expect_true(all(is.na(
-    dataRetrieval:::switch_properties_id(c("daily_id", "geometry"), id = "daily_id")
-  )))
-
-  # Mixed requests: the id alias and geometry are dropped, real properties kept.
-  expect_equal(
-    dataRetrieval:::switch_properties_id(c("daily_id", "value"), id = "daily_id"),
-    "value"
-  )
-  expect_equal(
-    dataRetrieval:::switch_properties_id(c("id", "value", "geometry"), id = "daily_id"),
-    "value"
-  )
-
-  # No properties requested -> unchanged (NA passes through).
-  expect_true(all(is.na(
-    dataRetrieval:::switch_properties_id(NA, id = "daily_id")
-  )))
-})

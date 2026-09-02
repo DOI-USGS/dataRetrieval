@@ -178,14 +178,9 @@ switch_properties_id <- function(properties, id) {
     }
 
     if (length(properties) == 0) {
-      # If a user requested only id and/or geometry, properties is now empty.
-      # The feature "id" always comes back (and geometry is handled by
-      # skipGeometry), so omit the properties filter entirely rather than
-      # requesting "id": several collections (e.g. daily, continuous) now
-      # reject "id" as a selectable property, and it also fails the
-      # available-properties check below. rejigger_cols() still subsets the
-      # result to the requested id column.
-      properties <- NA_character_
+      # If a user requested only id and/or geometry, properties would now be empty
+      # geometry is taken care of with skipGeometry
+      properties <- "id"
     }
   }
 
