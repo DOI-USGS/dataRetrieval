@@ -23,6 +23,11 @@
 #' print(nwis_citation, style = "citation")
 #' }
 create_NWIS_bib <- function(x) {
+  .Deprecated(
+    package = "dataRetrieval",
+    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata functions."
+  )
+
   textVersion <- paste0(
     "U.S. Geological Survey, ",
     format(attr(x, "queryTime"), "%Y"),
