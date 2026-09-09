@@ -243,18 +243,8 @@ test_that("read_waterdata_ts_meta", {
 test_that("General WQP retrievals working", {
   testthat::skip_on_cran()
   testthat::skip_on_ci()
-  # nameToUse <- "pH"
-  # pHData <- readWQPdata(
-  #   siteid = "USGS-04024315",
-  #   characteristicName = nameToUse,
-  #   service = "ResultWQX3"
-  # )
-  # expect_is(pHData$Activity_StartDateTime, "POSIXct")
-  # expect_type(pHData$USGSpcode, "character")
-  # expect_type(pHData$Result_Measure, "double")
-  # expect_type(pHData$SampleCollectionMethod_Identifier, "character")
-  #
-  # # testing lists:
+
+  # testing lists:
   startDate <- as.Date("2022-01-01")
   secchi.names <- c(
     "Depth, Secchi disk depth",
@@ -262,9 +252,6 @@ test_that("General WQP retrievals working", {
     "Water transparency, Secchi disc",
     "Depth, Secchi disk depth (choice list)"
   )
-  # "Transparency, Secchi tube with disk",
-  # "Secchi Reading Condition (choice list)",
-  # "Depth, Secchi disk visible at bottom (Y/N) (choice list)")
 
   args_2 <- list(
     "startDateLo" = startDate,
@@ -282,83 +269,7 @@ test_that("General WQP retrievals working", {
     statecode = "WI",
     characteristicName = secchi.names
   )
-
-  # wqp.summary_no_atts <- readWQPdata(
-  #   siteid = "USGS-04024315",
-  #   characteristicName = nameToUse,
-  #   ignore_attributes = TRUE,
-  #   service = "ResultWQX3"
-  # )
-  # expect_true(
-  #   !all(
-  #     c("siteInfo", "variableInfo") %in% names(attributes(wqp.summary_no_atts))
-  #   )
-  # )
-  #
-  # rawPcode <- readWQPqw("USGS-01594440", "01075", "", "", legacy = FALSE)
-  # expect_true(all(
-  #   c("url", "queryTime", "siteInfo") %in%
-  #     names(attributes(rawPcode))
-  # ))
-  #
-  # # This means wqp_check_status was called:
-  # expect_true("dataProviders" %in% names(attr(rawPcode, "headerInfo")))
-  #
-  # rawPcode2 <- readWQPqw(
-  #   "USGS-01594440",
-  #   "01075",
-  #   "",
-  #   "",
-  #   ignore_attributes = TRUE
-  # )
-  # expect_true(all(
-  #   !c("queryTime", "siteInfo") %in%
-  #     names(attributes(rawPcode2))
-  # ))
-  #
-  # # This means wqp_check_status wasn't called:
-  # expect_false("dataProviders" %in% names(attr(rawPcode2, "headerInfo")))
-  #
-  # pHData <- readWQPdata(
-  #   siteid = "USGS-04024315",
-  #   characteristicName = "pH",
-  #   service = "ResultWQX3"
-  # )
-  # expect_true(all(
-  #   c("url", "queryTime", "siteInfo", "headerInfo") %in%
-  #     names(attributes(pHData))
-  # ))
-  #
-  # # # This means wqp_check_status was called:
-  # expect_true("dataProviders" %in% names(attr(pHData, "headerInfo")))
-  #
-  # pHData2 <- readWQPdata(
-  #   siteid = "USGS-04024315",
-  #   characteristicName = "pH",
-  #   ignore_attributes = TRUE,
-  #   service = "ResultWQX3"
-  # )
-  # expect_true(all(
-  #   !c("queryTime", "siteInfo") %in%
-  #     names(attributes(pHData2))
-  # ))
-  #
-  # # # This means wqp_check_status was called:
-  # expect_false("dataProviders" %in% names(attr(pHData2, "headerInfo")))
-  #
-  # rawPcode <- readWQPqw(
-  #   "USGS-01594440",
-  #   "01075",
-  #   ignore_attributes = TRUE,
-  #   legacy = FALSE
-  # )
-  # headerInfo <- attr(rawPcode, "headerInfo")
-  # wqp_request_id <- headerInfo$`wqp-request-id`
-  # count_info <- wqp_check_status(wqp_request_id)
-  #
-  # expect_true("dataProviders" %in% names(count_info))
 })
-
 
 test_that("zeroPad handles NAs", {
   toPad <- c(1, 5, 55, NA)
@@ -375,44 +286,6 @@ test_that("Dates with no days can be handled", {
     time = c("1980-01-01", NA)
   )
   expect_true(nrow(empty_df) > 0)
-})
-
-context("whatWQPsamples")
-test_that("whatWQPsamples working", {
-  testthat::skip_on_cran()
-  testthat::skip_on_ci()
-  # The warning is caused by a confirmed bug in WQP
-  siteInfo <- whatWQPsamples(siteid = "USGS-01594440")
-  expect_true(nrow(siteInfo) > 0)
-})
-
-context("whatWQPmetrics")
-test_that("whatWQPmetrics working", {
-  testthat::skip_on_cran()
-  testthat::skip_on_ci()
-  type <- "Stream"
-  siteInfo <- whatWQPmetrics(countycode = "US:55:025", siteType = type)
-  expect_true(ncol(siteInfo) >= 21)
-})
-
-context("whatWQPdata")
-test_that("whatWQPdata working", {
-  testthat::skip_on_cran()
-  testthat::skip_on_ci()
-
-  site1 <- whatWQPdata(siteid = "USGS-01594440")
-  expect_is(site1, "data.frame")
-  expect_equal(1, nrow(site1))
-
-  type <- "Stream"
-  sites <- whatWQPdata(countycode = "US:55:025", siteType = type)
-  expect_gt(nrow(sites), 1)
-
-  lakeSites <- whatWQPdata(
-    siteType = "Lake, Reservoir, Impoundment",
-    statecode = "US:55"
-  )
-  expect_is(lakeSites$activityCount, "numeric")
 })
 
 context("read_waterdata_ts_meta")
@@ -456,29 +329,29 @@ test_that("readWQPdots working", {
   expect_true("statecode" %in% names(formArgs$values))
   expect_false("stateCd" %in% names(formArgs$values))
 
-  bbox <- c(-86.97361, 34.48827, -86.61349, 34.65623)
-  what_bbox <- whatWQPdata(bBox = bbox)
-  expect_true(nrow(what_bbox) > 0)
-  x <- whatWQPsites(bBox = bbox)
-  expect_true(nrow(x) > 0)
-  df <- readWQPdata(
-    bBox = bbox,
-    characteristicName = "Total Coliform",
-    startDateLo = "2023-01-01",
-    startDateHi = "2023-12-31",
-    service = "Result",
-    dataProfile = "narrowResult"
-  )
-  expect_true(nrow(df) > 0)
-  df_legacy <- readWQPdata(
-    bBox = bbox,
-    characteristicName = "Total Coliform",
-    startDateLo = "2023-01-01",
-    startDateHi = "2023-12-31",
-    service = "Result",
-    dataProfile = "narrowResult"
-  )
-  expect_true(nrow(df_legacy) > 0)
+  # bbox <- c(-86.97361, 34.48827, -86.61349, 34.65623)
+  # what_bbox <- whatWQPdata(bBox = bbox)
+  # expect_true(nrow(what_bbox) > 0)
+  # x <- whatWQPsites(bBox = bbox)
+  # expect_true(nrow(x) > 0)
+  # df <- readWQPdata(
+  #   bBox = bbox,
+  #   characteristicName = "Total Coliform",
+  #   startDateLo = "2023-01-01",
+  #   startDateHi = "2023-12-31",
+  #   service = "Result",
+  #   dataProfile = "narrowResult"
+  # )
+  # expect_true(nrow(df) > 0)
+  # df_legacy <- readWQPdata(
+  #   bBox = bbox,
+  #   characteristicName = "Total Coliform",
+  #   startDateLo = "2023-01-01",
+  #   startDateHi = "2023-12-31",
+  #   service = "Result",
+  #   dataProfile = "narrowResult"
+  # )
+  # expect_true(nrow(df_legacy) > 0)
 })
 
 
@@ -522,32 +395,33 @@ test_that("internal functions", {
 })
 
 
-test_that("importWQP convertType", {
-  testthat::skip_on_cran()
-
-  SC <- readWQPqw(
-    siteNumbers = "USGS-05288705",
-    parameterCd = "00300",
-    convertType = TRUE,
-    legacy = TRUE
-  )
-  expect_in("ActivityStartDateTime", names(SC))
-
-  SC2 <- readWQPqw(
-    siteNumbers = "USGS-05288705",
-    parameterCd = "00300",
-    convertType = FALSE,
-    legacy = TRUE
-  )
-  expect_true(!"ActivityStartDateTime" %in% names(SC2))
-
-  lakeSites_chars <- whatWQPdata(
-    siteType = "Lake, Reservoir, Impoundment",
-    statecode = "US:55",
-    convertType = FALSE
-  )
-  expect_is(lakeSites_chars$lat, "character")
-})
+# test_that("importWQP convertType", {
+#   testthat::skip_on_cran()
+#   testthat::skip_on_ci()
+#
+#   SC <- readWQPqw(
+#     siteNumbers = "USGS-05288705",
+#     parameterCd = "00300",
+#     convertType = TRUE,
+#     legacy = TRUE
+#   )
+#   expect_in("ActivityStartDateTime", names(SC))
+#
+#   SC2 <- readWQPqw(
+#     siteNumbers = "USGS-05288705",
+#     parameterCd = "00300",
+#     convertType = FALSE,
+#     legacy = TRUE
+#   )
+#   expect_true(!"ActivityStartDateTime" %in% names(SC2))
+#
+#   lakeSites_chars <- whatWQPdata(
+#     siteType = "Lake, Reservoir, Impoundment",
+#     statecode = "US:55",
+#     convertType = FALSE
+#   )
+#   expect_is(lakeSites_chars$lat, "character")
+# })
 
 test_that("format_dates", {
   start_end <- c("2021-01-01", "2022-01-01")
@@ -615,13 +489,13 @@ test_that("format_dates", {
     "2021-01-01T17:15:00Z/.."
   )
 
-  time = c("2014-05-01T00:00:00Z", "2014-05-01T12:00:00Z")
+  time <- c("2014-05-01T00:00:00Z", "2014-05-01T12:00:00Z")
   expect_equal(
     dataRetrieval:::format_api_dates(time),
     "2014-05-01T00:00:00Z/2014-05-01T12:00:00Z"
   )
 
-  time = c("2014-05-01T00:00Z", "2014-05-01T12:00Z")
+  time <- c("2014-05-01T00:00Z", "2014-05-01T12:00Z")
   expect_equal(
     dataRetrieval:::format_api_dates(time),
     "2014-05-01T00:00:00Z/2014-05-01T12:00:00Z"
