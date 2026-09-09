@@ -219,7 +219,7 @@ bbox_sites <- read_waterdata_samples(boundingBox = bbox,
 
 Hydrologic Unit Codes (HUCs) identify physical areas within the US that drain to a certain portion of the stream network. This filter accepts values containing 2, 4, 6, 8, 10 or 12 digits. 
 
-```{r}
+```{r eval=FALSE}
 
 huc_sites <- read_waterdata_samples(hydrologicUnit = "070700",
                                 characteristicUserSupplied = user_char,
@@ -229,16 +229,11 @@ huc_sites <- read_waterdata_samples(hydrologicUnit = "070700",
 ```
 
 
-```{r echo=FALSE}
-map_it(huc_sites)
-```
-
-
 ### Distance from a point
 
 Location latitude (pointLocationLatitude) and longitude (pointLocationLongitude), and the radius (pointLocationWithinMiles) are required for this geographic filter:
 
-```{r}
+```{r eval=FALSE}
 point_sites <- read_waterdata_samples(pointLocationLatitude = 43.074680,
                                  pointLocationLongitude = -89.428054,
                                  pointLocationWithinMiles = 20,
@@ -248,17 +243,12 @@ point_sites <- read_waterdata_samples(pointLocationLatitude = 43.074680,
 
 ```
 
-
-```{r echo=FALSE}
-map_it(point_sites)
-```
-
 ### countyFips 
 
 County query parameter. To get a list of available counties,
 run `check_waterdata_sample_params("counties")`. The "Fips" values can be created using the function `countyCdLookup`.
 
-```{r}
+```{r eval=FALSE}
 dane_county <- countyCdLookup("WI", "Dane", 
                               outputType = "fips")
 
@@ -269,10 +259,6 @@ county_sites <- read_waterdata_samples(countyFips = dane_county,
 
 ```
 
-
-```{r echo=FALSE}
-map_it(county_sites)
-```
 
 ### stateFips 
 
