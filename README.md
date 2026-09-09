@@ -193,36 +193,9 @@ citation(package = "dataRetrieval")
 
 ## Citing NWIS data
 
-U.S. Geological Survey, 2023, National Water Information System data
-available on the World Wide Web (USGS Water Data for the Nation),
-accessed \[April 26, 2023\], at <http://waterdata.usgs.gov/nwis/>.
-<http://dx.doi.org/10.5066/F7P55KJN>
-
-This can be done using the `create_NWIS_bib` function:
-
-``` r
-
-dv <- read_waterdata_daily(
-  monitoring_location_id = "USGS-09010500",
-  parameter_code = "00060"
-)
-
-NWIScitation <- create_NWIS_bib(dv)
-
-NWIScitation
-#> U.S. Geological Survey (2026). _USGS Water Data for the Nation: U.S.
-#> Geological Survey National Water Information System database_.
-#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>. Accessed Sep
-#> 02, 2026.
-print(NWIScitation, style = "Bibtex")
-#> @Manual{,
-#>   title = {USGS Water Data for the Nation: U.S. Geological Survey National Water Information System database},
-#>   author = {{U.S. Geological Survey}},
-#>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Sep 02, 2026},
-#>   year = {2026},
-#> }
-```
+U.S. Geological Survey, 2026, USGS Water Data for the Nation: U.S.
+Geological Survey National Water Information System database, accessed
+\[April 26, 2026\], at <http://dx.doi.org/10.5066/F7P55KJN>
 
 ## Citing WQP data
 
@@ -241,14 +214,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2026). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>.
-#> Accessed Sep 02, 2026,
+#> Accessed Sep 09, 2026,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Sep 02, 2026},
+#>   note = {Accessed Sep 09, 2026},
 #>   year = {2026},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }

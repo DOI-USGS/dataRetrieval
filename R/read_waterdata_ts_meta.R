@@ -18,14 +18,6 @@
 #' @param last_modified `r get_ogc_params("time-series-metadata")$last_modified`
 #'
 #' See also Details below for more information.
-#' @param begin_utc `r get_ogc_params("time-series-metadata")$begin_utc`
-#' #'
-#' See also Details below for more information.
-#' @param end_utc `r get_ogc_params("time-series-metadata")$end_utc`
-#'
-#' See also Details below for more information.
-#' @param hydrologic_unit_code `r get_ogc_params("time-series-metadata")$hydrologic_unit_code`
-#' @param state_name `r get_ogc_params("time-series-metadata")$state_name`
 #' @param thresholds `r get_ogc_params("time-series-metadata")$thresholds`
 #' @param unit_of_measure `r get_ogc_params("time-series-metadata")$unit_of_measure`
 #' @param primary
@@ -47,6 +39,12 @@
 #' @param time_series_id `r get_ogc_params("time-series-metadata")$id`
 #' @param \dots Not used. Included to help differentiate official Water Data API arguments
 #' from more seldom used, optional dataRetrieval-specific arguments.
+#' @param begin_utc Deprecated in v1. Use "begin" instead.
+#' @param end_utc Deprecated in v1. Use "end" instead.
+#' @param state_name Deprecated in v1. Use `read_waterdata_combined_meta` for
+#' similar functionality.
+#' @param hydrologic_unit_code Deprecated in v1. Use
+#' `read_waterdata_combined_meta` for similar functionality.
 #' @inheritParams check_arguments_api
 #' @inheritParams check_arguments_non_api
 #'
@@ -63,8 +61,8 @@
 #'                             parameter_code = c("00060", "00010"),
 #'                             properties = c("monitoring_location_id",
 #'                                            "parameter_code",
-#'                                            "begin_utc",
-#'                                            "end_utc",
+#'                                            "begin",
+#'                                            "end",
 #'                                            "time_series_id"),
 #'                             skipGeometry = TRUE)
 #'
@@ -104,6 +102,44 @@ read_waterdata_ts_meta <- function(
   service <- "time-series-metadata"
   output_id <- "time_series_id"
   rlang::check_dots_empty()
+
+  on.exit(options("dataRetrieval.api_version" = "v1"))
+
+  if (!is.na(state_name)) {
+    warning(
+      "state_name is deprecated starting in v1 of the Water Data APIs.
+Use the function read_waterdata_combined_meta instead.
+Reverting to v0 version of Water Data APIs."
+    )
+    options("dataRetrieval.api_version" = "v0")
+  }
+
+  if (!is.na(hydrologic_unit_code)) {
+    warning(
+      "hydrologic_unit_code is deprecated starting in v1 of the Water Data APIs.
+Use the function read_waterdata_combined_meta instead.
+Reverting to v0 version of Water Data APIs."
+    )
+    options("dataRetrieval.api_version" = "v0")
+  }
+
+  if (!is.na(begin_utc)) {
+    warning(
+      "begin_utc is deprecated starting in v1 of the Water Data APIs.
+Use begin instead.
+Reverting to v0 version of Water Data APIs."
+    )
+    options("dataRetrieval.api_version" = "v0")
+  }
+
+  if (!is.na(end_utc)) {
+    warning(
+      "end_utc is deprecated starting in v1 of the Water Data APIs.
+Use end instead.
+Reverting to v0 version of Water Data APIs."
+    )
+    options("dataRetrieval.api_version" = "v0")
+  }
 
   args <- mget(names(formals()))
   return_list <- get_ogc_data(args, output_id, service)

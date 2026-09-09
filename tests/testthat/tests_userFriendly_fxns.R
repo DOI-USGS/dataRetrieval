@@ -30,7 +30,11 @@ test_that("Unit value data returns correct types", {
   expect_equal(
     grep(
       x = attr(recent_uv, "request")[["url"]],
-      pattern = "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous"
+      pattern = paste0(
+        "https://api.waterdata.usgs.gov/ogcapi/",
+        getOption("dataRetrieval.api_version"),
+        "/collections/continuous"
+      )
     ),
     1
   )
@@ -38,7 +42,11 @@ test_that("Unit value data returns correct types", {
   expect_equal(
     grep(
       x = attr(spreadOver120, "request")[["url"]],
-      pattern = "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous"
+      pattern = paste0(
+        "https://api.waterdata.usgs.gov/ogcapi/",
+        getOption("dataRetrieval.api_version"),
+        "/collections/continuous"
+      )
     ),
     1
   )
@@ -157,7 +165,8 @@ test_that("peak, rating curves, surface-water measurements", {
   Meas07227500.ex <- read_waterdata_field_measurements(
     monitoring_location_id = "USGS-07227500"
   )
-  expect_is(Meas07227500.ex$time, "POSIXct")
+
+  expect_is(Meas07227500.ex$time, "Date")
 
   expect_equal(
     nrow(read_waterdata_ts_meta(
@@ -590,32 +599,6 @@ test_that("pCode Stuff", {
 
   paramINFO <- read_waterdata_parameter_codes()
   expect_true(nrow(paramINFO) > 10000)
-})
-
-context("pCode Name Stuff")
-test_that("pCode Stuff", {
-  testthat::skip_on_cran()
-
-  paramINFO <- pcode_to_name(c("00060", "01075", "00931", NA))
-  expect_equal(nrow(paramINFO), 4)
-  expect_equal(paramINFO$parm_cd, c("00060", "01075", "00931", NA))
-
-  # pcode 12345 isn't a valid code:
-  expect_warning(paramINFO <- pcode_to_name(c("12345")))
-  expect_warning(
-    paramINFO <- pcode_to_name(c("00060", "01075", "12345", NA_character_))
-  )
-  expect_equal(nrow(paramINFO), 4)
-  expect_equal(paramINFO$parm_cd, c("00060", "01075", "12345", NA_character_))
-
-  expect_equal(paramINFO$description[3:4], c(NA_character_, NA_character_))
-
-  paramINFO <- pcode_to_name("all")
-  expect_true(nrow(paramINFO) > 19000)
-  expect_equal(
-    attr(paramINFO, "url"),
-    "https://www.waterqualitydata.us/Codes/public_srsnames/?mimeType=json"
-  )
 })
 
 context("Smart errors, warnings")

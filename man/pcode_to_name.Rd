@@ -8,27 +8,19 @@ pcode_to_name(parameterCd = "all")
 }
 \arguments{
 \item{parameterCd}{character that contains the code for a character vector
-of 5-digit parameter codes. Default is "all" which will return a complete
-list of parameter codes that have been mapped to a characteristic name.}
-}
-\value{
-a data frame with columns  "parm_cd", "description",
-"characteristicname", "measureunitcode", "resultsamplefraction",
-"resulttemperaturebasis", "resultstatisticalbasis",  "resulttimebasis",
-"resultweightbasis", "resultparticlesizebasis", "last_rev_dt"
+of 5-digit parameter codes.}
 }
 \description{
-This function is useful to fine what characteristic name, result sample
-fraction, unit code, and other parameters are mapped with USGS parameter
-codes. This information is useful for converting workflows from a more
-traditional NWIS water quality retrieval to a Water Quality Portal retrieval.
+This function no longer works because the underlying service
+has been removed. Similar functionality can be found with
+\code{check_waterdata_sample_params}.
 }
 \examples{
 pcodes <- c("00070", "00075", "00430", "52642")
 \donttest{
-
-all <- pcode_to_name()
-some <- pcode_to_name(pcodes)
+all_new <- read_waterdata_parameter_codes(parameter_code = pcodes)
+ref_list <- check_waterdata_sample_params("reference-list")
+ref_list_sm <- ref_list[ref_list$parm_cd \%in\% pcodes, ]
 
 }
 }

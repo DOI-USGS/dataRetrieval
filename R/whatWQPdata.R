@@ -33,7 +33,7 @@ whatWQPsamples <- function(..., convertType = TRUE, legacy = TRUE) {
   } else {
     baseURL <- httr2::request(pkg.env[["ActivityWQX3"]])
   }
-  POST = FALSE
+  POST <- FALSE
   if (!legacy) {
     baseURL <- httr2::req_url_query(baseURL, !!!values, .multi = "explode")
   } else {
@@ -147,8 +147,6 @@ whatWQPmetrics <- function(..., convertType = TRUE) {
 #'
 #' Returns a list of sites from the Water Quality Portal web service. This function gets
 #' the data from: <https://www.waterqualitydata.us>.
-#' Arguments to the function should be based on
-#' <https://www.waterqualitydata.us/webservices_documentation>.
 #' The information returned from whatWQPdata describes the
 #' available data at the WQP sites, and some metadata on the sites themselves.
 #' For example, a row is returned for each individual site that fulfills this
@@ -158,11 +156,9 @@ whatWQPmetrics <- function(..., convertType = TRUE) {
 #' not learn what specific nutrients are available at that site. For that
 #' kind of data discovery see `readWQPsummary`.
 #'
-#' @param \dots see <https://www.waterqualitydata.us/webservices_documentation> for
-#' a complete list of options. A list of arguments can also be supplied.
+#' @param \dots A list of named arguments.
 #' One way to figure out how to construct a WQP query is to go to the "Advanced"
-#' form in the Water Quality Portal:
-#' <https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STORET>
+#' form in the Water Quality Portal.
 #' Use the form to discover what parameters are available. Once the query is
 #' set in the form, scroll down to the "Query URL". You will see the parameters
 #' after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"

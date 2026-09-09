@@ -53,6 +53,7 @@ read_waterdata_monitoring_location(
   bbox = NA,
   skipGeometry = NA,
   ...,
+  convertType = getOption("dataRetrieval.convertType"),
   limit = getOption("dataRetrieval.limit"),
   no_paging = getOption("dataRetrieval.no_paging"),
   chunk_size = getOption("dataRetrieval.site_chunk_size_meta"),
@@ -181,6 +182,10 @@ information. The default \code{NA} will not specify the argument in the request.
 
 \item{\dots}{Not used. Included to help differentiate official Water Data API arguments
 from more seldom used, optional dataRetrieval-specific arguments.}
+
+\item{convertType}{logical, defaults to TRUE.
+If \code{TRUE}, the function will convert the data to dates, any qualifiers to string
+vector and reorder the returned data frame.}
 
 \item{limit}{numeric, The optional limit parameter is used to control the subset of the
 selected features that should be returned in each page. The maximum allowable

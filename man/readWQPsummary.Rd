@@ -7,11 +7,10 @@
 readWQPsummary(...)
 }
 \arguments{
-\item{\dots}{see \url{https://www.waterqualitydata.us/webservices_documentation}
-for a complete list of options. A list of arguments can also be supplied.
+\item{\dots}{Named arguments.
+A list of arguments can also be supplied.
 One way to figure out how to construct a WQP query is to go to the "Advanced"
-form in the Water Quality Portal:
-\url{https://www.waterqualitydata.us/#mimeType=csv&providers=NWIS&providers=STORET}
+form in the Water Quality Portal.
 Use the form to discover what parameters are available. Once the query is
 set in the form, scroll down to the "Query URL". You will see the parameters
 after "https://www.waterqualitydata.us/#". For example, if you chose "Nutrient"
@@ -27,8 +26,6 @@ about the data available for the query parameters.
 \description{
 Returns a list of sites with year-by-year information on what data is available.
 The function gets the data from: \url{https://www.waterqualitydata.us}.
-Arguments to the function should be based on
-\url{https://www.waterqualitydata.us/webservices_documentation}.
 The information returned from this function describes the
 available data at the WQP sites, and some metadata on the sites themselves.
 }

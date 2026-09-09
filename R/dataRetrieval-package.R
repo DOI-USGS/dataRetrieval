@@ -69,9 +69,6 @@ NULL
 
 #' Data to convert USGS parameter code to characteristic names
 #'
-#' Data pulled from Water Quality Portal on December 20, 2021. The data was pulled from
-#' <https://www.waterqualitydata.us/Codes/public_srsnames/?mimeType=csv>.
-#'
 #' @name pCodeToName
 #' @return pCodeToName data frame with information about USGS parameters and how they
 #' relate to characteristic names (useful for WQP requests).
@@ -208,14 +205,14 @@ NULL
 #               "field-measurements", "latest-daily",
 #               "continuous", "field-measurements-metadata",
 #               "combined-metadata", "channel-measurements", "peaks")
-# 
+#
 # property_list <- list()
 # for(service in services){
 #   property_list[[service]] <- dataRetrieval:::get_properties_for_docs(service)
 # }
 #
 # num_cols <- c("value", "contributing_drainage_area", "drainage_area",
-#               #"altitude_accuracy", 
+#               #"altitude_accuracy",
 #               "well_construction_depth",
 #               "hole_construction_depth", "channel_flow", "channel_width",
 #               "channel_area", "channel_velocity", "channel_location_distance")

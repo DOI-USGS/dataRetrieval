@@ -173,7 +173,7 @@ daily data, which returns time values in local dates.
 \dontshow{if (is_dataRetrieval_user()) withAutoprint(\{ # examplesIf}
 
 \donttest{
-site <- "USGS-02238500"
+site <- "USGS-14202650"
 field_data_sf <- read_waterdata_field_measurements(monitoring_location_id = site)
 
 groundwater <- read_waterdata_field_measurements(monitoring_location_id = "USGS-375907091432201")

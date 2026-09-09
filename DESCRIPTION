@@ -72,4 +72,4 @@ BuildVignettes: true
 VignetteBuilder: knitr
 BugReports: https://github.com/DOI-USGS/dataRetrieval/issues
 Roxygen: list(markdown = TRUE)
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0

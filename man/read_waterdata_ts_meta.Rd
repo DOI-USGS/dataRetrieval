@@ -49,7 +49,7 @@ Multiple parameter_codes can be requested as a character vector.}
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, time_series_id, unit_of_measure, parameter_name, parameter_code, statistic_id, hydrologic_unit_code, state_name, last_modified, begin, end, begin_utc, end_utc, computation_period_identifier, computation_identifier, thresholds, sublocation_identifier, primary, monitoring_location_id, web_description, parameter_description, parent_time_series_id, data_gap_interval.
+geometry, time_series_id, unit_of_measure, parameter_name, parameter_code, statistic_id, last_modified, begin, end, computation_period_identifier, computation_identifier, thresholds, sublocation_identifier, primary, monitoring_location_id, web_description, parameter_description, parent_time_series_id, data_gap_interval.
 The default (\code{NA}) will return all columns of the data.}
 
 \item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/statistic-codes/items}.
@@ -70,38 +70,15 @@ Only features that have a \code{last_modified} that intersects the value of date
 
 See also Details below for more information.}
 
-\item{begin_utc}{The datetime of the earliest observation in the time series. Together with \code{end_utc}, this field represents the period of record of a time series. Note that some time series may have large gaps in their collection record.
-You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
-Examples:
-\itemize{
-\item A date-time: "2018-02-12T23:20:50Z"
-\item A bounded interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
-\item Half-bounded intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
-\item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
-}
+\item{begin_utc}{Deprecated in v1. Use "begin" instead.}
 
-Only features that have a \code{begin_utc} that intersects the value of datetime are selected.
+\item{end_utc}{Deprecated in v1. Use "end" instead.}
 
-#'
-See also Details below for more information.}
+\item{hydrologic_unit_code}{Deprecated in v1. Use
+\code{read_waterdata_combined_meta} for similar functionality.}
 
-\item{end_utc}{The datetime of the most recent observation in the time series. Data returned by this endpoint updates at most once per day, and potentially less frequently than that, and as such there may be more recent observations within a time series than the time series \code{end_utc} value reflects. Together with \code{begin_utc}, this field represents the period of record of a time series. It is additionally used to determine whether a time series is "active".
-You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
-Examples:
-\itemize{
-\item A date-time: "2018-02-12T23:20:50Z"
-\item A bounded interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
-\item Half-bounded intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
-\item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
-}
-
-Only features that have a \code{end_utc} that intersects the value of datetime are selected.
-
-See also Details below for more information.}
-
-\item{hydrologic_unit_code}{The hydrologic unit code (HUC) for the monitoring location. Supports prefix matching — querying with a shorter HUC (e.g. "04") matches all locations within that hydrologic region.}
-
-\item{state_name}{The name of the state or state equivalent in which the monitoring location is located.}
+\item{state_name}{Deprecated in v1. Use \code{read_waterdata_combined_meta} for
+similar functionality.}
 
 \item{unit_of_measure}{A human-readable description of the units of measurement associated with an observation.}
 
@@ -141,9 +118,29 @@ vector structured: c(xmin,ymin,xmax,ymax).
 Another way to think of it is c(Western-most longitude,
 Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
-\item{begin}{This field contains the same information as "begin_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
+\item{begin}{The datetime of the earliest observation in the time series. Together with \code{end}, this field represents the period of record of a time series. Note that some time series may have large gaps in their collection record.
+You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
+Examples:
+\itemize{
+\item A date-time: "2018-02-12T23:20:50Z"
+\item A bounded interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
+\item Half-bounded intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
+\item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
+}
 
-\item{end}{This field contains the same information as "end_utc", but in the local time of the monitoring location. It is retained for backwards compatibility, but will be removed in V1 of these APIs.}
+Only features that have a \code{begin} that intersects the value of datetime are selected.}
+
+\item{end}{The datetime of the most recent observation in the time series. Data returned by this endpoint updates at most once per day, and potentially less frequently than that, and as such there may be more recent observations within a time series than the time series \code{end} value reflects. Together with \code{begin}, this field represents the period of record of a time series. It is additionally used to determine whether a time series is "active".
+You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
+Examples:
+\itemize{
+\item A date-time: "2018-02-12T23:20:50Z"
+\item A bounded interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
+\item Half-bounded intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
+\item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
+}
+
+Only features that have a \code{end} that intersects the value of datetime are selected.}
 
 \item{\dots}{Not used. Included to help differentiate official Water Data API arguments
 from more seldom used, optional dataRetrieval-specific arguments.}
@@ -206,8 +203,8 @@ meta_multi <- read_waterdata_ts_meta(monitoring_location_id =  c("USGS-01491000"
                             parameter_code = c("00060", "00010"),
                             properties = c("monitoring_location_id",
                                            "parameter_code",
-                                           "begin_utc",
-                                           "end_utc",
+                                           "begin",
+                                           "end",
                                            "time_series_id"),
                             skipGeometry = TRUE)
 
