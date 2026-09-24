@@ -155,7 +155,7 @@ library(leaflet)
 attr(all_nitrogen, "siteInfo") |> 
   filter(!is.na(dec_lon_va)) |> 
   leaflet() |> 
-  addProviderTiles("CartoDB.Positron") |> 
+  addProviderTiles("Esri.WorldGrayCanvas") |> 
   addCircleMarkers(~dec_lon_va, ~dec_lat_va,
                    color = "red", radius = 3, stroke = FALSE,
                    fillOpacity = 0.8, opacity = 0.8,

@@ -682,24 +682,24 @@ Here are a bunch of valid inputs:
 #| code-line-numbers: "1-9|10-11|12-15|16-19"
 #| label: rtime
 # Ask for exact times:
-time = "2025-01-01"
-time = as.Date("2025-01-01")
-time = "2025-01-01T23:20:50Z"
-time = as.POSIXct(
+time <- "2025-01-01"
+time <- as.Date("2025-01-01")
+time <- "2025-01-01T23:20:50Z"
+time <- as.POSIXct(
   "2025-01-01T23:20:50Z",
   format = "%Y-%m-%dT%H:%M:%S",
   tz = "UTC"
 )
 # Ask for specific range
-time = c("2024-01-01", "2025-01-01") # or Dates or POSIXs
+time <- c("2024-01-01", "2025-01-01") # or Dates or POSIXs
 # Asking beginning of record to specific end:
-time = c(NA, "2024-01-01") # or Date or POSIX
+time <- c(NA, "2024-01-01") # or Date or POSIX
 # Asking specific beginning to end of record:
-time = c("2024-01-01", NA) # or Date or POSIX
+time <- c("2024-01-01", NA) # or Date or POSIX
 # Ask for period
-time = "P1M" # past month
-time = "P7D" # past 7 days
-time = "PT12H" # past hours
+time <- "P1M" # past month
+time <- "P7D" # past 7 days
+time <- "PT12H" # past hours
 ```
 
 ### Python
@@ -896,7 +896,7 @@ leaflet(
   data = site_info_refined |>
     sf::st_transform(crs = leaflet_crs)
 ) |>
-  addProviderTiles("CartoDB.Positron") |>
+  addProviderTiles("Esri.WorldGrayCanvas") |>
   addCircleMarkers(popup = ~monitoring_location_name, radius = 3, opacity = 1)
 ```
 
@@ -909,7 +909,7 @@ If you have `geopandas` installed, the function will return a GeoDataFrame with 
 site_info_refined.set_crs(crs="WGS84").explore(
     marker_kwds=dict(radius=7),
     style_kwds=dict(opacity=1, fillOpacity=1),
-    tiles="CartoDB.Positron",
+    tiles="Esri.WorldGrayCanvas",
 )
 ```
 
@@ -1023,7 +1023,7 @@ leaflet(
   data = tus_summary |>
     sf::st_transform(crs = leaflet_crs)
 ) |>
-  addProviderTiles("CartoDB.Positron") |>
+  addProviderTiles("Esri.WorldGrayCanvas") |>
   addCircleMarkers(popup = ~monitoring_location_name, radius = 3, opacity = 1)
 ```
 
@@ -1093,7 +1093,7 @@ leaflet(
   data = latest_discharge |>
     sf::st_transform(crs = leaflet_crs)
 ) |>
-  addProviderTiles("CartoDB.Positron") |>
+  addProviderTiles("Esri.WorldGrayCanvas") |>
   addCircleMarkers(
     popup = paste(
       latest_discharge$monitoring_location_id,
@@ -1124,7 +1124,7 @@ leaflet(
 latest_discharge.set_crs(crs="WGS84").explore(
     marker_kwds=dict(radius=7),
     style_kwds=dict(opacity=1, fillOpacity=1),
-    tiles="CartoDB.Positron",
+    tiles="Esri.WorldGrayCanvas",
     column="value",
     cmap="viridis",
     zoom_start=10,

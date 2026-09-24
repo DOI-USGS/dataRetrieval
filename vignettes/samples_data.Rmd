@@ -53,7 +53,7 @@ map_it <- function(df){
   leaflet_crs <- "+proj=longlat +datum=WGS84"
 
   leaf_map <- leaflet::leaflet() |> 
-    leaflet::addProviderTiles("CartoDB.Positron") |> 
+    leaflet::addProviderTiles("Esri.WorldGrayCanvas") |> 
     leaflet::addCircleMarkers(data = df_sf |> 
                   sf::st_transform(crs = leaflet_crs), 
                 color = "red",

@@ -66,13 +66,13 @@ create_NWIS_bib <- function(x) {
 #'
 #' @examples
 #' \donttest{
-#' WQPData <- readWQPqw("USGS-05288705",
-#'                      parameterCd = "00300")
-#' wqp_citation <- create_WQP_bib(WQPData)
-#' wqp_citation
+#' # WQPData <- readWQPqw("USGS-05288705",
+#' #                      parameterCd = "00300")
+#' # wqp_citation <- create_WQP_bib(WQPData)
+#' # wqp_citation
 #'
-#' print(wqp_citation, style = "Bibtex")
-#' print(wqp_citation, style = "citation")
+#' # print(wqp_citation, style = "Bibtex")
+#' # print(wqp_citation, style = "citation")
 #' }
 create_WQP_bib <- function(x) {
   textVersion <- paste0(
