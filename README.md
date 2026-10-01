@@ -28,12 +28,6 @@ functionality, visit:
 If you have additional questions about these changes, email
 <CompTools@usgs.gov>.
 
-# Feedback requested
-
-We at USGS Water Data for the Nation want your feedback! Tell us how
-we’re doing by taking our quick survey:
-<https://usgswaterresources.gov1.qualtrics.com/jfe/form/SV_07gX8G1DeOtVrH8>
-
 # What would you like to do?
 
 1.  Get instantaneous USGS data (for example, discharge sensor data).
@@ -56,8 +50,9 @@ we’re doing by taking our quick survey:
 5.  Get USGS discrete water quality data. Start here:
     `?read_waterdata_samples`
 
-6.  Get metadata about USGS time series data, including instantaneous
-    and daily data. Start here: `?read_waterdata_ts_meta`
+6.  Get metadata about USGS water data, including instantaneous, field
+    measurements, and daily data. Start here:
+    `?read_waterdata_combined_meta`
 
 7.  Find Hydro Network-Linked Data Index (NLDI) data. Start here:
     `?findNLDI`
@@ -175,7 +170,7 @@ citation(package = "dataRetrieval")
 #>   De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., Johnson, M.,
 #>   Blodgett, D.L., Hinman, E.D., Zemmels, J., 2026, dataRetrieval: R
 #>   packages for discovering and retrieving water data available from
-#>   Federal hydrologic web services, v.2.7.25, doi:10.5066/P9X4L3GE
+#>   Federal hydrologic web services, v.2.7.26, doi:10.5066/P9X4L3GE
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
@@ -184,7 +179,7 @@ citation(package = "dataRetrieval")
 #>     title = {dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services},
 #>     publisher = {U.S. Geological Survey},
 #>     address = {Reston, VA},
-#>     version = {2.7.25},
+#>     version = {2.7.26},
 #>     institution = {U.S. Geological Survey},
 #>     year = {2026},
 #>     doi = {10.5066/P9X4L3GE},
@@ -214,14 +209,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2026). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>.
-#> Accessed Sep 09, 2026,
+#> Accessed Oct 01, 2026,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Sep 09, 2026},
+#>   note = {Accessed Oct 01, 2026},
 #>   year = {2026},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }

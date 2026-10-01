@@ -38,10 +38,6 @@ The `dataRetrieval` package was created to simplify the process of loading hydro
 
 If you have additional questions about these changes, email CompTools@usgs.gov.
 
-# Feedback requested
-We at USGS Water Data for the Nation want your feedback! Tell us how we're doing by taking our quick survey: <https://usgswaterresources.gov1.qualtrics.com/jfe/form/SV_07gX8G1DeOtVrH8>
-
-
 # What would you like to do?
 
 1. Get instantaneous USGS data (for example, discharge sensor data). Start here: `?read_waterdata_continuous`. If you only need the latest value, you can use the function: `?read_waterdata_latest_continuous`.
@@ -54,7 +50,7 @@ We at USGS Water Data for the Nation want your feedback! Tell us how we're doing
 
 5. Get USGS discrete water quality data. Start here: `?read_waterdata_samples`
 
-6. Get metadata about USGS time series data, including instantaneous and daily data. Start here: `?read_waterdata_ts_meta`
+6. Get metadata about USGS water data, including instantaneous, field measurements, and daily data. Start here: `?read_waterdata_combined_meta`
 
 7. Find Hydro Network-Linked Data Index (NLDI) data. Start here: `?findNLDI`
 
