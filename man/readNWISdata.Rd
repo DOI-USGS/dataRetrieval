@@ -4,7 +4,13 @@
 \alias{readNWISdata}
 \title{General Data Import from NWIS}
 \usage{
-readNWISdata(..., asDateTime = TRUE, convertType = TRUE, tz = "UTC")
+readNWISdata(
+  ...,
+  asDateTime = TRUE,
+  convertType = TRUE,
+  tz = "UTC",
+  override_error = FALSE
+)
 }
 \arguments{
 \item{\dots}{see \url{https://waterservices.usgs.gov/docs/site-service/} for
@@ -30,6 +36,11 @@ Possible values to provide are "America/New_York", "America/Chicago", "America/D
 "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
 "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  \code{OlsonNames()}
 for more information on time zones.}
+
+\item{override_error}{Logical parameter that allows users to run this
+function during the final stages of NWIS decommission. NWIS servers will be taken
+offline February 22nd, 2027. Setting this parameter to \code{TRUE} should only
+be used as a tool to convert readNWIS to read_waterdata functions.}
 }
 \value{
 A data frame with the following columns:
