@@ -4,12 +4,17 @@
 \alias{readNWISpCode}
 \title{USGS Parameter Data Retrieval}
 \usage{
-readNWISpCode(parameterCd)
+readNWISpCode(parameterCd, override_error = FALSE)
 }
 \arguments{
 \item{parameterCd}{character of USGS parameter codes (or multiple parameter codes).
 These are 5 digit number codes. To get a complete list of all current parameter
 codes in the USGS, use "all" as the input.}
+
+\item{override_error}{Logical parameter that allows users to run this
+function during the final stages of NWIS decommission. NWIS servers will be taken
+offline February 22nd, 2027. Setting this parameter to \code{TRUE} should only
+be used as a tool to convert readNWIS to read_waterdata functions.}
 }
 \value{
 parameterData data frame with the following information:

@@ -6,7 +6,10 @@
 #'
 #' @param \dots see <https://waterservices.usgs.gov/docs/site-service/>
 #' for a complete list of options. A list (or lists) can also be supplied.
-#'
+#' @param override_error Logical parameter that allows users to run this
+#' function during the final stages of NWIS decommission. NWIS servers will be taken
+#' offline February 22nd, 2027. Setting this parameter to `TRUE` should only
+#' be used as a tool to convert readNWIS to read_waterdata functions.
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -34,101 +37,107 @@
 #' #siteListPhos <- whatNWISsites(stateCd = "OH", parameterCd = "00665")
 #' #oneSite <- whatNWISsites(sites = "05114000")
 #'
-whatNWISsites <- function(...) {
-  .Deprecated(
-    new = "read_waterdata_monitoring_location",
-    package = "dataRetrieval",
-    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location"
-  )
-
-  matchReturn <- convertLists(...)
-  if ("service" %in% names(matchReturn)) {
-    service <- matchReturn$service
-    matchReturn$service <- NULL
-  } else {
-    service <- NULL
-  }
-
-  valuesList <- readNWISdots(matchReturn)
-
-  values <- valuesList[["values"]]
-  values <- values[names(values) != "format"]
-
-  #################
-  # temporary gwlevels fixes
-  values <- values[
-    !names(values) %in%
-      c(
-        "date_format",
-        "TZoutput",
-        "rdb_inventory_output",
-        "list_of_search_criteria"
-      )
-  ]
-
-  names(values)[names(values) == "state_cd"] <- "stateCd"
-  ##################
-
-  if (!is.null(service)) {
-    service[service == "peak"] <- "pk"
-    service[service == "uv"] <- "id"
-
-    values[["hasDataTypeCd"]] <- service
-  }
-
-  POST <- nchar(paste0(unlist(values), collapse = "")) > 2048
-
-  urlCall <- httr2::request(pkg.env[["site"]])
-
-  urlCall <- get_or_post(urlCall, POST = POST, !!!values, .multi = "comma")
-
-  urlCall <- get_or_post(urlCall, POST = POST, format = "mapper")
-
-  rawData <- getWebServiceData(urlCall)
-  if (is.null(rawData)) {
-    return(invisible(NULL))
-  }
-  doc <- xml2::xml_root(rawData)
-  siteCategories <- xml2::xml_children(doc)
-  retVal <- NULL
-  for (sc in siteCategories) {
-    sites <- xml2::xml_children(sc)
-    site_no <- xml2::xml_attr(sites, "sno")
-    station_nm <- xml2::xml_attr(sites, "sna")
-    site_tp_cd <- xml2::xml_attr(sites, "cat")
-    dec_lat_va <- as.numeric(xml2::xml_attr(sites, "lat"))
-    dec_long_va <- as.numeric(xml2::xml_attr(sites, "lng"))
-    agency_cd <- xml2::xml_attr(sites, "agc")
-
-    colocated <- isTRUE(xml2::xml_name(sc) == "colocated_sites")
-
-    df <- data.frame(
-      agency_cd,
-      site_no,
-      station_nm,
-      site_tp_cd,
-      dec_lat_va,
-      dec_long_va,
-      colocated,
-      stringsAsFactors = FALSE
+whatNWISsites <- function(..., override_error = FALSE) {
+  if (override_error) {
+    warning(
+      "NWIS servers will be taken offline February 22nd, 2027. Update whatNWISsites to read_waterdata_monitoring_location"
     )
 
-    if (is.null(retVal)) {
-      retVal <- df
+    matchReturn <- convertLists(...)
+    if ("service" %in% names(matchReturn)) {
+      service <- matchReturn$service
+      matchReturn$service <- NULL
     } else {
-      retVal <- r_bind_dr(retVal, df)
+      service <- NULL
     }
+
+    valuesList <- readNWISdots(matchReturn)
+
+    values <- valuesList[["values"]]
+    values <- values[names(values) != "format"]
+
+    #################
+    # temporary gwlevels fixes
+    values <- values[
+      !names(values) %in%
+        c(
+          "date_format",
+          "TZoutput",
+          "rdb_inventory_output",
+          "list_of_search_criteria"
+        )
+    ]
+
+    names(values)[names(values) == "state_cd"] <- "stateCd"
+    ##################
+
+    if (!is.null(service)) {
+      service[service == "peak"] <- "pk"
+      service[service == "uv"] <- "id"
+
+      values[["hasDataTypeCd"]] <- service
+    }
+
+    POST <- nchar(paste0(unlist(values), collapse = "")) > 2048
+
+    urlCall <- httr2::request(pkg.env[["site"]])
+
+    urlCall <- get_or_post(urlCall, POST = POST, !!!values, .multi = "comma")
+
+    urlCall <- get_or_post(urlCall, POST = POST, format = "mapper")
+
+    rawData <- getWebServiceData(urlCall)
+    if (is.null(rawData)) {
+      return(invisible(NULL))
+    }
+    doc <- xml2::xml_root(rawData)
+    siteCategories <- xml2::xml_children(doc)
+    retVal <- NULL
+    for (sc in siteCategories) {
+      sites <- xml2::xml_children(sc)
+      site_no <- xml2::xml_attr(sites, "sno")
+      station_nm <- xml2::xml_attr(sites, "sna")
+      site_tp_cd <- xml2::xml_attr(sites, "cat")
+      dec_lat_va <- as.numeric(xml2::xml_attr(sites, "lat"))
+      dec_long_va <- as.numeric(xml2::xml_attr(sites, "lng"))
+      agency_cd <- xml2::xml_attr(sites, "agc")
+
+      colocated <- isTRUE(xml2::xml_name(sc) == "colocated_sites")
+
+      df <- data.frame(
+        agency_cd,
+        site_no,
+        station_nm,
+        site_tp_cd,
+        dec_lat_va,
+        dec_long_va,
+        colocated,
+        stringsAsFactors = FALSE
+      )
+
+      if (is.null(retVal)) {
+        retVal <- df
+      } else {
+        retVal <- r_bind_dr(retVal, df)
+      }
+    }
+
+    retVal <- retVal[!duplicated(retVal), ]
+
+    attr(retVal, "url") <- urlCall$url
+
+    timenow <- Sys.time()
+
+    attr(retVal, "queryTime") <- timenow
+    # Backwards compatible, might remove later:
+    retVal$queryTime <- timenow
+
+    return(retVal)
+  } else {
+    stop(
+      "NWIS servers will be taken offline February 22nd, 2027. Update whatNWISsites to read_waterdata_monitoring_location.
+Use override_error = TRUE to temporarily override this error. For more information:
+https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html"
+    )
   }
-
-  retVal <- retVal[!duplicated(retVal), ]
-
-  attr(retVal, "url") <- urlCall$url
-
-  timenow <- Sys.time()
-
-  attr(retVal, "queryTime") <- timenow
-  # Backwards compatible, might remove later:
-  retVal$queryTime <- timenow
-
-  return(retVal)
 }

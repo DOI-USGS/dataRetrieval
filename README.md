@@ -15,9 +15,32 @@ Environmental Protection Agency (EPA), U.S. Department of Agriculture
 
 # Introduction
 
-:warning: NWIS web services (readNWIS functions) will be replaced over
-time by USGS Water Data APIs (read_waterdata\_). Read more about it
-here:
+:warning: ALL NWIS web services (readNWIS functions) will be retired
+Feb. 22, 2027. Replace all readNWIS functions with read_waterdata
+functions as soon as possible.
+
+WaterServices (web services behind the “readNWIS” functions) will be
+taken offline February 22nd, 2027. Ahead of that date, we’ll be
+intentionally adding “waits” into requests to the legacy APIs, and will
+have two intentional outages on January 27th and February 16th.
+
+The full decommissioning schedule for WaterServices can be found here:
+[Intentional degradations to WaterServices ahead of final
+decommissioning](https://waterdata.usgs.gov/blog/wdfn-waterservices-degradation/)
+
+Intentional degradations to WaterServices ahead of final decommissioning
+
+Users will need to migrate to services hosted at [USGS Water Data
+APIs](https://api.waterdata.usgs.gov/) before this date. Note that any
+users who may be accessing this data from internal-only URLs, or
+directly from the legacy servers, will also be impacted; we will be
+removing the underpinning databases and decommissioning hardware.
+
+In order to alert automated users of WaterServices, we will
+intentionally slow down requests and perform two scheduled outages
+before permanently decommissioning the services in February 2027.
+
+Read more about the new Water Data dataRetrieval functions here:
 <https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html>
 
 :warning: USGS discrete water-quality data availability and format are
@@ -209,14 +232,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2026). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>.
-#> Accessed Oct 01, 2026,
+#> Accessed Oct 06, 2026,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Oct 01, 2026},
+#>   note = {Accessed Oct 06, 2026},
 #>   year = {2026},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }

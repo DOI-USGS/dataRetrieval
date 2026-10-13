@@ -31,11 +31,11 @@ read_waterdata_daily(
 
 Multiple monitoring_location_ids can be requested as a character vector.}
 
-\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/parameter-codes/items}.
+\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/parameter-codes/items}.
 
 Multiple parameter_codes can be requested as a character vector.}
 
-\item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/statistic-codes/items}.
+\item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/statistic-codes/items}.
 
 Multiple statistic_ids can be requested as a character vector.}
 

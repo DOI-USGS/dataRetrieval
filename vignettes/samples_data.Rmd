@@ -266,7 +266,7 @@ State query parameter. To get a list of available state fips values,
 run `check_waterdata_sample_params("states")`. The "fips" values can be created using the function
 `stateCdLookup`.
 
-```{r}
+```{r eval=FALSE}
 state_fip <- stateCdLookup("WI", outputType = "fips")
 
 state_sites <- read_waterdata_samples(stateFips = state_fip,
@@ -277,9 +277,6 @@ state_sites <- read_waterdata_samples(stateFips = state_fip,
 ```
 
 
-```{r echo=FALSE}
-map_it(state_sites)
-```
 
 ## Additional Query Parameters
 
@@ -361,21 +358,17 @@ Specify one or both of these fields to filter on the activity start date. The se
 
 For instance, let's grab Wisconsin sites that measured phosphorus in October or November of 2024:
  
-```{r}
-state_sites_recent <- read_waterdata_samples(stateFips = state_fip,
-                                characteristicUserSupplied = user_char,
-                                dataType = "locations",
-                                activityStartDateLower = "2024-10-01",
-                                activityStartDateUpper = "2024-11-30",
-                                dataProfile = "site")
+```{r eval=FALSE}
+state_sites_recent <- read_waterdata_samples(
+  stateFips = stateCdLookup("WI", outputType = "fips"),
+  characteristicUserSupplied = user_char,
+  dataType = "locations",
+  activityStartDateLower = "2024-10-01",
+  activityStartDateUpper = "2024-11-30",
+  dataProfile = "site")
 
 ```
 
-Many fewer sites than the original Wisconsin map:
-
-```{r echo=FALSE}
-map_it(state_sites_recent)
-```
 
 ## Data Discovery
 

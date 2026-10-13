@@ -4,7 +4,7 @@
 \alias{whatNWISdata}
 \title{USGS data availability}
 \usage{
-whatNWISdata(..., convertType = TRUE)
+whatNWISdata(..., convertType = TRUE, override_error = FALSE)
 }
 \arguments{
 \item{\dots}{see \url{https://waterservices.usgs.gov/docs/site-service/}
@@ -13,6 +13,11 @@ for a complete list of options.  A list of arguments can also be supplied.}
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function will
 convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character}
+
+\item{override_error}{Logical parameter that allows users to run this
+function during the final stages of NWIS decommission. NWIS servers will be taken
+offline February 22nd, 2027. Setting this parameter to \code{TRUE} should only
+be used as a tool to convert readNWIS to read_waterdata functions.}
 }
 \value{
 A data frame with the following columns:
@@ -72,23 +77,8 @@ the results will be filtered to the proper data_type_cd. This is a great
 function to use before a large data set, by filtering down the number
 of sites that have useful data.
 }
-\examples{
-
-# see ?read_waterdata_ts_meta
-
-#site1 <- whatWQPsamples(siteid = "USGS-01594440")
-
-#type <- "Stream"
-
-#sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
-
-#lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
-#                                    countycode = "US:55:025")
-
-
-}
 \seealso{
-\code{\link[=read_waterdata_ts_meta]{read_waterdata_ts_meta()}}
+\code{\link[=read_waterdata_combined_meta]{read_waterdata_combined_meta()}}
 }
 \keyword{USGS}
 \keyword{data}

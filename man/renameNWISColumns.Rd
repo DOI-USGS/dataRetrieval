@@ -71,20 +71,6 @@ The following statistics codes are converted by \code{renameNWISColumns}.
 \item{00024}{Tidal low-low value, suffix: LoLoTide}
 }
 }
-\examples{
-siteWithTwo <- "01480015"
-startDate <- "2012-09-01"
-endDate <- "2012-10-01"
-\donttest{
-twoResults <- readNWISdv(siteWithTwo, "00060", startDate, endDate)
-names(twoResults)
-renamedCols <- renameNWISColumns(twoResults)
-names(renamedCols)
-# Custom names:
-newNames <- renameNWISColumns(twoResults, p00060 = "Discharge")
-names(newNames)
-}
-}
 \seealso{
 \code{\link[=readNWISdv]{readNWISdv()}}, \code{\link[=readNWISuv]{readNWISuv()}}
 }

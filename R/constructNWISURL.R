@@ -146,12 +146,6 @@ constructNWISURL <- function(
     },
     stat = {
       # for statistics service
-
-      message(
-        "Please be aware the NWIS data service feeding this function is in BETA.\n
-          Data formatting could be changed at any time, and is not guaranteed"
-      )
-
       # make sure only statTypes allowed for the statReportType are being requested
       if (
         !grepl("(?i)daily", statReportType) &&
@@ -327,7 +321,7 @@ constructWQPURL <- function(
 
   pCodeLogic <- TRUE
 
-  POST = nchar(paste0(siteNumbers, collapse = "")) > 2048
+  POST <- nchar(paste0(siteNumbers, collapse = "")) > 2048
 
   if (!allPCode) {
     multiplePcodes <- length(parameterCd) > 1

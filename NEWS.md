@@ -1,3 +1,10 @@
+dataRetrieval 2.7.27
+===================
+* All NWIS functions will now error out by default. NWIS servers will be taken offline February 22nd, 2027. Use override_error = TRUE to temporarily override this error. 
+* Added sublocation_identifier parameter to read_waterdata_field_measurements and read_waterdata_field_meta.
+* Added method_category parameter to read_waterdata_continuous.
+* Updated Water Data API informational links to v1. 
+
 dataRetrieval 2.7.26
 ===================
 * Switching to v1 of the Water Data APIs.

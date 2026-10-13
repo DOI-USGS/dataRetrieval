@@ -87,7 +87,7 @@ Biological Habitat Metrics \tab BiologicalMetric \tab /data/BiologicalMetric/sea
 Organization Data \tab Organization \tab /data/Organization/search \cr
 }
 
-There are 4 WQX3 options. These are still in-development,
+There are 5 WQX3 options. These are still in-development,
 and should be used with caution.
 
 \tabular{llll}{

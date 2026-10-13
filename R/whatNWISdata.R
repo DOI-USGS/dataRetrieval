@@ -9,6 +9,10 @@
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function will
 #' convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
+#' @param override_error Logical parameter that allows users to run this
+#' function during the final stages of NWIS decommission. NWIS servers will be taken
+#' offline February 22nd, 2027. Setting this parameter to `TRUE` should only
+#' be used as a tool to convert readNWIS to read_waterdata functions.
 #' @keywords data import USGS web service
 #'
 #' @details This function requires users to create their own arguments
@@ -63,129 +67,106 @@
 #' queryTime \tab POSIXct \tab The time the data was returned \cr
 #' }
 #' @export
-#' @seealso [read_waterdata_ts_meta()]
-#' @examples
-#'
-#' # see ?read_waterdata_ts_meta
-#'
-#' #site1 <- whatWQPsamples(siteid = "USGS-01594440")
-#'
-#' #type <- "Stream"
-#'
-#' #sites <- whatWQPsamples(countycode = "US:55:025", siteType = type)
-#'
-#' #lakeSites_samples <- whatWQPsamples(siteType = "Lake, Reservoir, Impoundment",
-#' #                                    countycode = "US:55:025")
-#'
-#'
-whatNWISdata <- function(..., convertType = TRUE) {
-  matchReturn <- convertLists(...)
+#' @seealso [read_waterdata_combined_meta()]
+whatNWISdata <- function(..., convertType = TRUE, override_error = FALSE) {
+  if (override_error) {
+    warning(
+      "NWIS servers will be taken offline February 22nd, 2027. Update whatNWISdata to read_waterdata_combined_meta"
+    )
 
-  prewarned <- FALSE
+    matchReturn <- convertLists(...)
 
-  .Deprecated(
-    new = "read_waterdata_ts_meta",
-    package = "dataRetrieval",
-    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_ts_meta"
-  )
+    prewarned <- FALSE
 
-  if ("service" %in% names(matchReturn)) {
-    service <- matchReturn$service
-
-    if (any(service %in% c("qw", "qwdata"))) {
-      .Deprecated(
-        old = "whatNWISdata",
-        package = "dataRetrieval",
-        new = "whatWQPdata",
-        msg = nwis_message()
-      )
-      prewarned <- TRUE
+    if ("service" %in% names(matchReturn)) {
+      service <- matchReturn$service
+    } else {
+      service <- "all"
     }
-  } else {
-    service <- "all"
-  }
 
-  if (any(service == "site")) {
-    service <- "all"
-  } else if (any(service == "iv")) {
-    service[service == "iv"] <- "uv"
-  } else if (any(service == "peak")) {
-    service[service == "peak"] <- "pk"
-  }
-
-  if ("statCd" %in% names(matchReturn)) {
-    statCd <- matchReturn$statCd
-    matchReturn <- matchReturn[names(matchReturn) != "statCd"]
-  } else {
-    statCd <- "all"
-  }
-
-  if ("parameterCd" %in% names(matchReturn)) {
-    parameterCd <- matchReturn$parameterCd
-    matchReturn[["parameterCd"]] <- NULL
-  } else {
-    parameterCd <- "all"
-  }
-
-  if (
-    "startDate" %in% names(matchReturn) && !"endDate" %in% names(matchReturn)
-  ) {
-    matchReturn[["endDate"]] <- matchReturn[["startDate"]]
-  }
-
-  matchReturn$service <- "site"
-
-  valuesList <- readNWISdots(matchReturn)
-
-  values <- valuesList[["values"]]
-  values <- values[names(values) != "format"]
-
-  POST <- nchar(paste0(unlist(values), collapse = "")) > 2048
-
-  urlSitefile <- httr2::request(pkg.env[["site"]])
-  urlSitefile <- get_or_post(
-    urlSitefile,
-    POST = POST,
-    seriesCatalogOutput = "true"
-  )
-  urlSitefile <- get_or_post(
-    urlSitefile,
-    POST = POST,
-    !!!values,
-    .multi = "comma"
-  )
-
-  SiteFile <- importRDB1(
-    urlSitefile,
-    asDateTime = FALSE,
-    convertType = convertType
-  )
-
-  if (!("all" %in% service)) {
-    SiteFile <- SiteFile[SiteFile$data_type_cd %in% service, ]
-  }
-  if (!("all" %in% statCd)) {
-    SiteFile <- SiteFile[SiteFile$stat_cd %in% c(statCd, NA), ]
-  }
-  if (!("all" %in% parameterCd)) {
-    SiteFile <- SiteFile[SiteFile$parm_cd %in% parameterCd, ]
-  }
-
-  if (nrow(SiteFile) > 0 && convertType) {
-    SiteFile$begin_date <- as.Date(suppressWarnings(lubridate::parse_date_time(
-      SiteFile$begin_date,
-      c("Ymd", "mdY", "Y!")
-    )))
-    SiteFile$end_date <- as.Date(suppressWarnings(lubridate::parse_date_time(
-      SiteFile$end_date,
-      c("Ymd", "mdY", "Y!")
-    )))
-  }
-
-  if (any(SiteFile$data_type_cd == "qw")) {
-    if (!prewarned) {
-      message(nwis_message())
+    if (any(service == "site")) {
+      service <- "all"
+    } else if (any(service == "iv")) {
+      service[service == "iv"] <- "uv"
+    } else if (any(service == "peak")) {
+      service[service == "peak"] <- "pk"
     }
+
+    if ("statCd" %in% names(matchReturn)) {
+      statCd <- matchReturn$statCd
+      matchReturn <- matchReturn[names(matchReturn) != "statCd"]
+    } else {
+      statCd <- "all"
+    }
+
+    if ("parameterCd" %in% names(matchReturn)) {
+      parameterCd <- matchReturn$parameterCd
+      matchReturn[["parameterCd"]] <- NULL
+    } else {
+      parameterCd <- "all"
+    }
+
+    if (
+      "startDate" %in% names(matchReturn) && !"endDate" %in% names(matchReturn)
+    ) {
+      matchReturn[["endDate"]] <- matchReturn[["startDate"]]
+    }
+
+    matchReturn$service <- "site"
+
+    valuesList <- readNWISdots(matchReturn)
+
+    values <- valuesList[["values"]]
+    values <- values[names(values) != "format"]
+
+    POST <- nchar(paste0(unlist(values), collapse = "")) > 2048
+
+    urlSitefile <- httr2::request(pkg.env[["site"]])
+    urlSitefile <- get_or_post(
+      urlSitefile,
+      POST = POST,
+      seriesCatalogOutput = "true"
+    )
+    urlSitefile <- get_or_post(
+      urlSitefile,
+      POST = POST,
+      !!!values,
+      .multi = "comma"
+    )
+
+    SiteFile <- importRDB1(
+      urlSitefile,
+      asDateTime = FALSE,
+      convertType = convertType
+    )
+
+    if (!("all" %in% service)) {
+      SiteFile <- SiteFile[SiteFile$data_type_cd %in% service, ]
+    }
+    if (!("all" %in% statCd)) {
+      SiteFile <- SiteFile[SiteFile$stat_cd %in% c(statCd, NA), ]
+    }
+    if (!("all" %in% parameterCd)) {
+      SiteFile <- SiteFile[SiteFile$parm_cd %in% parameterCd, ]
+    }
+
+    if (nrow(SiteFile) > 0 && convertType) {
+      SiteFile$begin_date <- as.Date(suppressWarnings(lubridate::parse_date_time(
+        SiteFile$begin_date,
+        c("Ymd", "mdY", "Y!")
+      )))
+      SiteFile$end_date <- as.Date(suppressWarnings(lubridate::parse_date_time(
+        SiteFile$end_date,
+        c("Ymd", "mdY", "Y!")
+      )))
+    }
+
+    return(SiteFile)
+  } else {
+    stop(
+      "NWIS servers will be taken offline February 22nd, 2027. Update whatNWISdata to read_waterdata_combined_meta
+Use override_error = TRUE to temporarily override this error. For more information:
+https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html"
+    )
   }
-  return(SiteFile)
 }

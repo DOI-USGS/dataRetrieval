@@ -18,7 +18,7 @@
 #'
 #' See also Details below for more information.
 #' @param end `r get_ogc_params("field-measurements-metadata")$end`
-#'
+#' @param sublocation_identifier `r get_ogc_params("field-measurements-metadata")$sublocation_identifier`
 #' See also Details below for more information.
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are:
@@ -77,6 +77,7 @@ read_waterdata_field_meta <- function(
   end = NA_character_,
   last_modified = NA_character_,
   properties = NA_character_,
+  sublocation_identifier = NA_character_,
   skipGeometry = NA,
   bbox = NA,
   limit = NA,

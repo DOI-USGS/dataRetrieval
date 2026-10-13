@@ -25,6 +25,7 @@
 #' `read_waterdata_field_meta` endpoint. Collection series are defined as the
 #' set of field measurements at a given monitoring location for a single parameter
 #' code using a single reading type.
+#' @param sublocation_identifier `r get_ogc_params("field-measurements")$sublocation_identifier`
 #'
 #' @param vertical_datum `r get_ogc_params("field-measurements")$vertical_datum`
 #' @param measuring_agency `r get_ogc_params("field-measurements")$measuring_agency`
@@ -111,6 +112,7 @@ read_waterdata_field_measurements <- function(
   measuring_agency = NA_character_,
   control_condition = NA_character_,
   measurement_rated = NA_character_,
+  sublocation_identifier = NA_character_,
   skipGeometry = NA,
   time = NA_character_,
   bbox = NA,

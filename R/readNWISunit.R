@@ -22,6 +22,10 @@
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
 #' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  `OlsonNames()`
 #' for more information on time zones.
+#' @param override_error Logical parameter that allows users to run this
+#' function during the final stages of NWIS decommission. NWIS servers will be taken
+#' offline February 22nd, 2027. Setting this parameter to `TRUE` should only
+#' be used as a tool to convert readNWIS to read_waterdata functions.
 #' @keywords data import USGS web service
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
@@ -68,34 +72,41 @@ readNWISuv <- function(
   parameterCd,
   startDate = "",
   endDate = "",
-  tz = "UTC"
+  tz = "UTC",
+  override_error = FALSE
 ) {
-  if (
-    as.character(startDate) == "" || (as.Date(startDate) <= Sys.Date() - 120)
-  ) {
-    service <- "iv"
+  if (override_error) {
+    warning(
+      "NWIS servers will be taken offline February 22nd, 2027. Update readNWISuv to read_waterdata_continuous."
+    )
+
+    if (
+      as.character(startDate) == "" || (as.Date(startDate) <= Sys.Date() - 120)
+    ) {
+      service <- "iv"
+    } else {
+      service <- "iv_recent"
+    }
+
+    url <- constructNWISURL(
+      siteNumbers,
+      parameterCd,
+      startDate,
+      endDate,
+      service,
+      format = "xml"
+    )
+
+    data <- importWaterML1(url, asDateTime = TRUE, tz = tz)
+
+    return(data)
   } else {
-    service <- "iv_recent"
+    stop(
+      "NWIS servers will be taken offline February 22nd, 2027. Update readNWISuv to read_waterdata_continuous.
+Use override_error = TRUE to temporarily override this error. For more information:
+https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html"
+    )
   }
-
-  .Deprecated(
-    new = "read_waterdata_continuous",
-    package = "dataRetrieval",
-    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_continuous."
-  )
-
-  url <- constructNWISURL(
-    siteNumbers,
-    parameterCd,
-    startDate,
-    endDate,
-    service,
-    format = "xml"
-  )
-
-  data <- importWaterML1(url, asDateTime = TRUE, tz = tz)
-
-  return(data)
 }
 
 #' Peak flow data from USGS (NWIS)
@@ -123,6 +134,10 @@ readNWISuv <- function(
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
+#' @param override_error Logical parameter that allows users to run this
+#' function during the final stages of NWIS decommission. NWIS servers will be taken
+#' offline February 22nd, 2027. Setting this parameter to `TRUE` should only
+#' be used as a tool to convert readNWIS to read_waterdata functions.
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -168,63 +183,73 @@ readNWISpeak <- function(
   startDate = "",
   endDate = "",
   asDateTime = TRUE,
-  convertType = TRUE
+  convertType = TRUE,
+  override_error = FALSE
 ) {
-  .Deprecated(
-    new = "read_waterdata_peaks",
-    package = "dataRetrieval",
-    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_peaks."
-  )
-  # Doesn't seem to be a peak xml service
-  url <- constructNWISURL(
-    siteNumbers = siteNumbers,
-    parameterCd = NA,
-    startDate = startDate,
-    endDate = endDate,
-    service = "peak"
-  )
-
-  data <- importRDB1(url, asDateTime = asDateTime, convertType = convertType)
-
-  if (nrow(data) > 0) {
-    if (asDateTime && convertType) {
-      if ("peak_dt" %in% names(data)) {
-        if (
-          any(nchar(as.character(data$peak_dt)) <= 7, na.rm = TRUE) ||
-            any(grepl("[0-9]*-[0-9]*-00", data$peak_dt), na.rm = TRUE)
-        ) {
-          stop(
-            "Not all dates could be converted to Date object. Use convertType=FALSE to retrieve the raw text"
-          )
-        } else {
-          data$peak_dt <- as.Date(data$peak_dt, format = "%Y-%m-%d")
-        }
-        if (anyNA(data$peak_dt)) {
-          message(
-            "Some dates could not be converted to a valid date, and were returned as NA"
-          )
-        }
-      }
-
-      if ("ag_dt" %in% names(data)) {
-        data$ag_dt <- as.Date(data$ag_dt, format = "%Y-%m-%d")
-      }
-    }
-
-    siteInfo <- suppressWarnings(readNWISsite(siteNumbers))
-    siteInfo <- merge(
-      x = unique(data[, c("agency_cd", "site_no")]),
-      y = siteInfo,
-      by = c("agency_cd", "site_no"),
-      all.x = TRUE
+  if (override_error) {
+    warning(
+      "NWIS servers will be taken offline February 22nd, 2027. Update readNWISpeak to read_waterdata_peaks."
+    )
+    # Doesn't seem to be a peak xml service
+    url <- constructNWISURL(
+      siteNumbers = siteNumbers,
+      parameterCd = NA,
+      startDate = startDate,
+      endDate = endDate,
+      service = "peak"
     )
 
-    attr(data, "siteInfo") <- siteInfo
-    attr(data, "variableInfo") <- NULL
-    attr(data, "statisticInfo") <- NULL
-  }
+    data <- importRDB1(url, asDateTime = asDateTime, convertType = convertType)
 
-  return(data)
+    if (nrow(data) > 0) {
+      if (asDateTime && convertType) {
+        if ("peak_dt" %in% names(data)) {
+          if (
+            any(nchar(as.character(data$peak_dt)) <= 7, na.rm = TRUE) ||
+              any(grepl("[0-9]*-[0-9]*-00", data$peak_dt), na.rm = TRUE)
+          ) {
+            stop(
+              "Not all dates could be converted to Date object. Use convertType=FALSE to retrieve the raw text"
+            )
+          } else {
+            data$peak_dt <- as.Date(data$peak_dt, format = "%Y-%m-%d")
+          }
+          if (anyNA(data$peak_dt)) {
+            message(
+              "Some dates could not be converted to a valid date, and were returned as NA"
+            )
+          }
+        }
+
+        if ("ag_dt" %in% names(data)) {
+          data$ag_dt <- as.Date(data$ag_dt, format = "%Y-%m-%d")
+        }
+      }
+
+      siteInfo <- suppressWarnings(readNWISsite(
+        siteNumbers,
+        override_error = TRUE
+      ))
+      siteInfo <- merge(
+        x = unique(data[, c("agency_cd", "site_no")]),
+        y = siteInfo,
+        by = c("agency_cd", "site_no"),
+        all.x = TRUE
+      )
+
+      attr(data, "siteInfo") <- siteInfo
+      attr(data, "variableInfo") <- NULL
+      attr(data, "statisticInfo") <- NULL
+    }
+
+    return(data)
+  } else {
+    stop(
+      "NWIS servers will be taken offline February 22nd, 2027. Update readNWISdv to read_waterdata_peaks.
+Use override_error = TRUE to temporarily override this error. For more information:
+https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html"
+    )
+  }
 }
 
 #' Rating table for an active USGS streamgage retrieval
@@ -236,6 +261,10 @@ readNWISpeak <- function(
 #' @param convertType logical, defaults to `TRUE`. If `TRUE`, the function
 #' will convert the data to dates, datetimes,
 #' numerics based on a standard algorithm. If false, everything is returned as a character
+#' @param override_error Logical parameter that allows users to run this
+#' function during the final stages of NWIS decommission. NWIS servers will be taken
+#' offline February 22nd, 2027. Setting this parameter to `TRUE` should only
+#' be used as a tool to convert readNWIS to read_waterdata functions.
 #' @return A data frame. If `type` is "base, " then the columns are
 #' INDEP, typically the gage height, in feet; DEP, typically the streamflow,
 #' in cubic feet per second; and STOR, where "*" indicates that the pair are
@@ -267,38 +296,52 @@ readNWISpeak <- function(
 #' #data <- readNWISrating(site_id, "base")
 #' #attr(data, "RATING")
 #' }
-readNWISrating <- function(siteNumber, type = "base", convertType = TRUE) {
-  .Deprecated(
-    new = "read_waterdata_ratings",
-    package = "dataRetrieval",
-    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_ratings."
-  )
+readNWISrating <- function(
+  siteNumber,
+  type = "base",
+  convertType = TRUE,
+  override_error = FALSE
+) {
+  if (override_error) {
+    warning(
+      "NWIS servers will be taken offline February 22nd, 2027. Update readNWISrating to read_waterdata_ratings."
+    )
 
-  # No rating xml service
-  url <- constructNWISURL(siteNumber, service = "rating", ratingType = type)
+    # No rating xml service
+    url <- constructNWISURL(siteNumber, service = "rating", ratingType = type)
 
-  data <- importRDB1(url, asDateTime = FALSE, convertType = convertType)
+    data <- importRDB1(url, asDateTime = FALSE, convertType = convertType)
 
-  if ("current_rating_nu" %in% names(data)) {
-    data$current_rating_nu <- gsub(" ", "", data$current_rating_nu)
-  }
-
-  if (nrow(data) > 0) {
-    if (type == "base") {
-      Rat <- grep("//RATING ", comment(data), value = TRUE, fixed = TRUE)
-      Rat <- sub("# //RATING ", "", Rat)
-      Rat <- scan(text = Rat, sep = " ", what = "")
-      attr(data, "RATING") <- Rat
+    if ("current_rating_nu" %in% names(data)) {
+      data$current_rating_nu <- gsub(" ", "", data$current_rating_nu)
     }
 
-    siteInfo <- suppressWarnings(readNWISsite(siteNumbers = siteNumber))
+    if (nrow(data) > 0) {
+      if (type == "base") {
+        Rat <- grep("//RATING ", comment(data), value = TRUE, fixed = TRUE)
+        Rat <- sub("# //RATING ", "", Rat)
+        Rat <- scan(text = Rat, sep = " ", what = "")
+        attr(data, "RATING") <- Rat
+      }
 
-    attr(data, "siteInfo") <- siteInfo
-    attr(data, "variableInfo") <- NULL
-    attr(data, "statisticInfo") <- NULL
+      siteInfo <- suppressWarnings(readNWISsite(
+        siteNumbers = siteNumber,
+        override_error = TRUE
+      ))
+
+      attr(data, "siteInfo") <- siteInfo
+      attr(data, "variableInfo") <- NULL
+      attr(data, "statisticInfo") <- NULL
+    }
+
+    return(data)
+  } else {
+    stop(
+      "NWIS servers will be taken offline February 22nd, 2027. Update readNWISrating to read_waterdata_ratings.
+Use override_error = TRUE to temporarily override this error. For more information:
+https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html"
+    )
   }
-
-  return(data)
 }
 
 
@@ -329,6 +372,10 @@ readNWISrating <- function(siteNumber, type = "base", convertType = TRUE) {
 #' provide statistics for each month and year within the range indivually.
 #' @param statType character type(s) of statistics to output for daily values.
 #' Default is mean, which is the only option for monthly and yearly report types.
+#' @param override_error Logical parameter that allows users to run this
+#' function during the final stages of NWIS decommission. NWIS servers will be taken
+#' offline February 22nd, 2027. Setting this parameter to `TRUE` should only
+#' be used as a tool to convert readNWIS to read_waterdata functions.
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -372,99 +419,60 @@ readNWISstat <- function(
   endDate = "",
   convertType = TRUE,
   statReportType = "daily",
-  statType = "mean"
+  statType = "mean",
+  override_error = FALSE
 ) {
-  .Deprecated(
-    new = "read_waterdata_stats_por",
-    package = "dataRetrieval",
-    msg = "NWIS servers are slated for decommission. Please begin to migrate to either read_waterdata_stats_por or read_waterdata_stats_daterange."
-  )
-
-  message(new_nwis_message())
-  # check for NAs in site numbers
-  if (any(is.na(siteNumbers))) {
-    siteNumbers <- siteNumbers[!is.na(siteNumbers)]
-    if (length(siteNumbers) == 0) {
-      stop("siteNumbers was all NAs")
+  if (override_error) {
+    warning(
+      "NWIS servers will be taken offline February 22nd, 2027. Update readNWISstat to read_waterdata_stats_por"
+    )
+    # check for NAs in site numbers
+    if (any(is.na(siteNumbers))) {
+      siteNumbers <- siteNumbers[!is.na(siteNumbers)]
+      if (length(siteNumbers) == 0) {
+        stop("siteNumbers was all NAs")
+      }
+      warning("NAs were passed in siteNumbers; they were ignored")
     }
-    warning("NAs were passed in siteNumbers; they were ignored")
-  }
-  url <- constructNWISURL(
-    siteNumbers = siteNumbers,
-    parameterCd = parameterCd,
-    startDate = startDate,
-    endDate = endDate,
-    service = "stat",
-    format = "rdb",
-    statType = statType,
-    statReportType = statReportType
-  )
+    url <- constructNWISURL(
+      siteNumbers = siteNumbers,
+      parameterCd = parameterCd,
+      startDate = startDate,
+      endDate = endDate,
+      service = "stat",
+      format = "rdb",
+      statType = statType,
+      statReportType = statReportType
+    )
 
-  data <- importRDB1(
-    obs_url = url,
-    asDateTime = TRUE,
-    convertType = convertType
-  )
+    data <- importRDB1(
+      obs_url = url,
+      asDateTime = TRUE,
+      convertType = convertType
+    )
 
-  siteInfo <- suppressWarnings(readNWISsite(siteNumbers))
+    siteInfo <- suppressWarnings(readNWISsite(
+      siteNumbers,
+      override_error = TRUE
+    ))
 
-  if (nrow(data) > 0) {
-    siteInfo <- merge(
-      x = unique(data[, c("agency_cd", "site_no")]),
-      y = siteInfo,
-      by = c("agency_cd", "site_no"),
-      all.x = TRUE
+    if (nrow(data) > 0) {
+      siteInfo <- merge(
+        x = unique(data[, c("agency_cd", "site_no")]),
+        y = siteInfo,
+        by = c("agency_cd", "site_no"),
+        all.x = TRUE
+      )
+    }
+
+    attr(data, "siteInfo") <- siteInfo
+
+    return(data)
+  } else {
+    stop(
+      "NWIS servers will be taken offline February 22nd, 2027. Update readNWISstat to read_waterdata_stats_por
+Use override_error = TRUE to temporarily override this error. For more information:
+https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html"
     )
   }
-
-  attr(data, "siteInfo") <- siteInfo
-
-  return(data)
-}
-
-#' Water use data retrieval from USGS (NWIS)
-#'
-#' Retrieves water use data from USGS Water Use Data for the Nation.
-#'
-#' @param stateCd could be character (full name, abbreviation, id), or numeric (id).
-#' Only one is accepted per query.
-#' @param countyCd could be character (name, with or without "County", or "ALL"),
-#' numeric (id), or `NULL`, which will
-#' return state or national data depending on the stateCd argument.  "ALL" may
-#' also be supplied, which will return data
-#' for every county in a state. Can be a vector of counties in the same state.
-#' @param years integer Years for data retrieval. Must be years ending in 0 or 5.
-#' Default is all available years.
-#' @param categories character categories of water use.  Defaults to "ALL".
-#' Specific categories must be supplied as two-
-#' letter abbreviations as seen in the URL when using the NWIS water use web interface.  Note that
-#' there are different codes for national and state level data.
-#' @param convertType logical defaults to `TRUE`. If `TRUE`, the function
-#' will convert the data to
-#' numerics based on a standard algorithm. Years, months, and days (if appliccable) are
-#' also returned as numerics
-#' in separate columns.  If convertType is false, everything is returned as a character.
-#' @param transform logical only intended for use with national data.  Defaults to
-#' `FALSE`, with data being returned as
-#' presented by the web service.  If `TRUE`, data will be transformed and
-#' returned with column names, which will reformat
-#' national data to be similar to state data.
-#' @return A data frame with at least the year of record, and all available
-#' statistics for the given geographic parameters.
-#' County and state fields will be included as appropriate.
-#'
-#' @export
-readNWISuse <- function(
-  stateCd,
-  countyCd,
-  years = "ALL",
-  categories = "ALL",
-  convertType = TRUE,
-  transform = FALSE
-) {
-  .Deprecated(
-    package = "dataRetrieval",
-    msg = "NWIS servers for water use have been decommissioned. New functions are being developed."
-  )
-  return(NULL)
 }

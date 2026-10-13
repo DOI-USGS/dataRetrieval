@@ -581,6 +581,7 @@ Within your code, add:
 
 ```{python}
 #| eval: false
+#| label: osexample
 import os
 os.environ["API_USGS_PAT"] = "abc123"
 ```
@@ -631,6 +632,7 @@ Shift + Tab:
 ```{r}
 #| eval: false
 #| echo: true
+#| label: rdischarge
 discharge <- read_waterdata_daily(
   parameter_code = "00060",
   statistic_id = "00003"
@@ -764,7 +766,7 @@ site_info <- read_waterdata_monitoring_location(
 ### Python
 
 ```{python}
-#| eval: !expr evaluate_python
+#| eval: false
 #| label: pythondanecountysites
 site_info, md = waterdata.get_monitoring_locations(
     state_name="Wisconsin", county_name="Dane County"
@@ -856,6 +858,7 @@ site_info_refined, md = waterdata.get_monitoring_locations(
 
 ```{r}
 #| output-location: default
+#| label: ggplotmap
 library(ggplot2)
 
 ggplot(data = site_info_refined) +
@@ -866,6 +869,7 @@ ggplot(data = site_info_refined) +
 
 ```{python}
 #| eval: !expr evaluate_python
+#| label: pythonmap
 import matplotlib.pyplot as plt
 import geopandas as gpd
 
@@ -888,6 +892,7 @@ site_info_refined.plot()
 ```{r}
 #| eval: true
 #| output-location: slide
+#| label: rleafletmap
 library(leaflet)
 #default leaflet crs:
 leaflet_crs <- "+proj=longlat +datum=WGS84"
@@ -906,6 +911,7 @@ If you have `geopandas` installed, the function will return a GeoDataFrame with 
 
 ```{python}
 #| eval: false
+#| label: pyleafletmap
 site_info_refined.set_crs(crs="WGS84").explore(
     marker_kwds=dict(radius=7),
     style_kwds=dict(opacity=1, fillOpacity=1),
@@ -928,6 +934,7 @@ Let's get all the time series in Dane County, WI with daily mean (statistic_id =
 ### R
 
 ```{r}
+#| label: rcombinedmeta
 sites_available <- read_waterdata_combined_meta(
   state_name = "Wisconsin",
   county_name = "Dane County",
@@ -939,6 +946,8 @@ sites_available <- read_waterdata_combined_meta(
 ### Python
 
 ```{python}
+#| label: pycombinedmeta
+#| eval: false
 sites_available, md = waterdata.get_combined_metadata(
   state_name = "Wisconsin",
   county_name = "Dane County",
@@ -956,6 +965,7 @@ Selecting just a few columns:
 
 ```{r}
 #| echo: false
+#| label: tablecombined
 dt_me(
   sites_available |>
     sf::st_drop_geometry() |>
@@ -989,6 +999,7 @@ When these slides were generated on `{r} Sys.Date()`, the results were:
 ```{r}
 #| message: false
 #| echo: false
+#| label: rsolution1
 library(dplyr)
 cat("1. ")
 tus <- read_waterdata_combined_meta(
@@ -1019,6 +1030,7 @@ tus_summary$end[1]
 
 ```{r}
 #| echo: false
+#| label: bonussolution
 leaflet(
   data = tus_summary |>
     sf::st_transform(crs = leaflet_crs)
@@ -1042,6 +1054,7 @@ Let's get the continuous discharge measurements in Dane County, WI (parameter co
 ### R
 
 ```{r}
+#| label: rcombined2
 latest_sites <- read_waterdata_combined_meta(
   state_name = "Wisconsin",
   county_name = "Dane County",
@@ -1059,17 +1072,18 @@ latest_discharge <- read_waterdata_latest_continuous(
 ### Python
 
 ```{python}
+#| eval: false
+#| label: pycombined2
 latest_sites, md = waterdata.get_combined_metadata(
-  state_name = "Wisconsin",
-  county_name = "Dane County",
-  parameter_code = "00060",
-  last_modified = "P14D",
-  data_type = "Continuous values"
+    state_name="Wisconsin",
+    county_name="Dane County",
+    parameter_code="00060",
+    last_modified="P14D",
+    data_type="Continuous values",
 )
 
 latest_discharge, md = waterdata.get_latest_continuous(
-  monitoring_location_id = latest_sites.monitoring_location_id,
-  parameter_code = "00060"
+    monitoring_location_id=latest_sites.monitoring_location_id, parameter_code="00060"
 )
 ```
 
@@ -1086,7 +1100,8 @@ latest_discharge, md = waterdata.get_latest_continuous(
 ### R
 
 ```{r}
-#| eval: false
+#| label: rmap2
+#| output-location: slide
 pal <- colorNumeric("viridis", latest_discharge$value)
 
 leaflet(
@@ -1118,9 +1133,8 @@ leaflet(
 ### Python
 
 ```{python}
-#| eval: true
-#| output-location: slide
-
+#| eval: false
+#| label: pymap2
 latest_discharge.set_crs(crs="WGS84").explore(
     marker_kwds=dict(radius=7),
     style_kwds=dict(opacity=1, fillOpacity=1),
@@ -1147,6 +1161,7 @@ Let's get daily discharge data for the last 3 years from 2 sites:
 ### R
 
 ```{r}
+#| label: rdaily2
 daily <- read_waterdata_daily(
   monitoring_location_id = c("USGS-05406457", "USGS-05427930"),
   parameter_code = c("00060"),
@@ -1158,8 +1173,10 @@ daily <- read_waterdata_daily(
 ### Python
 
 ```{python}
+#| eval: !expr evaluate_python
+#| label: pydaily2
 df, md = waterdata.get_daily(
-    monitoring_location_id= ["USGS-05406457", "USGS-05427930"],
+    monitoring_location_id=["USGS-05406457", "USGS-05427930"],
     parameter_code="00060",
     statistic_id="00003",
     time="2022-10-01/2025-10-01",
@@ -1175,6 +1192,7 @@ df, md = waterdata.get_daily(
 ### R
 
 ```{r}
+#| label: rplot4
 ggplot(data = daily) +
   geom_line(aes(x = time, y = value, color = approval_status)) +
   facet_grid(monitoring_location_id ~ ., scale = "free_y")
@@ -1183,15 +1201,20 @@ ggplot(data = daily) +
 ### Python
 
 ```{python}
-#| eval: true
+#| eval: false
+#| label: pyplot4
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn
 
 levels, categories = pd.factorize(df["approval_status"])
 graph = seaborn.FacetGrid(
-    df, row="monitoring_location_id", hue="approval_status", 
-    height=3, aspect=3, sharey=False
+    df,
+    row="monitoring_location_id",
+    hue="approval_status",
+    height=3,
+    aspect=3,
+    sharey=False,
 )
 graph.map(plt.plot, "time", "value").add_legend()
 ```
@@ -1229,6 +1252,7 @@ Let's get orthophosphate ("00660") data from the Shenandoah River at Front Royal
 
 ```{r}
 #| message: true
+#| label: rsamples
 site <- "USGS-01631000"
 pcode <- "00660"
 
@@ -1243,7 +1267,7 @@ ncol(qw_data)
 
 ### Python
 ```{python}
-#| eval: !expr evaluate_python
+#| eval: false
 site = "USGS-01631000"
 pcode = "00660"
 
@@ -1254,7 +1278,7 @@ qw_data, md_qw = waterdata.get_samples(
     profile = "basicphyschem",
 )
 
-qw_data.shape[1]
+
 ```
 
 :::
@@ -1291,6 +1315,7 @@ That's a LOT of columns returned.
 
 ```{r}
 #| echo: false
+#| label: dataprofile
 df <- tibble(
   dataType = c(
     "results",
@@ -1322,6 +1347,7 @@ dt_me(df, escape = FALSE, paging = FALSE)
 
 ```{r}
 #| echo: false
+#| label: pyprofile
 names(df) <- c("service", "Description", "profile")
 
 dt_me(df, escape = FALSE, paging = FALSE)

@@ -21,6 +21,7 @@ read_waterdata_field_measurements(
   measuring_agency = NA_character_,
   control_condition = NA_character_,
   measurement_rated = NA_character_,
+  sublocation_identifier = NA_character_,
   skipGeometry = NA,
   time = NA_character_,
   bbox = NA,
@@ -37,7 +38,7 @@ read_waterdata_field_measurements(
 
 Multiple monitoring_location_ids can be requested as a character vector.}
 
-\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/parameter-codes/items}.
+\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/parameter-codes/items}.
 
 Multiple parameter_codes can be requested as a character vector.}
 
@@ -45,7 +46,7 @@ Multiple parameter_codes can be requested as a character vector.}
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, field_measurements_series_id, reading_type, field_visit_id, parameter_code, monitoring_location_id, observing_procedure_code, observing_procedure, value, unit_of_measure, time, qualifier, vertical_datum, approval_status, measuring_agency, last_modified, control_condition, measurement_rated, year, month, day, time_of_day.
+geometry, field_measurements_series_id, reading_type, field_visit_id, parameter_code, monitoring_location_id, observing_procedure_code, observing_procedure, value, unit_of_measure, time, qualifier, vertical_datum, approval_status, measuring_agency, last_modified, control_condition, measurement_rated, year, month, day, time_of_day, sublocation_identifier.
 The default (\code{NA}) will return all columns of the data.}
 
 \item{field_visit_id}{A universally unique identifier (UUID) for the field visit. Multiple measurements may be made during a single field visit.}
@@ -80,7 +81,7 @@ See also Details below for more information.}
 
 \item{observing_procedure}{Water measurement or water-quality observing procedure descriptions.}
 
-\item{vertical_datum}{The datum used to determine altitude and vertical position at the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/altitude-datums/items}.}
+\item{vertical_datum}{The datum used to determine altitude and vertical position at the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/altitude-datums/items}.}
 
 \item{measuring_agency}{The agency performing the measurement.}
 
@@ -92,6 +93,8 @@ What and where the control of flow is for the gage pool.}
 
 Rated measurement based on the hydrologic/hydraulic conditions in which the measurement was made
 (excellent (2 percent), good (5 percent), fair (8 percent), or poor (more than 8 percent).                                                        percent)}
+
+\item{sublocation_identifier}{An optional human-readable identifier used to specify where measurements are recorded at a monitoring location.}
 
 \item{skipGeometry}{This parameter can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial

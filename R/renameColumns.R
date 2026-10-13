@@ -37,19 +37,6 @@
 #' @seealso [readNWISdv()], [readNWISuv()]
 #' @keywords manip IO
 #' @export
-#' @examples
-#' siteWithTwo <- "01480015"
-#' startDate <- "2012-09-01"
-#' endDate <- "2012-10-01"
-#' \donttest{
-#' twoResults <- readNWISdv(siteWithTwo, "00060", startDate, endDate)
-#' names(twoResults)
-#' renamedCols <- renameNWISColumns(twoResults)
-#' names(renamedCols)
-#' # Custom names:
-#' newNames <- renameNWISColumns(twoResults, p00060 = "Discharge")
-#' names(newNames)
-#' }
 renameNWISColumns <- function(
   rawData,
   p00010 = "Wtemp",

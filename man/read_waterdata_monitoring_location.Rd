@@ -65,7 +65,7 @@ read_waterdata_monitoring_location(
 
 Multiple monitoring_location_ids can be requested as a character vector.}
 
-\item{agency_code}{The agency that is reporting the data. Agency codes are fixed values assigned by the National Water Information System (NWIS). A list of agency codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/agency-codes/items}.}
+\item{agency_code}{The agency that is reporting the data. Agency codes are fixed values assigned by the National Water Information System (NWIS). A list of agency codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/agency-codes/items}.}
 
 \item{agency_name}{The name of the agency that is reporting the data.}
 
@@ -83,15 +83,15 @@ Multiple monitoring_location_ids can be requested as a character vector.}
 
 \item{state_name}{The name of the state or state equivalent in which the monitoring location is located.}
 
-\item{county_code}{The code for the county or county equivalent (parish, borough, etc.) in which the monitoring location is located. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/counties/items}.}
+\item{county_code}{The code for the county or county equivalent (parish, borough, etc.) in which the monitoring location is located. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/counties/items}.}
 
-\item{county_name}{The name of the county or county equivalent (parish, borough, etc.) in which the monitoring location is located. [A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/counties/items}.}
+\item{county_name}{The name of the county or county equivalent (parish, borough, etc.) in which the monitoring location is located. [A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/counties/items}.}
 
 \item{minor_civil_division_code}{Codes for primary governmental or administrative divisions of the county or county equivalent in which the monitoring location is located.}
 
-\item{site_type_code}{A code describing the hydrologic setting of the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/site-types/items}.}
+\item{site_type_code}{A code describing the hydrologic setting of the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/site-types/items}.}
 
-\item{site_type}{A description of the hydrologic setting of the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/site-types/items}.}
+\item{site_type}{A description of the hydrologic setting of the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/site-types/items}.}
 
 \item{hydrologic_unit_code}{The hydrologic unit code (HUC) for the monitoring location. Supports prefix matching — querying with a shorter HUC (e.g. "04") matches all locations within that hydrologic region.}
 
@@ -105,21 +105,21 @@ Multiple monitoring_location_ids can be requested as a character vector.}
 
 \item{altitude_method_name}{The name of the method used to measure altitude.}
 
-\item{vertical_datum}{The datum used to determine altitude and vertical position at the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/altitude-datums/items}.}
+\item{vertical_datum}{The datum used to determine altitude and vertical position at the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/altitude-datums/items}.}
 
-\item{vertical_datum_name}{The datum used to determine altitude and vertical position at the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/altitude-datums/items}.}
+\item{vertical_datum_name}{The datum used to determine altitude and vertical position at the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/altitude-datums/items}.}
 
-\item{horizontal_positional_accuracy_code}{Indicates the accuracy of the latitude longitude values. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/coordinate-accuracy-codes/items}.}
+\item{horizontal_positional_accuracy_code}{Indicates the accuracy of the latitude longitude values. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/coordinate-accuracy-codes/items}.}
 
-\item{horizontal_positional_accuracy}{Indicates the accuracy of the latitude longitude values. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/coordinate-accuracy-codes/items}.}
+\item{horizontal_positional_accuracy}{Indicates the accuracy of the latitude longitude values. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/coordinate-accuracy-codes/items}.}
 
-\item{horizontal_position_method_code}{Indicates the method used to determine latitude longitude values. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/coordinate-method-codes/items}.}
+\item{horizontal_position_method_code}{Indicates the method used to determine latitude longitude values. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/coordinate-method-codes/items}.}
 
-\item{horizontal_position_method_name}{Indicates the method used to determine latitude longitude values. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/coordinate-method-codes/items}.}
+\item{horizontal_position_method_name}{Indicates the method used to determine latitude longitude values. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/coordinate-method-codes/items}.}
 
-\item{original_horizontal_datum}{Coordinates are published in EPSG:4326 / WGS84 / World Geodetic System 1984. This field indicates the original datum used to determine coordinates before they were converted. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/coordinate-datum-codes/items}.}
+\item{original_horizontal_datum}{Coordinates are published in EPSG:4326 / WGS84 / World Geodetic System 1984. This field indicates the original datum used to determine coordinates before they were converted. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/coordinate-datum-codes/items}.}
 
-\item{original_horizontal_datum_name}{Coordinates are published in EPSG:4326 / WGS84 / World Geodetic System 1984. This field indicates the original datum used to determine coordinates before they were converted. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/coordinate-datum-codes/items}.}
+\item{original_horizontal_datum_name}{Coordinates are published in EPSG:4326 / WGS84 / World Geodetic System 1984. This field indicates the original datum used to determine coordinates before they were converted. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/coordinate-datum-codes/items}.}
 
 \item{drainage_area}{The area enclosed by a topographic divide from which direct surface runoff from precipitation normally drains by gravity into the stream above that point.}
 
@@ -133,7 +133,7 @@ Multiple monitoring_location_ids can be requested as a character vector.}
 
 \item{aquifer_code}{Local aquifers in the USGS water resources data base are identified by a geohydrologic unit code (a three-digit number related to the age of the formation, followed by a 4 or 5 character abbreviation for the geologic unit or aquifer name).}
 
-\item{national_aquifer_code}{National aquifers are the principal aquifers or aquifer systems in the United States, defined as regionally extensive aquifers or aquifer systems that have the potential to be used as a source of potable water. Not all groundwater monitoring locations can be associated with a National Aquifer. Such monitoring locations will not be retrieved using this search criteria. A list of National aquifer codes and names is available at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/national-aquifer-codes/items}.}
+\item{national_aquifer_code}{National aquifers are the principal aquifers or aquifer systems in the United States, defined as regionally extensive aquifers or aquifer systems that have the potential to be used as a source of potable water. Not all groundwater monitoring locations can be associated with a National Aquifer. Such monitoring locations will not be retrieved using this search criteria. A list of National aquifer codes and names is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/national-aquifer-codes/items}.}
 
 \item{aquifer_type_code}{Describes the confinement status of an aquifer at the monitoring location. A confined aquifer is an aquifer below the land surface that is saturated with water. A water table--or unconfined--aquifer is an aquifer whose upper water surface (water table) is at atmospheric pressure, and thus is able to rise and fall.}
 

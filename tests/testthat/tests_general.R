@@ -76,9 +76,6 @@ test_that("General NWIS retrievals working", {
 
   expect_is(multiSite$time, "POSIXct")
 
-  expect_error(readNWISdata(), "No arguments supplied")
-  expect_error(readNWISdata(siteNumber = NA), "NA's are not allowed in query")
-
   bBox_inventory <- read_waterdata_ts_meta(
     bbox = c(-83, 38, -82.5, 38.5),
     parameter_code = "00010"
@@ -182,18 +179,6 @@ test_that("General NWIS retrievals working", {
     time = c("2015-06-18", "2015-06-18")
   )
   expect_equal(4, length(unique(multi_huc$monitoring_location_id)))
-
-  peak_data <- readNWISdata(
-    service = "peak",
-    state_cd = "PA"
-  )
-  expect_lt(nrow(peak_data), 100000)
-
-  peak_data <- readNWISdata(
-    service = "peak",
-    huc2_cd = "20"
-  )
-  expect_lt(nrow(peak_data), 100000)
 })
 
 test_that("read_waterdata_ts_meta", {

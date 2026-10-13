@@ -11,7 +11,8 @@ readNWISstat(
   endDate = "",
   convertType = TRUE,
   statReportType = "daily",
-  statType = "mean"
+  statType = "mean",
+  override_error = FALSE
 )
 }
 \arguments{
@@ -44,6 +45,11 @@ provide statistics for each month and year within the range indivually.}
 
 \item{statType}{character type(s) of statistics to output for daily values.
 Default is mean, which is the only option for monthly and yearly report types.}
+
+\item{override_error}{Logical parameter that allows users to run this
+function during the final stages of NWIS decommission. NWIS servers will be taken
+offline February 22nd, 2027. Setting this parameter to \code{TRUE} should only
+be used as a tool to convert readNWIS to read_waterdata functions.}
 }
 \value{
 A data frame with the following columns:

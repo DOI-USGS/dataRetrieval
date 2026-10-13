@@ -96,8 +96,8 @@ reference:
       - summarize_waterdata_samples
       - check_waterdata_sample_params
       - get_monitoring_location_arguments
-  - title: National Water Information System (NWIS)
-    desc:  Functions to retrieve (USGS) NWIS data. These will be slowly phased out and replaced with the read_waterdata family of functions.
+  - title: RETIRED FUNCTIONS - Discontinue Using!
+    desc:  These functions will be removed after Feburary 22, 2027
     contents:
       - readNWISdv
       - readNWISuv
@@ -106,10 +106,12 @@ reference:
       - readNWISpCode
       - readNWISrating
       - readNWISpeak
-      - readNWISuse
       - readNWISdata
       - whatNWISsites
       - whatNWISdata
+      - create_NWIS_bib
+      - constructNWISURL
+      - renameNWISColumns
   - title: Water Quality Portal (WQP)
     desc: Functions to retrieve WQP data.
     contents:
@@ -145,11 +147,9 @@ reference:
       - importWQP
   - title: Helper functions
     contents:
-      - create_NWIS_bib
       - create_WQP_bib
       - calcWaterYear
       - addWaterYear
-      - renameNWISColumns
       - setAccess
       - countyCdLookup
       - stateCdLookup
@@ -163,7 +163,6 @@ reference:
   - title: Web query utilities
     desc: Functions to create web queries
     contents:
-      - constructNWISURL
       - constructWQPURL
       - getQuerySummary
       - getWebServiceData
