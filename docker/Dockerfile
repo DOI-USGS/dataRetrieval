@@ -48,7 +48,7 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
   r-cran-pkgdown \
   r-cran-covr \
   r-cran-readxl \
-  r-cran-DBI \
+  r-cran-dbi \
   r-cran-duckdb \
   r-cran-dbplyr \
   r-cran-dt \
