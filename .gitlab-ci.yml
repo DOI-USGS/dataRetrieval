@@ -32,17 +32,6 @@ variables:
   API_USGS_PAT: "${API_USGS_PAT}"
   BUILDX_NO_DEFAULT_ATTESTATIONS: 1
 
-build-package:
-  stage: build-package
-  image: ${CI_REGISTRY_IMAGE}:latest
-  script:
-    - set -euo pipefail
-    - R CMD build .
-  artifacts:
-    paths:
-      - "*.tar.gz"
-    expire_in: 1 day
-
 build-image:
   stage: build
   cache: []
@@ -61,7 +50,17 @@ build-image:
     - if [ -n "${CI_COMMIT_TAG}" ]; then docker tag "${CI_REGISTRY_IMAGE}:BUILD_${CI_COMMIT_SHORT_SHA}" "${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"; fi
     - docker push --all-tags ${CI_REGISTRY_IMAGE}
 
-
+build-package:
+  stage: build-package
+  image: ${CI_REGISTRY_IMAGE}:latest
+  script:
+    - set -euo pipefail
+    - R CMD build .
+  artifacts:
+    paths:
+      - "*.tar.gz"
+    expire_in: 1 day
+    
 buildcheck:
   image: ${CI_REGISTRY_IMAGE}:latest
   stage: check

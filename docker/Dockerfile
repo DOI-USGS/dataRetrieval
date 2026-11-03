@@ -50,6 +50,7 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
   r-cran-readxl \
   r-cran-DBI \
   r-cran-duckdb \
+  r-cran-dbplyr \
   r-cran-dt \
   && rm -rf /var/lib/apt/lists/*
 
