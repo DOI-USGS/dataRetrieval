@@ -21,7 +21,7 @@ get_stac_data <- function(args, file_directory, download, load_all) {
     if (!load_all) {
       return(unique(download_files))
     } else {
-      con <- DBI::dbConnect(duckdb::duckdb())
+      con <- DBI::dbConnect(duckdb::duckdb(), allow_extensions = FALSE)
       on.exit(DBI::dbDisconnect(con))
 
       query <- sprintf(
@@ -42,7 +42,7 @@ get_stac_data <- function(args, file_directory, download, load_all) {
         paste(paste0("'", urls, "'"), collapse = ", "),
         "]"
       )
-      con <- DBI::dbConnect(duckdb::duckdb())
+      con <- DBI::dbConnect(duckdb::duckdb(), allow_extensions = FALSE)
       on.exit(DBI::dbDisconnect(con))
       add_duck_header(con)
 

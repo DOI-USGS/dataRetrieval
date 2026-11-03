@@ -104,7 +104,7 @@
 #' )
 #'
 #' # Example of how to use partitioned files:
-#' con <- DBI::dbConnect(duckdb::duckdb())
+#' con <- DBI::dbConnect(duckdb::duckdb(), allow_extensions = FALSE)
 #' df_explore <- dplyr::tbl(con,
 #'                          paste0(files_explore,
 #'                           "/**/*.parquet")) |>
