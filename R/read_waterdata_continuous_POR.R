@@ -173,4 +173,6 @@ read_waterdata_continuous_por <- function(
     download = download,
     load_all = load_all
   )
+
+  return(df_out)
 }

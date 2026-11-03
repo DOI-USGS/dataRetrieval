@@ -29,6 +29,16 @@ get_stac_data <- function(args, file_directory, download, load_all) {
         download_files
       )
       df_out <- DBI::dbGetQuery(con, query)
+
+      if ("value" %in% names(df_out)) {
+        df_out$value <- as.numeric(df_out$value)
+      }
+
+      if ("qualifier" %in% names(df_out)) {
+        df_out$qualifier <- as.character(df_out$qualifier)
+        df_out$qualifier[df_out$qualifier == "NULL"] <- NA_character_
+      }
+
       attr(df_out, "download_location") <- download_files
       return(df_out)
     }
@@ -48,9 +58,16 @@ get_stac_data <- function(args, file_directory, download, load_all) {
 
       query <- sprintf("SELECT * FROM read_parquet(%s)", sql_url_array)
 
-      df <- DBI::dbGetQuery(con, query)
+      df_out <- DBI::dbGetQuery(con, query)
+      if ("value" %in% names(df_out)) {
+        df_out$value <- as.numeric(df_out$value)
+      }
 
-      return(df)
+      if ("qualifier" %in% names(df_out)) {
+        df_out$qualifier <- as.character(df_out$qualifier)
+        df_out$qualifier[df_out$qualifier == "NULL"] <- NA_character_
+      }
+      return(df_out)
     } else {
       return(urls)
     }
