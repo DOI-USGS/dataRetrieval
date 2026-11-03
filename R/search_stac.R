@@ -201,7 +201,7 @@ download_stac <- function(
       )
       partition_index <- partition_index + 1
 
-      message("Downloading:\n", id, ": ", collection, "\n")
+      message("Downloading ", id, ": ", collection, "\n")
 
       resp <- httr2::request(urls[i]) |>
         basic_request() |>
