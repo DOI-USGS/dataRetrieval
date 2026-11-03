@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   pkgdown:
-    if: github.repository == 'DOI-USGS/dataRetrieval'
+    # if: github.repository == 'DOI-USGS/dataRetrieval' 
     runs-on: ubuntu-latest
     # Only restrict concurrency for non-PR jobs
     environment: CI_config

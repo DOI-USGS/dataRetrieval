@@ -6,7 +6,7 @@
 #' @export
 #' @param service Which service available on <https://api.waterdata.usgs.gov/ogcapi/v0/>.
 #' @param output_id Name of id column to return
-#' @param ... Extra parameters from the specific services.
+#' @param \dots Extra parameters from the specific services.
 #' @param bbox Only features that have a geometry that intersects the bounding
 #' box are selected.The bounding box is provided as four or six numbers, depending
 #' on whether the coordinate reference system includes a vertical axis (height or
@@ -193,7 +193,7 @@ construct_api_requests <- function(
   post_params <- explode_post(post_list)
 
   # Should we do a POST?
-  POST = length(post_params) > 0
+  POST <- length(post_params) > 0
 
   if (POST) {
     baseURL <- baseURL |>

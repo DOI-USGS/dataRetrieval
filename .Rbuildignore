@@ -76,4 +76,5 @@ environment.yml
 requirements.txt
 ^\.venv$
 .env
+raw_data_store
 

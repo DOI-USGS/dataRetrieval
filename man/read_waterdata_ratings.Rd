@@ -10,6 +10,9 @@ read_waterdata_ratings(
   file_path = tempdir(),
   bbox = NA,
   datetime = NA_character_,
+  updated = NA_character_,
+  agency_code = NA_character_,
+  monitoring_location_number = NA_character_,
   ...,
   limit = 10000,
   download_and_parse = TRUE
@@ -46,6 +49,13 @@ Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 \item{datetime}{Only return items that have a temporal property that
 intersects this value. Either a date-time or an interval, open or closed.
 See Details below.}
+
+\item{updated}{When the rating file was last updated (ISO 8601, UTC).
+Either a date-time or an interval, open or closed. See Details below.}
+
+\item{agency_code}{Agency that operates the monitoring location (e.g. USGS).}
+
+\item{monitoring_location_number}{Site number without the agency prefix (e.g. 01451500).}
 
 \item{\dots}{Not used.}
 
@@ -120,7 +130,11 @@ bbox_query <- read_waterdata_ratings(bbox = bbox,
                                      download_and_parse = FALSE)
 length(bbox_query)
 recent_query <- read_waterdata_ratings(bbox = bbox,
-                                       datetime = c(Sys.Date()-7, NA),
+                                       datetime = c(Sys.Date()-24, NA),
+                                       download_and_parse = FALSE)
+
+recent_query_up <- read_waterdata_ratings(bbox = bbox,
+                                       updated = c(Sys.Date()-24, NA),
                                        download_and_parse = FALSE)
 }
 \dontshow{\}) # examplesIf}

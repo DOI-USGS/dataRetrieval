@@ -22,7 +22,7 @@ construct_api_requests(
 
 \item{output_id}{Name of id column to return}
 
-\item{...}{Extra parameters from the specific services.}
+\item{\dots}{Extra parameters from the specific services.}
 
 \item{bbox}{Only features that have a geometry that intersects the bounding
 box are selected.The bounding box is provided as four or six numbers, depending

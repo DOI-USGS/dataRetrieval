@@ -7,6 +7,7 @@ pkg.env <- new.env()
     "dataRetrieval.nldi_base" = "https://api.water.usgs.gov/nldi/linked-data/"
   )
   options("dataRetrieval.api_version" = "v1")
+  options("dataRetrieval.api_version_stac" = "v0")
   options("dataRetrieval.api_version_stat" = "v0")
   options("dataRetrieval.attach_request" = TRUE)
   options("dataRetrieval.convertType" = TRUE)
@@ -125,21 +126,4 @@ is_legacy <- function(service) {
       "BiologicalMetric"
     )
   return(legacy)
-}
-
-nwis_message <- function() {
-  return(
-    "WARNING: whatNWISdata does not include
-discrete water quality data newer than March 11, 2024.
-For additional details, see:
-https://doi-usgs.github.io/dataRetrieval/articles/Status.html"
-  )
-}
-
-new_nwis_message <- function() {
-  return(
-    "ALERT: All NWIS services are slated for decommission in early 2027.
-For up-to-date information, see: 
-https://doi-usgs.github.io/dataRetrieval/articles/Status.html"
-  )
 }
