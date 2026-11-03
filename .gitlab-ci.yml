@@ -8,8 +8,8 @@ default:
     - chs-shared
 
 stages:
-  - build-package
   - build
+  - build-package
   - check
   - test
   - end
