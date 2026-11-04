@@ -176,6 +176,8 @@ get_stac_features <- function(resp) {
 #' @param output_returned Output of this function is either a vector of file
 #' paths that point to each individual file ("targets"), or the subfolder of
 #' partitioned parquet files ("partition_folder")
+#' @param showWarnings Logical, whether to show a warning or not if the
+#' file_directory already has subdirectory of the requested collection.
 #' @export
 #' @details
 #' Downloaded files are structured as partitioned parquet files.
@@ -217,12 +219,23 @@ get_stac_features <- function(resp) {
 download_stac <- function(
   features,
   file_directory = tempdir(),
-  output_returned = c("partition_folder")
+  output_returned = c("partition_folder"),
+  showWarnings = TRUE
 ) {
   match.arg(output_returned, c("partition_folder", "targets"))
   multiple_files <- length(features) > 1
   collections <- unlist(unique(sapply(features, function(x) x["collection"])))
   multiple_assests <- length(collections) > 1
+
+  if (showWarnings) {
+    unique_folders <- file.path(file_directory, collections)
+    for (i in unique_folders) {
+      if (length(list.dirs(i)) > 0) {
+        warning("Files already existed within: ", i)
+      }
+    }
+  }
+
   paths_out <- c()
 
   for (f in features) {
@@ -238,6 +251,7 @@ download_stac <- function(
       file_directory,
       collection
     )
+
     dir.create(p1, showWarnings = FALSE)
 
     partition_path <- file.path(
@@ -256,7 +270,7 @@ download_stac <- function(
       )
       partition_index <- partition_index + 1
 
-      message("Downloading ", id, ": ", collection, "\n")
+      message("Downloading ", id, ": ", collection)
 
       resp <- httr2::request(urls[i]) |>
         basic_request() |>

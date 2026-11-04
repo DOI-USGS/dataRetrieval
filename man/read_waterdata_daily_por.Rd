@@ -19,7 +19,8 @@ read_waterdata_daily_por(
   site_limits = 1000,
   download = TRUE,
   file_directory = tempdir(),
-  load_all = TRUE
+  load_all = getOption("dataRetrieval.limit"),
+  showWarnings = TRUE
 )
 }
 \arguments{
@@ -64,6 +65,9 @@ is \code{TRUE}.}
 \item{file_directory}{Location to download files.}
 
 \item{load_all}{Logical, whether to load data or not. Default is \code{TRUE}.}
+
+\item{showWarnings}{Logical, whether to show a warning if the file_directory
+already contains data for the daily collection. Default is \code{TRUE}.}
 }
 \value{
 What is returned depends on the arguments download and load_all.
@@ -112,7 +116,8 @@ df <- read_waterdata_daily_por(
     monitoring_location_id = "USGS-0208458892",
     file_directory = "raw_data_store",
     download = TRUE,
-    load_all = TRUE
+    load_all = TRUE,
+    showWarnings = FALSE
 )
 nrow(df)
 attr(df, "download_location")
@@ -130,7 +135,8 @@ df_only_download <- read_waterdata_daily_por(
     monitoring_location_id = "USGS-0208458892",
     download = TRUE,
     file_directory = "raw_data_store",
-    load_all = FALSE
+    load_all = FALSE,
+    showWarnings = FALSE
 )
 df_only_download
 
@@ -157,7 +163,8 @@ files_explore <- read_waterdata_daily_por(
     monitoring_location_id = monitoring_location_id,
     file_directory = "raw_data_store",
     download = TRUE,
-    load_all = FALSE
+    load_all = FALSE,
+    showWarnings = FALSE
 )
 
 # Example of how to use partitioned files:
@@ -203,7 +210,8 @@ huc_files <- read_waterdata_daily_por(
     hydrologic_unit_code = c("0709000203", "0709000204"),
     file_directory = "raw_HUC",
     download = TRUE,
-    load_all = FALSE
+    load_all = FALSE,
+    showWarnings = FALSE
 )
 
 con <- DBI::dbConnect(duckdb::duckdb(), allow_extensions = FALSE)

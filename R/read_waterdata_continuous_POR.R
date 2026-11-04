@@ -31,6 +31,8 @@
 #' is `TRUE`.
 #' @param file_directory Location to download files.
 #' @param load_all Logical, whether to load data or not. Default is `TRUE`.
+#' @param showWarnings Logical, whether to show a warning if the file_directory
+#' already contains data for the continuous collection. Default is `TRUE`.
 #' @return What is returned depends on the arguments download and load_all.
 #' * If download = `TRUE` and load_all = `TRUE`, the data has been downloaded
 #' locally, and the data is returned as a data frame. An attribute is
@@ -55,7 +57,8 @@
 #'     monitoring_location_id = "USGS-0208458892",
 #'     file_directory = "raw_data_store",
 #'     download = TRUE,
-#'     load_all = TRUE
+#'     load_all = TRUE,
+#'     showWarnings = FALSE
 #' )
 #' nrow(df)
 #' attr(df, "download_location")
@@ -73,11 +76,12 @@
 #'     monitoring_location_id = "USGS-0208458892",
 #'     download = TRUE,
 #'     file_directory = "raw_data_store",
-#'     load_all = FALSE
+#'     load_all = FALSE,
+#'     showWarnings = FALSE
 #' )
 #' df_only_download
 #'
-#' # Don't download or load returns URLs to data:
+#' # Don't download or load, returns URLs to data:
 #' feature_urls <- read_waterdata_continuous_por(
 #'     monitoring_location_id = "USGS-0208458892",
 #'     download = FALSE,
@@ -100,7 +104,8 @@
 #'     monitoring_location_id = monitoring_location_id,
 #'     file_directory = "raw_data_store",
 #'     download = TRUE,
-#'     load_all = FALSE
+#'     load_all = FALSE,
+#'     showWarnings = FALSE
 #' )
 #'
 #' # Example of how to use partitioned files:
@@ -145,7 +150,8 @@
 #'     hydrologic_unit_code = c("0709000203", "0709000204"),
 #'     file_directory = "raw_HUC",
 #'     download = TRUE,
-#'     load_all = FALSE
+#'     load_all = FALSE,
+#'     showWarnings = FALSE
 #' )
 #'
 #' con <- DBI::dbConnect(duckdb::duckdb(), allow_extensions = FALSE)
@@ -174,10 +180,11 @@ read_waterdata_continuous_por <- function(
   hydrologic_unit_code = NA_character_,
   bbox = NA,
   ...,
-  site_limits = 1000,
+  site_limits = getOption("dataRetrieval.limit"),
   download = TRUE,
   file_directory = tempdir(),
-  load_all = TRUE
+  load_all = TRUE,
+  showWarnings = TRUE
 ) {
   rlang::check_dots_empty()
 
@@ -200,7 +207,8 @@ read_waterdata_continuous_por <- function(
     args = search_features,
     file_directory = file_directory,
     download = download,
-    load_all = load_all
+    load_all = load_all,
+    showWarnings = showWarnings
   )
 
   return(df_out)

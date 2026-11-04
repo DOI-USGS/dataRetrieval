@@ -6,7 +6,13 @@
 #' @param load_all Whether to load data or not
 #'
 #' @noRd
-get_stac_data <- function(args, file_directory, download, load_all) {
+get_stac_data <- function(
+  args,
+  file_directory,
+  download,
+  load_all,
+  showWarnings
+) {
   search_features <- args[!is.na(args)]
 
   features <- do.call(search_stac, search_features)
@@ -15,7 +21,8 @@ get_stac_data <- function(args, file_directory, download, load_all) {
     download_files <- download_stac(
       features = features,
       file_directory = file_directory,
-      output_returned = c("partition_folder")
+      output_returned = c("partition_folder"),
+      showWarnings = showWarnings
     )
 
     if (!load_all) {

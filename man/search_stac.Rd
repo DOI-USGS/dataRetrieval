@@ -8,7 +8,7 @@ search_stac(
   ...,
   collections = c("daily", "continuous", "ratings"),
   bbox = NA,
-  limit = 1000,
+  limit = getOption("dataRetrieval.limit"),
   custom_filter = NA_character_
 )
 }
@@ -70,6 +70,13 @@ features_huc2 <- search_stac(
 
 unlist(unique(sapply(features_huc2, function(x)
     x[["properties"]]["hydrologic_unit_code"])))
+
+# Paging example:
+features_OH <- search_stac(
+  state_name = "Ohio",
+  limit = 500
+)
+
 }
 \dontshow{\}) # examplesIf}
 }

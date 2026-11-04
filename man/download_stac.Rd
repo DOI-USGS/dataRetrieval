@@ -7,7 +7,8 @@
 download_stac(
   features,
   file_directory = tempdir(),
-  output_returned = c("partition_folder")
+  output_returned = c("partition_folder"),
+  showWarnings = TRUE
 )
 }
 \arguments{
@@ -18,6 +19,9 @@ download_stac(
 \item{output_returned}{Output of this function is either a vector of file
 paths that point to each individual file ("targets"), or the subfolder of
 partitioned parquet files ("partition_folder")}
+
+\item{showWarnings}{Logical, whether to show a warning or not if the
+file_directory already has subdirectory of the requested collection.}
 }
 \value{
 vector of file paths to downloaded data
