@@ -51,11 +51,12 @@
 #'
 #' \donttest{
 #'
-#' dir.create("raw_data_store", showWarnings = FALSE)
+#' raw_data_store <- file.path(tempdir(), "test_1")
+#' dir.create(raw_data_store, showWarnings = FALSE)
 #' # Download and load data:
 #' df <- read_waterdata_continuous_por(
 #'     monitoring_location_id = "USGS-0208458892",
-#'     file_directory = "raw_data_store",
+#'     file_directory = raw_data_store,
 #'     download = TRUE,
 #'     load_all = TRUE,
 #'     showWarnings = FALSE
@@ -69,13 +70,13 @@
 #'     download = FALSE,
 #'     load_all = TRUE
 #' )
-#' nrow(df)
+#' nrow(df) == nrow(df_no_download)
 #'
 #' # Just download returns path to partition folder:
 #' df_only_download <- read_waterdata_continuous_por(
 #'     monitoring_location_id = "USGS-0208458892",
 #'     download = TRUE,
-#'     file_directory = "raw_data_store",
+#'     file_directory = raw_data_store,
 #'     load_all = FALSE,
 #'     showWarnings = FALSE
 #' )
@@ -102,7 +103,7 @@
 #' # Download data, return path to partitioned folder:
 #' files_explore <- read_waterdata_continuous_por(
 #'     monitoring_location_id = monitoring_location_id,
-#'     file_directory = "raw_data_store",
+#'     file_directory = raw_data_store,
 #'     download = TRUE,
 #'     load_all = FALSE,
 #'     showWarnings = FALSE
@@ -118,9 +119,16 @@
 #'       parameter_code == "00095",
 #'       approval_status == "Approved",
 #'       time > as.POSIXct("2015-01-01"),
-#'       value > 2000
+#'       value > 1000
 #'      ) |>
 #'    dplyr::collect()
+#'
+#' overlap <- dplyr::tbl(con,
+#'                          paste0(files_explore,
+#'                           "/**/*.parquet")) |>
+#'  dplyr::count(time_series_id, time) |>
+#'  dplyr::collect()
+#' any(overlap$n > 1)
 #'
 #' df_summarize <- dplyr::tbl(con,
 #'                          paste0(files_explore,
@@ -145,10 +153,11 @@
 #' # from that file, you will get all the data you've ever downloaded,
 #' # not just these 2 HUCs. Therefore, you will want to make a new
 #' # directory when you are specific filters you will be using:
-#' dir.create("raw_HUC", showWarnings = FALSE)
+#' raw_HUC <- file.path(tempdir(), "test_2")
+#' dir.create(raw_HUC, showWarnings = FALSE)
 #' huc_files <- read_waterdata_continuous_por(
 #'     hydrologic_unit_code = c("0709000203", "0709000204"),
-#'     file_directory = "raw_HUC",
+#'     file_directory = raw_HUC,
 #'     download = TRUE,
 #'     load_all = FALSE,
 #'     showWarnings = FALSE
@@ -210,6 +219,45 @@ read_waterdata_continuous_por <- function(
     load_all = load_all,
     showWarnings = showWarnings
   )
+
+  if (load_all) {
+    # Continuous data will have overlap between historical and hot:
+    # Need to prioritize hot over historic
+
+    no_dups <- data.table::uniqueN(data.table::data.table(df_out[, c(
+      "time_series_id",
+      "time"
+    )])) ==
+      nrow(df_out)
+    if (!no_dups) {
+      # For each time_series_id/time pair, keep only the row with the
+      # most recent last_modified value, dropping the older duplicates.
+      was_data_frame <- !data.table::is.data.table(df_out)
+
+      dt <- data.table::as.data.table(df_out)
+
+      # Stable row index so original order can be restored after de-duping.
+      dt[, ".orig_order" := .I]
+
+      # Order so that, within each group, the newest last_modified is last,
+      # then keep the last row of each time_series_id/time group.
+      data.table::setorderv(dt, c("time_series_id", "time", "last_modified"))
+      dt <- dt[,
+        .SD[.N],
+        by = c("time_series_id", "time")
+      ]
+
+      # Restore original row ordering and remove helper column.
+      data.table::setorderv(dt, ".orig_order")
+      dt[, ".orig_order" := NULL]
+
+      if (was_data_frame) {
+        df_out <- as.data.frame(dt)
+      } else {
+        df_out <- dt
+      }
+    }
+  }
 
   return(df_out)
 }
