@@ -63,7 +63,7 @@ df <- data.frame(
     "`read_waterdata_rating`", #rating
     "`read_waterdata_stats_por`, `read_waterdata_stats_daterange`",
     "`read_waterdata_peaks`",
-    "",
+    "`read_wateruse`",
     "`read_waterdata_ts_meta`, `read_waterdata_field_meta`, `read_waterdata_combined_meta`"
   ),
   "Available on (branch)" = c(
@@ -71,10 +71,10 @@ df <- data.frame(
     "main (CRAN)",
     "main (CRAN)",
     "main (CRAN)",
-    "develop",
+    "main",
     "main (CRAN)",
+    "main",
     "develop",
-    "",
     "main (CRAN)"
   )
 )
