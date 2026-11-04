@@ -49,12 +49,19 @@
 #'
 #' unlist(unique(sapply(features_huc2, function(x)
 #'     x[["properties"]]["hydrologic_unit_code"])))
+#'
+#' # Paging example:
+#' features_OH <- search_stac(
+#'   state_name = "Ohio",
+#'   limit = 500
+#' )
+#'
 #'}
 search_stac <- function(
   ...,
   collections = c("daily", "continuous", "ratings"),
   bbox = NA,
-  limit = 1000,
+  limit = getOption("dataRetrieval.limit"),
   custom_filter = NA_character_
 ) {
   match.arg(
@@ -135,11 +142,27 @@ search_stac <- function(
 
   message("Requesting:\n", request$url)
 
-  resp <- httr2::req_perform(request)
-  log_rate_limit(resp)
+  # resp <- httr2::req_perform(request)
 
+  resps <- httr2::req_perform_iterative(
+    request,
+    next_req = next_req_url,
+    max_reqs = Inf,
+    on_error = "stop"
+  )
+
+  failures <- resps |> httr2::resps_failures()
+
+  features <- resps |>
+    httr2::resps_successes() |>
+    httr2::resps_data(\(resp) get_stac_features(resp))
+
+  return(features)
+}
+
+
+get_stac_features <- function(resp) {
   features <- httr2::resp_body_json(resp)[["features"]]
-
   return(features)
 }
 
