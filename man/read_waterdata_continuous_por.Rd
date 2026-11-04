@@ -150,8 +150,8 @@ feature_urls <- read_waterdata_continuous_por(
 feature_urls
 
 # Multiple features:
-monitoring_location_id <- c("USGS-01435000", "USGS-05406360")
 
+dir.create(raw_data_store, showWarnings = FALSE)
 df <- read_waterdata_continuous_por(
     monitoring_location_id = monitoring_location_id,
     download = FALSE,
@@ -160,9 +160,12 @@ df <- read_waterdata_continuous_por(
 nrow(df)
 
 # Download data, return path to partitioned folder:
+monitoring_location_id <- c("USGS-01435000", "USGS-05406360")
+raw_data_store2 <- file.path(tempdir(), "test_2")
+
 files_explore <- read_waterdata_continuous_por(
     monitoring_location_id = monitoring_location_id,
-    file_directory = raw_data_store,
+    file_directory = raw_data_store2,
     download = TRUE,
     load_all = FALSE,
     showWarnings = FALSE
@@ -178,10 +181,16 @@ df_explore <- dplyr::tbl(con,
       parameter_code == "00095",
       approval_status == "Approved",
       time > as.POSIXct("2015-01-01"),
-      value > 2000
+      value > 1000
      ) |>
-   dplyr::distinct(-last_modified) |>  #just in case there's overlap
    dplyr::collect()
+
+overlap <- dplyr::tbl(con,
+                         paste0(files_explore,
+                          "/**/*.parquet")) |>
+ dplyr::count(time_series_id, time) |>
+ dplyr::collect()
+any(overlap$n > 1)
 
 df_summarize <- dplyr::tbl(con,
                          paste0(files_explore,
@@ -206,7 +215,7 @@ DBI::dbDisconnect(con)
 # from that file, you will get all the data you've ever downloaded,
 # not just these 2 HUCs. Therefore, you will want to make a new
 # directory when you are specific filters you will be using:
-raw_HUC <- file.path(tempdir(), "test_2")
+raw_HUC <- file.path(tempdir(), "test_3")
 dir.create(raw_HUC, showWarnings = FALSE)
 huc_files <- read_waterdata_continuous_por(
     hydrologic_unit_code = c("0709000203", "0709000204"),
