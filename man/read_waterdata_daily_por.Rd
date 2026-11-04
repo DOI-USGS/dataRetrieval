@@ -169,7 +169,7 @@ files_explore <- read_waterdata_daily_por(
 
 # Example of how to use partitioned files:
 # These examples will connect to all the daily data in "raw_data_store":
-con <- DBI::dbConnect(duckdb::duckdb(), allow_extensions = FALSE)
+con <- DBI::dbConnect(duckdb::duckdb(shared_home = TRUE))
 df_explore <- dplyr::tbl(con,
                          paste0(files_explore,
                           "/**/*.parquet")) |>
@@ -214,7 +214,7 @@ huc_files <- read_waterdata_daily_por(
     showWarnings = FALSE
 )
 
-con <- DBI::dbConnect(duckdb::duckdb(), allow_extensions = FALSE)
+con <- DBI::dbConnect(duckdb::duckdb(shared_home = TRUE))
 
 huc_explore <- dplyr::tbl(con,
                          paste0(huc_files,

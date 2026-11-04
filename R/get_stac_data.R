@@ -28,9 +28,9 @@ get_stac_data <- function(
     if (!load_all) {
       return(unique(download_files))
     } else {
-      con <- DBI::dbConnect(duckdb::duckdb(), allow_extensions = FALSE)
+      con <- DBI::dbConnect(duckdb::duckdb(shared_home = TRUE))
       on.exit(DBI::dbDisconnect(con))
-
+      # This is all local, so no extra header needed:
       query <- sprintf(
         "SELECT * FROM read_parquet('%s/**/*.parquet')",
         download_files
@@ -59,7 +59,7 @@ get_stac_data <- function(
         paste(paste0("'", urls, "'"), collapse = ", "),
         "]"
       )
-      con <- DBI::dbConnect(duckdb::duckdb(), allow_extensions = FALSE)
+      con <- DBI::dbConnect(duckdb::duckdb(shared_home = TRUE))
       on.exit(DBI::dbDisconnect(con))
       add_duck_header(con)
 

@@ -126,14 +126,16 @@ search_stac <- function(
     }
 
     request <- request |>
-      httr2::req_url_query(filter = filters)
+      httr2::req_url_query(filter = filters) |>
+      httr2::req_url_query(`filter-lang` = "cql2-text")
   } else {
     if (length(like_filters) > 0) {
       filters <- like_filters
     }
 
     request <- request |>
-      httr2::req_url_query(filter = filters)
+      httr2::req_url_query(filter = filters) |>
+      httr2::req_url_query(`filter-lang` = "cql2-text")
   }
 
   request <- request |>
@@ -141,8 +143,6 @@ search_stac <- function(
     basic_request()
 
   message("Requesting:\n", request$url)
-
-  # resp <- httr2::req_perform(request)
 
   resps <- httr2::req_perform_iterative(
     request,
