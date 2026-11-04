@@ -243,6 +243,15 @@ huc_files <- read_waterdata_continuous_por(
 
 con <- DBI::dbConnect(duckdb::duckdb(shared_home = TRUE))
 
+overlap <- dplyr::tbl(con,
+                         paste0(huc_files,
+                          "/**/*.parquet")) |>
+ dplyr::count(time_series_id, time) |>
+ dplyr::collect()
+
+any(overlap$n > 1)
+
+# Assuming no overlap:
 huc_explore <- dplyr::tbl(con,
                          paste0(huc_files,
                           "/**/*.parquet")) |>
