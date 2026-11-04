@@ -150,8 +150,8 @@ feature_urls <- read_waterdata_continuous_por(
 feature_urls
 
 # Multiple features:
+monitoring_location_id <- c("USGS-01435000", "USGS-05406360")
 
-dir.create(raw_data_store, showWarnings = FALSE)
 df <- read_waterdata_continuous_por(
     monitoring_location_id = monitoring_location_id,
     download = FALSE,
@@ -160,9 +160,8 @@ df <- read_waterdata_continuous_por(
 nrow(df)
 
 # Download data, return path to partitioned folder:
-monitoring_location_id <- c("USGS-01435000", "USGS-05406360")
 raw_data_store2 <- file.path(tempdir(), "test_2")
-
+dir.create(raw_data_store2, showWarnings = FALSE)
 files_explore <- read_waterdata_continuous_por(
     monitoring_location_id = monitoring_location_id,
     file_directory = raw_data_store2,
@@ -173,24 +172,41 @@ files_explore <- read_waterdata_continuous_por(
 
 # Example of how to use partitioned files:
 con <- DBI::dbConnect(duckdb::duckdb(shared_home = TRUE))
-df_explore <- dplyr::tbl(con,
-                         paste0(files_explore,
-                          "/**/*.parquet")) |>
-   dplyr::mutate(value = as.numeric(value)) |>
-   dplyr::filter(
-      parameter_code == "00095",
-      approval_status == "Approved",
-      time > as.POSIXct("2015-01-01"),
-      value > 1000
-     ) |>
-   dplyr::collect()
 
 overlap <- dplyr::tbl(con,
                          paste0(files_explore,
                           "/**/*.parquet")) |>
  dplyr::count(time_series_id, time) |>
  dplyr::collect()
+
 any(overlap$n > 1)
+
+# No overlap? Then we can collect at the end:
+df_explore <- dplyr::tbl(con,
+                         paste0(files_explore,
+                          "/**/*.parquet")) |>
+   dplyr::collect() |>
+   dplyr::mutate(value = as.numeric(value)) |>
+   dplyr::filter(
+      parameter_code == "00095",
+      approval_status == "Approved",
+      time > as.POSIXct("2015-01-01"),
+      value > 1000
+     )
+
+# But if there is overlap:
+df_explore <- dplyr::tbl(con,
+                         paste0(files_explore,
+                          "/**/*.parquet")) |>
+   dplyr::collect() |>
+   dataRetrieval::fix_continuous_overlap() |>
+   dplyr::mutate(value = as.numeric(value)) |>
+   dplyr::filter(
+      parameter_code == "00095",
+      approval_status == "Approved",
+      time > as.POSIXct("2015-01-01"),
+      value > 1000
+     )
 
 df_summarize <- dplyr::tbl(con,
                          paste0(files_explore,
@@ -240,4 +256,7 @@ DBI::dbDisconnect(con)
 
 }
 \dontshow{\}) # examplesIf}
+}
+\seealso{
+\code{\link[=fix_continuous_overlap]{fix_continuous_overlap()}}
 }

@@ -46,6 +46,7 @@
 #' are returned.
 #'
 #' @export
+#' @seealso [fix_continuous_overlap()]
 #' @inherit read_waterdata_continuous details
 #' @examplesIf is_dataRetrieval_user()
 #'
@@ -91,8 +92,8 @@
 #' feature_urls
 #'
 #' # Multiple features:
+#' monitoring_location_id <- c("USGS-01435000", "USGS-05406360")
 #'
-#' dir.create(raw_data_store, showWarnings = FALSE)
 #' df <- read_waterdata_continuous_por(
 #'     monitoring_location_id = monitoring_location_id,
 #'     download = FALSE,
@@ -101,9 +102,8 @@
 #' nrow(df)
 #'
 #' # Download data, return path to partitioned folder:
-#' monitoring_location_id <- c("USGS-01435000", "USGS-05406360")
 #' raw_data_store2 <- file.path(tempdir(), "test_2")
-#'
+#' dir.create(raw_data_store2, showWarnings = FALSE)
 #' files_explore <- read_waterdata_continuous_por(
 #'     monitoring_location_id = monitoring_location_id,
 #'     file_directory = raw_data_store2,
@@ -114,24 +114,41 @@
 #'
 #' # Example of how to use partitioned files:
 #' con <- DBI::dbConnect(duckdb::duckdb(shared_home = TRUE))
-#' df_explore <- dplyr::tbl(con,
-#'                          paste0(files_explore,
-#'                           "/**/*.parquet")) |>
-#'    dplyr::mutate(value = as.numeric(value)) |>
-#'    dplyr::filter(
-#'       parameter_code == "00095",
-#'       approval_status == "Approved",
-#'       time > as.POSIXct("2015-01-01"),
-#'       value > 1000
-#'      ) |>
-#'    dplyr::collect()
 #'
 #' overlap <- dplyr::tbl(con,
 #'                          paste0(files_explore,
 #'                           "/**/*.parquet")) |>
 #'  dplyr::count(time_series_id, time) |>
 #'  dplyr::collect()
+#'
 #' any(overlap$n > 1)
+#'
+#' # No overlap? Then we can collect at the end:
+#' df_explore <- dplyr::tbl(con,
+#'                          paste0(files_explore,
+#'                           "/**/*.parquet")) |>
+#'    dplyr::collect() |>
+#'    dplyr::mutate(value = as.numeric(value)) |>
+#'    dplyr::filter(
+#'       parameter_code == "00095",
+#'       approval_status == "Approved",
+#'       time > as.POSIXct("2015-01-01"),
+#'       value > 1000
+#'      )
+#'
+#' # But if there is overlap:
+#' df_explore <- dplyr::tbl(con,
+#'                          paste0(files_explore,
+#'                           "/**/*.parquet")) |>
+#'    dplyr::collect() |>
+#'    dataRetrieval::fix_continuous_overlap() |>
+#'    dplyr::mutate(value = as.numeric(value)) |>
+#'    dplyr::filter(
+#'       parameter_code == "00095",
+#'       approval_status == "Approved",
+#'       time > as.POSIXct("2015-01-01"),
+#'       value > 1000
+#'      )
 #'
 #' df_summarize <- dplyr::tbl(con,
 #'                          paste0(files_explore,
@@ -225,42 +242,72 @@ read_waterdata_continuous_por <- function(
 
   if (load_all) {
     # Continuous data will have overlap between historical and hot:
-    # Need to prioritize hot over historic
-
-    no_dups <- data.table::uniqueN(data.table::data.table(df_out[, c(
-      "time_series_id",
-      "time"
-    )])) ==
-      nrow(df_out)
-    if (!no_dups) {
-      # For each time_series_id/time pair, keep only the row with the
-      # most recent last_modified value, dropping the older duplicates.
-      was_data_frame <- !data.table::is.data.table(df_out)
-
-      dt <- data.table::as.data.table(df_out)
-
-      # Stable row index so original order can be restored after de-duping.
-      dt[, ".orig_order" := .I]
-
-      # Order so that, within each group, the newest last_modified is last,
-      # then keep the last row of each time_series_id/time group.
-      data.table::setorderv(dt, c("time_series_id", "time", "last_modified"))
-      dt <- dt[,
-        .SD[.N],
-        by = c("time_series_id", "time")
-      ]
-
-      # Restore original row ordering and remove helper column.
-      data.table::setorderv(dt, ".orig_order")
-      dt[, ".orig_order" := NULL]
-
-      if (was_data_frame) {
-        df_out <- as.data.frame(dt)
-      } else {
-        df_out <- dt
-      }
-    }
+    df_out <- fix_continuous_overlap(df_out)
   }
 
   return(df_out)
+}
+
+
+#' Fix overlap between historic and current continuous data
+#'
+#' Fix overlap between historic and current continuous data. This is
+#' needed because sometimes the historic and hot data will overlap.
+#' This will make sure the data with the more recent "last_modified"
+#' will have priority.
+#'
+#'
+#' @export
+#' @param df Data frame with at least time_series_id, time, last_modified
+#' @return Data frame with duplicated data removed
+#' @examples
+#'
+#' df1 <- data.frame(
+#'      time = c(seq.Date("2026-01-01", "2026-01-07"),
+#'               seq.Date("2026-01-05", "2026-01-09")),
+#'      last_modified = c(rep("2026-01-07", 7),
+#'                        rep("2026-01-09", 5)),
+#'      value = 1:12,
+#'      time_series_id = "a"
+#' )
+#'
+#' fix_continuous_overlap(df1)
+#'
+fix_continuous_overlap <- function(df) {
+  no_dups <- data.table::uniqueN(data.table::data.table(df[, c(
+    "time_series_id",
+    "time"
+  )])) ==
+    nrow(df)
+  if (!no_dups) {
+    # For each time_series_id/time pair, keep only the row with the
+    # most recent last_modified value, dropping the older duplicates.
+    was_data_frame <- !data.table::is.data.table(df)
+
+    dt <- data.table::as.data.table(df)
+
+    # Stable row index so original order can be restored after de-duping.
+    dt[, ".orig_order" := .I]
+
+    # Order so that, within each group, the newest last_modified is last,
+    # then keep the last row of each time_series_id/time group.
+    data.table::setorderv(dt, c("time_series_id", "time", "last_modified"))
+    dt <- dt[,
+      .SD[.N],
+      by = c("time_series_id", "time")
+    ]
+
+    # Restore original row ordering and remove helper column.
+    data.table::setorderv(dt, ".orig_order")
+    dt[, ".orig_order" := NULL]
+
+    if (was_data_frame) {
+      df_out <- as.data.frame(dt)
+    } else {
+      df_out <- dt
+    }
+    return(df_out)
+  } else {
+    return(df)
+  }
 }
