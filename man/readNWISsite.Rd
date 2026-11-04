@@ -4,10 +4,15 @@
 \alias{readNWISsite}
 \title{USGS Site File Data Retrieval}
 \usage{
-readNWISsite(siteNumbers)
+readNWISsite(siteNumbers, override_error = FALSE)
 }
 \arguments{
 \item{siteNumbers}{character USGS site number (or multiple sites).  This is usually an 8 digit number}
+
+\item{override_error}{Logical parameter that allows users to run this
+function during the final stages of NWIS decommission. NWIS servers will be taken
+offline February 22nd, 2027. Setting this parameter to \code{TRUE} should only
+be used as a tool to convert readNWIS to read_waterdata functions.}
 }
 \value{
 A data frame with at least the following columns:

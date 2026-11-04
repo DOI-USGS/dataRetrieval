@@ -4,11 +4,16 @@
 \alias{whatNWISsites}
 \title{Site Data Import from NWIS}
 \usage{
-whatNWISsites(...)
+whatNWISsites(..., override_error = FALSE)
 }
 \arguments{
 \item{\dots}{see \url{https://waterservices.usgs.gov/docs/site-service/}
 for a complete list of options. A list (or lists) can also be supplied.}
+
+\item{override_error}{Logical parameter that allows users to run this
+function during the final stages of NWIS decommission. NWIS servers will be taken
+offline February 22nd, 2027. Setting this parameter to \code{TRUE} should only
+be used as a tool to convert readNWIS to read_waterdata functions.}
 }
 \value{
 A data frame with at least the following columns:

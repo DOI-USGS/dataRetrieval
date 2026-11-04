@@ -14,6 +14,10 @@
 #' "America/Anchorage", as well as the following which do not use daylight savings time: "America/Honolulu",
 #' "America/Jamaica", "America/Managua", "America/Phoenix", and "America/Metlakatla". See also  `OlsonNames()`
 #' for more information on time zones.
+#' @param override_error Logical parameter that allows users to run this
+#' function during the final stages of NWIS decommission. NWIS servers will be taken
+#' offline February 22nd, 2027. Setting this parameter to `TRUE` should only
+#' be used as a tool to convert readNWIS to read_waterdata functions.
 #' @param \dots see <https://waterservices.usgs.gov/docs/site-service/> for
 #' a complete list of options.  A
 #' list of arguments can also be supplied. One important argument to include is
@@ -76,121 +80,108 @@ readNWISdata <- function(
   ...,
   asDateTime = TRUE,
   convertType = TRUE,
-  tz = "UTC"
+  tz = "UTC",
+  override_error = FALSE
 ) {
-  tz <- match.arg(tz, OlsonNames())
-
-  valuesList <- readNWISdots(...)
-
-  values <- valuesList[["values"]]
-  values <- values[names(values) != "format"]
-  format <- valuesList[["values"]][["format"]]
-
-  service <- valuesList$service
-  if (length(service) > 1) {
+  if (override_error) {
     warning(
-      "Only one service value is allowed. Service: ",
-      service[1],
-      " will be used."
+      "NWIS servers will be taken offline February 22nd, 2027. Update to read_waterdata functions."
     )
-    service <- service[1]
-  }
 
-  if (any(service %in% c("qw", "qwdata"))) {
-    .Deprecated(
-      old = "readNWISdata",
-      package = "dataRetrieval",
-      new = "readWQPdata",
-      msg = "NWIS qw web services are being retired.
-Please see vignette('qwdata_changes', package = 'dataRetrieval')
-for more information.
-https://cran.r-project.org/web/packages/dataRetrieval/vignettes/qwdata_changes.html"
-    )
-  } else if (service == "dv") {
-    .Deprecated(
-      new = "read_waterdata_daily",
-      package = "dataRetrieval",
-      msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_daily."
-    )
-  } else if (service == "site") {
-    .Deprecated(
-      new = "read_waterdata_monitoring_location",
-      package = "dataRetrieval",
-      msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location"
-    )
-  } else {
-    message(new_nwis_message())
-  }
+    tz <- match.arg(tz, OlsonNames())
 
-  baseURL <- httr2::request(pkg.env[[service]])
+    valuesList <- readNWISdots(...)
 
-  POST <- nchar(paste0(unlist(values), collapse = "")) > 2048
+    values <- valuesList[["values"]]
+    values <- values[names(values) != "format"]
+    format <- valuesList[["values"]][["format"]]
 
-  baseURL <- get_or_post(baseURL, POST = POST, !!!values, .multi = "comma")
-
-  if (service != "rating") {
-    baseURL <- get_or_post(baseURL, POST = POST, format = format)
-  }
-
-  if (length(grep("rdb", format)) > 0) {
-    retval <- importRDB1(
-      baseURL,
-      tz = tz,
-      asDateTime = asDateTime,
-      convertType = convertType
-    )
-  } else {
-    retval <- importWaterML1(baseURL, tz = tz, asDateTime = asDateTime)
-  }
-
-  if ("dv" == service) {
-    tzLib <- stats::setNames(
-      c(
-        "America/New_York",
-        "America/New_York",
-        "America/Chicago",
-        "America/Chicago",
-        "America/Denver",
-        "America/Denver",
-        "America/Los_Angeles",
-        "America/Los_Angeles",
-        "America/Anchorage",
-        "America/Anchorage",
-        "America/Honolulu",
-        "America/Honolulu",
-        "UTC"
-      ),
-      c(
-        "EST",
-        "EDT",
-        "CST",
-        "CDT",
-        "MST",
-        "MDT",
-        "PST",
-        "PDT",
-        "AKST",
-        "AKDT",
-        "HAST",
-        "HST",
-        "UTC"
+    service <- valuesList$service
+    if (length(service) > 1) {
+      warning(
+        "Only one service value is allowed. Service: ",
+        service[1],
+        " will be used."
       )
-    )
-    # TODO: Think about dates that cross a time zone boundary.
-    if (format == "waterml,1.1" && nrow(retval) > 0) {
-      retval$dateTime <- as.POSIXct(
-        retval$dateTime,
-        tzLib[tz = retval$tz_cd[1]]
-      )
+      service <- service[1]
     }
-  }
 
-  if ("iv" == service || "iv_recent" == service) {
-    if (tz == "") {
-      retval$tz_cd <- rep("UTC", nrow(retval))
+    baseURL <- httr2::request(pkg.env[[service]])
+
+    POST <- nchar(paste0(unlist(values), collapse = "")) > 2048
+
+    baseURL <- get_or_post(baseURL, POST = POST, !!!values, .multi = "comma")
+
+    if (service != "rating") {
+      baseURL <- get_or_post(baseURL, POST = POST, format = format)
+    }
+
+    if (length(grep("rdb", format)) > 0) {
+      retval <- importRDB1(
+        baseURL,
+        tz = tz,
+        asDateTime = asDateTime,
+        convertType = convertType
+      )
     } else {
-      retval$tz_cd <- rep(tz, nrow(retval))
+      retval <- importWaterML1(baseURL, tz = tz, asDateTime = asDateTime)
     }
+
+    if ("dv" == service) {
+      tzLib <- stats::setNames(
+        c(
+          "America/New_York",
+          "America/New_York",
+          "America/Chicago",
+          "America/Chicago",
+          "America/Denver",
+          "America/Denver",
+          "America/Los_Angeles",
+          "America/Los_Angeles",
+          "America/Anchorage",
+          "America/Anchorage",
+          "America/Honolulu",
+          "America/Honolulu",
+          "UTC"
+        ),
+        c(
+          "EST",
+          "EDT",
+          "CST",
+          "CDT",
+          "MST",
+          "MDT",
+          "PST",
+          "PDT",
+          "AKST",
+          "AKDT",
+          "HAST",
+          "HST",
+          "UTC"
+        )
+      )
+      # TODO: Think about dates that cross a time zone boundary.
+      if (format == "waterml,1.1" && nrow(retval) > 0) {
+        retval$dateTime <- as.POSIXct(
+          retval$dateTime,
+          tzLib[tz = retval$tz_cd[1]]
+        )
+      }
+    }
+
+    if ("iv" == service || "iv_recent" == service) {
+      if (tz == "") {
+        retval$tz_cd <- rep("UTC", nrow(retval))
+      } else {
+        retval$tz_cd <- rep(tz, nrow(retval))
+      }
+    }
+  } else {
+    stop(
+      "NWIS servers will be taken offline February 22nd, 2027. Update to read_waterdata functions.
+Use override_error = TRUE to temporarily override this error. For more information:
+https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html"
+    )
   }
 
   return(retval)

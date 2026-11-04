@@ -23,6 +23,11 @@
 #' print(nwis_citation, style = "citation")
 #' }
 create_NWIS_bib <- function(x) {
+  .Deprecated(
+    package = "dataRetrieval",
+    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata functions."
+  )
+
   textVersion <- paste0(
     "U.S. Geological Survey, ",
     format(attr(x, "queryTime"), "%Y"),
@@ -61,13 +66,13 @@ create_NWIS_bib <- function(x) {
 #'
 #' @examples
 #' \donttest{
-#' WQPData <- readWQPqw("USGS-05288705",
-#'                      parameterCd = "00300")
-#' wqp_citation <- create_WQP_bib(WQPData)
-#' wqp_citation
+#' # WQPData <- readWQPqw("USGS-05288705",
+#' #                      parameterCd = "00300")
+#' # wqp_citation <- create_WQP_bib(WQPData)
+#' # wqp_citation
 #'
-#' print(wqp_citation, style = "Bibtex")
-#' print(wqp_citation, style = "citation")
+#' # print(wqp_citation, style = "Bibtex")
+#' # print(wqp_citation, style = "citation")
 #' }
 create_WQP_bib <- function(x) {
   textVersion <- paste0(

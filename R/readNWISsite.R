@@ -3,6 +3,10 @@
 #' Imports data from USGS site file site. This function gets data from here: <https://waterservices.usgs.gov/>
 #'
 #' @param siteNumbers character USGS site number (or multiple sites).  This is usually an 8 digit number
+#' @param override_error Logical parameter that allows users to run this
+#' function during the final stages of NWIS decommission. NWIS servers will be taken
+#' offline February 22nd, 2027. Setting this parameter to `TRUE` should only
+#' be used as a tool to convert readNWIS to read_waterdata functions.
 #' @keywords data import USGS web service
 #' @return A data frame with at least the following columns:
 #' \tabular{lll}{
@@ -65,37 +69,43 @@
 #' # see ?read_waterdata_monitoring_location
 #' # siteINFOMulti <- readNWISsite(c("05114000", "09423350"))
 #'
-readNWISsite <- function(siteNumbers) {
-  .Deprecated(
-    new = "read_waterdata_monitoring_location",
-    package = "dataRetrieval",
-    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_monitoring_location"
-  )
+readNWISsite <- function(siteNumbers, override_error = FALSE) {
+  if (override_error) {
+    warning(
+      "NWIS servers will be taken offline February 22nd, 2027. Update readNWISsite to read_waterdata_monitoring_location"
+    )
 
-  baseURL <- httr2::request(pkg.env[["site"]])
-  urlSitefile <- httr2::req_url_query(
-    baseURL,
-    siteOutput = "Expanded",
-    format = "rdb"
-  )
+    baseURL <- httr2::request(pkg.env[["site"]])
+    urlSitefile <- httr2::req_url_query(
+      baseURL,
+      siteOutput = "Expanded",
+      format = "rdb"
+    )
 
-  POST <- nchar(paste0(siteNumbers, collapse = "")) > 2048
+    POST <- nchar(paste0(siteNumbers, collapse = "")) > 2048
 
-  urlSitefile <- get_or_post(
-    urlSitefile,
-    POST = POST,
-    site = siteNumbers,
-    .multi = "comma"
-  )
+    urlSitefile <- get_or_post(
+      urlSitefile,
+      POST = POST,
+      site = siteNumbers,
+      .multi = "comma"
+    )
 
-  data <- importRDB1(urlSitefile, asDateTime = FALSE)
-  # readr needs multiple lines to convert to anything but characters:
-  data[grep("_va", names(data))][data[grep("_va", names(data))] == "."] <- NA
+    data <- importRDB1(urlSitefile, asDateTime = FALSE)
+    # readr needs multiple lines to convert to anything but characters:
+    data[grep("_va", names(data))][data[grep("_va", names(data))] == "."] <- NA
 
-  data[, grep("_va", names(data))] <- sapply(
-    data[, grep("_va", names(data))],
-    as.numeric
-  )
+    data[, grep("_va", names(data))] <- sapply(
+      data[, grep("_va", names(data))],
+      as.numeric
+    )
 
-  return(data)
+    return(data)
+  } else {
+    stop(
+      "NWIS servers will be taken offline February 22nd, 2027. Update readNWISsite to read_waterdata_monitoring_location
+Use override_error = TRUE to temporarily override this error. For more information:
+https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html"
+    )
+  }
 }

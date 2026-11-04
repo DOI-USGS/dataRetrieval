@@ -28,7 +28,7 @@
 #' Organization Data \tab Organization \tab /data/Organization/search \cr
 #' }
 #'
-#' There are 4 WQX3 options. These are still in-development,
+#' There are 5 WQX3 options. These are still in-development,
 #' and should be used with caution.
 #'
 #' \tabular{llll}{
@@ -40,8 +40,7 @@
 #' Sampling Activity \tab ActivityWQX3 \tab /wqx3/Activity/search \cr
 #' }
 #'
-#' @param \dots see <https://www.waterqualitydata.us/webservices_documentation> for a complete list of options.
-#' A list of arguments can also be supplied. For more information see the above
+#' @param \dots A list of arguments can also be supplied. For more information see the above
 #' description for this help file. One way to figure out how to construct a WQP query is to go to the "Advanced"
 #' form in the Water Quality Portal. Use the form to discover what parameters are available. Once the query is
 #' set in the form, scroll down to the "Query URL". You will see the parameters

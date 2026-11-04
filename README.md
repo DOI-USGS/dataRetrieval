@@ -15,9 +15,32 @@ Environmental Protection Agency (EPA), U.S. Department of Agriculture
 
 # Introduction
 
-:warning: NWIS web services (readNWIS functions) will be replaced over
-time by USGS Water Data APIs (read_waterdata\_). Read more about it
-here:
+:warning: ALL NWIS web services (readNWIS functions) will be retired
+Feb. 22, 2027. Replace all readNWIS functions with read_waterdata
+functions as soon as possible.
+
+WaterServices (web services behind the “readNWIS” functions) will be
+taken offline February 22nd, 2027. Ahead of that date, we’ll be
+intentionally adding “waits” into requests to the legacy APIs, and will
+have two intentional outages on January 27th and February 16th.
+
+The full decommissioning schedule for WaterServices can be found here:
+[Intentional degradations to WaterServices ahead of final
+decommissioning](https://waterdata.usgs.gov/blog/wdfn-waterservices-degradation/)
+
+Intentional degradations to WaterServices ahead of final decommissioning
+
+Users will need to migrate to services hosted at [USGS Water Data
+APIs](https://api.waterdata.usgs.gov/) before this date. Note that any
+users who may be accessing this data from internal-only URLs, or
+directly from the legacy servers, will also be impacted; we will be
+removing the underpinning databases and decommissioning hardware.
+
+In order to alert automated users of WaterServices, we will
+intentionally slow down requests and perform two scheduled outages
+before permanently decommissioning the services in February 2027.
+
+Read more about the new Water Data dataRetrieval functions here:
 <https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html>
 
 :warning: USGS discrete water-quality data availability and format are
@@ -27,12 +50,6 @@ functionality, visit:
 
 If you have additional questions about these changes, email
 <CompTools@usgs.gov>.
-
-# Feedback requested
-
-We at USGS Water Data for the Nation want your feedback! Tell us how
-we’re doing by taking our quick survey:
-<https://usgswaterresources.gov1.qualtrics.com/jfe/form/SV_07gX8G1DeOtVrH8>
 
 # What would you like to do?
 
@@ -56,8 +73,9 @@ we’re doing by taking our quick survey:
 5.  Get USGS discrete water quality data. Start here:
     `?read_waterdata_samples`
 
-6.  Get metadata about USGS time series data, including instantaneous
-    and daily data. Start here: `?read_waterdata_ts_meta`
+6.  Get metadata about USGS water data, including instantaneous, field
+    measurements, and daily data. Start here:
+    `?read_waterdata_combined_meta`
 
 7.  Find Hydro Network-Linked Data Index (NLDI) data. Start here:
     `?findNLDI`
@@ -175,7 +193,7 @@ citation(package = "dataRetrieval")
 #>   De Cicco, L.A., Hirsch, R.M., Lorenz, D., Watkins, W.D., Johnson, M.,
 #>   Blodgett, D.L., Hinman, E.D., Zemmels, J., 2026, dataRetrieval: R
 #>   packages for discovering and retrieving water data available from
-#>   Federal hydrologic web services, v.2.7.25, doi:10.5066/P9X4L3GE
+#>   Federal hydrologic web services, v.2.7.26, doi:10.5066/P9X4L3GE
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
@@ -184,7 +202,7 @@ citation(package = "dataRetrieval")
 #>     title = {dataRetrieval: R packages for discovering and retrieving water data available from U.S. federal hydrologic web services},
 #>     publisher = {U.S. Geological Survey},
 #>     address = {Reston, VA},
-#>     version = {2.7.25},
+#>     version = {2.7.26},
 #>     institution = {U.S. Geological Survey},
 #>     year = {2026},
 #>     doi = {10.5066/P9X4L3GE},
@@ -193,36 +211,9 @@ citation(package = "dataRetrieval")
 
 ## Citing NWIS data
 
-U.S. Geological Survey, 2023, National Water Information System data
-available on the World Wide Web (USGS Water Data for the Nation),
-accessed \[April 26, 2023\], at <http://waterdata.usgs.gov/nwis/>.
-<http://dx.doi.org/10.5066/F7P55KJN>
-
-This can be done using the `create_NWIS_bib` function:
-
-``` r
-
-dv <- read_waterdata_daily(
-  monitoring_location_id = "USGS-09010500",
-  parameter_code = "00060"
-)
-
-NWIScitation <- create_NWIS_bib(dv)
-
-NWIScitation
-#> U.S. Geological Survey (2026). _USGS Water Data for the Nation: U.S.
-#> Geological Survey National Water Information System database_.
-#> doi:10.5066/F7P55KJN <https://doi.org/10.5066/F7P55KJN>. Accessed Sep
-#> 02, 2026.
-print(NWIScitation, style = "Bibtex")
-#> @Manual{,
-#>   title = {USGS Water Data for the Nation: U.S. Geological Survey National Water Information System database},
-#>   author = {{U.S. Geological Survey}},
-#>   doi = {10.5066/F7P55KJN},
-#>   note = {Accessed Sep 02, 2026},
-#>   year = {2026},
-#> }
-```
+U.S. Geological Survey, 2026, USGS Water Data for the Nation: U.S.
+Geological Survey National Water Information System database, accessed
+\[April 26, 2026\], at <http://dx.doi.org/10.5066/F7P55KJN>
 
 ## Citing WQP data
 
@@ -241,14 +232,14 @@ WQPcitation <- create_WQP_bib(SC)
 WQPcitation
 #> National Water Quality Monitoring Council (2026). _Water Quality
 #> Portal_. doi:10.5066/P9QRKUVJ <https://doi.org/10.5066/P9QRKUVJ>.
-#> Accessed Sep 02, 2026,
+#> Accessed Oct 06, 2026,
 #> <https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv>.
 print(WQPcitation, style = "Bibtex")
 #> @Manual{,
 #>   title = {Water Quality Portal},
 #>   author = {{National Water Quality Monitoring Council}},
 #>   doi = {10.5066/P9QRKUVJ},
-#>   note = {Accessed Sep 02, 2026},
+#>   note = {Accessed Oct 06, 2026},
 #>   year = {2026},
 #>   url = {https://www.waterqualitydata.us/data/Result/search?siteid=USGS-05288705&count=no&pCode=00300&mimeType=csv},
 #> }

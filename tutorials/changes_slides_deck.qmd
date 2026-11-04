@@ -517,7 +517,7 @@ leaflet(
   data = site_info_refined |>
     sf::st_transform(crs = leaflet_crs)
 ) |>
-  addProviderTiles("CartoDB.Positron") |>
+  addProviderTiles("Esri.WorldGrayCanvas") |>
   addCircleMarkers(popup = ~monitoring_location_name, radius = 3, opacity = 1)
 ```
 
@@ -799,7 +799,7 @@ leaflet(
   data = latest_dane_county |>
     sf::st_transform(crs = leaflet_crs)
 ) |>
-  addProviderTiles("CartoDB.Positron") |>
+  addProviderTiles("Esri.WorldGrayCanvas") |>
   addCircleMarkers(
     popup = paste(
       latest_dane_county$monitoring_location_id,
@@ -844,7 +844,7 @@ leaflet(
   data = latest_dane_county_daily |>
     sf::st_transform(crs = leaflet_crs)
 ) |>
-  addProviderTiles("CartoDB.Positron") |>
+  addProviderTiles("Esri.WorldGrayCanvas") |>
   addCircleMarkers(
     popup = paste(
       latest_dane_county_daily$monitoring_location_id,
@@ -943,7 +943,7 @@ leaflet(
   data = sites_mn_wi |>
     sf::st_transform(crs = leaflet_crs)
 ) |>
-  addProviderTiles("CartoDB.Positron") |>
+  addProviderTiles("Esri.WorldGrayCanvas") |>
   addCircleMarkers(
     popup = ~monitoring_location_name,
     color = ~ pal(drainage_area),

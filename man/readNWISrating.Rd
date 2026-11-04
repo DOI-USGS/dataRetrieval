@@ -4,7 +4,12 @@
 \alias{readNWISrating}
 \title{Rating table for an active USGS streamgage retrieval}
 \usage{
-readNWISrating(siteNumber, type = "base", convertType = TRUE)
+readNWISrating(
+  siteNumber,
+  type = "base",
+  convertType = TRUE,
+  override_error = FALSE
+)
 }
 \arguments{
 \item{siteNumber}{character USGS site number.  This is usually an 8 digit number}
@@ -14,6 +19,11 @@ readNWISrating(siteNumber, type = "base", convertType = TRUE)
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character}
+
+\item{override_error}{Logical parameter that allows users to run this
+function during the final stages of NWIS decommission. NWIS servers will be taken
+offline February 22nd, 2027. Setting this parameter to \code{TRUE} should only
+be used as a tool to convert readNWIS to read_waterdata functions.}
 }
 \value{
 A data frame. If \code{type} is "base, " then the columns are
