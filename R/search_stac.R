@@ -84,9 +84,9 @@ search_stac <- function(
   }
 
   if (length(like_index) > 0) {
-    in_filters <- filter_args[-like_index]
+    in_filters <- in_filters[-grep("hydrologic_unit_code", names(in_filters))]
   } else {
-    in_filters <- filter_args
+    in_filters <- in_filters
   }
 
   in_filters <- do.call(add_in_filter, args = in_filters)
