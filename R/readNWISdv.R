@@ -24,6 +24,10 @@
 #' @param endDate character ending date for data retrieval in the form YYYY-MM-DD. Default is "" which indicates
 #' retrieval for the latest possible record. Date arguments are always specified in local time.
 #' @param statCd character USGS statistic code. This is usually 5 digits.  Daily mean (00003) is the default.
+#' @param override_error Logical parameter that allows users to run this
+#' function during the final stages of NWIS decommission. NWIS servers will be taken
+#' offline February 22nd, 2027. Setting this parameter to `TRUE` should only
+#' be used as a tool to convert readNWIS to read_waterdata functions.
 #' @return A data frame with the following columns:
 #' \tabular{lll}{
 #' Name \tab Type \tab Description \cr
@@ -51,48 +55,43 @@
 #'
 #' @seealso [read_waterdata_daily()]
 #' @export
-#' @keywords data import USGS web service
-#' @examples
-#'
-#' # see ?read_waterdata_daily
-#'
-#' #site_id <- "04085427"
-#' #startDate <- "2012-01-01"
-#' #endDate <- "2012-06-30"
-#' #pCode <- "00060"
-#' #
-#' #rawDailyQ <- readNWISdv(site_id, pCode, startDate, endDate)
-#'
 readNWISdv <- function(
   siteNumbers,
   parameterCd,
   startDate = "",
   endDate = "",
-  statCd = "00003"
+  statCd = "00003",
+  override_error = FALSE
 ) {
-  .Deprecated(
-    new = "read_waterdata_daily",
-    package = "dataRetrieval",
-    msg = "NWIS servers are slated for decommission. Please begin to migrate to read_waterdata_daily."
-  )
+  if (override_error) {
+    warning(
+      "NWIS servers will be taken offline February 22nd, 2027. Update readNWISdv to read_waterdata_daily."
+    )
 
-  url <- constructNWISURL(
-    siteNumbers = siteNumbers,
-    parameterCd = parameterCd,
-    startDate = startDate,
-    endDate = endDate,
-    service = "dv",
-    statCd = statCd
-  )
+    url <- constructNWISURL(
+      siteNumbers = siteNumbers,
+      parameterCd = parameterCd,
+      startDate = startDate,
+      endDate = endDate,
+      service = "dv",
+      statCd = statCd
+    )
 
-  data <- importWaterML1(url, asDateTime = FALSE)
+    data <- importWaterML1(url, asDateTime = FALSE)
 
-  if (nrow(data) > 0) {
-    data$dateTime <- as.Date(data$dateTime)
-    data$tz_cd <- NULL
+    if (nrow(data) > 0) {
+      data$dateTime <- as.Date(data$dateTime)
+      data$tz_cd <- NULL
 
-    names(data)[names(data) == "dateTime"] <- "Date"
+      names(data)[names(data) == "dateTime"] <- "Date"
+    }
+
+    return(data)
+  } else {
+    stop(
+      "NWIS servers will be taken offline February 22nd, 2027. Update readNWISdv to read_waterdata_daily.
+Use override_error = TRUE to temporarily override this error. For more information:
+https://doi-usgs.github.io/dataRetrieval/articles/read_waterdata_functions.html"
+    )
   }
-
-  return(data)
 }

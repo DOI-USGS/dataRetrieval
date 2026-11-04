@@ -154,7 +154,7 @@ leaflet_crs <- "+proj=longlat +datum=WGS84" #default leaflet crs
 
 leaflet(data = sites_wi |> 
                 sf::st_transform(crs = leaflet_crs)) |> 
-    addProviderTiles("CartoDB.Positron") |> 
+    addProviderTiles("Esri.WorldGrayCanvas") |> 
     addCircleMarkers(popup = ~monitoring_location_name, 
                    radius = 0.1,
                    opacity = 1)
@@ -397,7 +397,7 @@ pal <- colorNumeric("viridis", sites_mn_wi$drainage_area)
 
 leaflet(data = sites_mn_wi |> 
                 sf::st_transform(crs = leaflet_crs)) |> 
-    addProviderTiles("CartoDB.Positron") |> 
+    addProviderTiles("Esri.WorldGrayCanvas") |> 
     addCircleMarkers(popup = ~monitoring_location_name, 
                      color = ~ pal(drainage_area),
                      radius = 0.1,
@@ -433,7 +433,7 @@ pal <- colorFactor("viridis", what_huc_sites$hydrologic_unit_code)
 
 leaflet(data = what_huc_sites |> 
                 sf::st_transform(crs = leaflet_crs)) |> 
-    addProviderTiles("CartoDB.Positron") |> 
+    addProviderTiles("Esri.WorldGrayCanvas") |> 
     addCircleMarkers(popup = ~monitoring_location_name, 
                      color = ~ pal(hydrologic_unit_code),
                      radius = 0.1,

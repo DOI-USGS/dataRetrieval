@@ -9,7 +9,8 @@ readNWISpeak(
   startDate = "",
   endDate = "",
   asDateTime = TRUE,
-  convertType = TRUE
+  convertType = TRUE,
+  override_error = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,11 @@ columns are removed, but no dates are converted.}
 \item{convertType}{logical, defaults to \code{TRUE}. If \code{TRUE}, the function
 will convert the data to dates, datetimes,
 numerics based on a standard algorithm. If false, everything is returned as a character}
+
+\item{override_error}{Logical parameter that allows users to run this
+function during the final stages of NWIS decommission. NWIS servers will be taken
+offline February 22nd, 2027. Setting this parameter to \code{TRUE} should only
+be used as a tool to convert readNWIS to read_waterdata functions.}
 }
 \value{
 A data frame with the following columns:

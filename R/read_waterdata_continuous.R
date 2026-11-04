@@ -27,6 +27,7 @@
 #' @param time_series_id `r get_ogc_params("continuous")$time_series_id`
 #' Multiple time_series_ids can be requested as a character vector.
 #' @param qualifier `r get_ogc_params("continuous")$qualifier`
+#' @param method_category `r get_ogc_params("continuous")$method_category`
 #' @param properties A vector of requested columns to be returned from the query.
 #' Available options are:
 #' `r dataRetrieval:::get_properties_for_docs("continuous", "continuous_id")`.
@@ -129,6 +130,7 @@ read_waterdata_continuous <- function(
   value = NA,
   last_modified = NA_character_,
   time = NA_character_,
+  method_category = NA_character_,
   skipGeometry = TRUE,
   bbox = NA,
   ...,

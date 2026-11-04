@@ -9,7 +9,8 @@ readNWISdv(
   parameterCd,
   startDate = "",
   endDate = "",
-  statCd = "00003"
+  statCd = "00003",
+  override_error = FALSE
 )
 }
 \arguments{
@@ -26,6 +27,11 @@ retrieval for the earliest possible record. Date arguments are always specified 
 retrieval for the latest possible record. Date arguments are always specified in local time.}
 
 \item{statCd}{character USGS statistic code. This is usually 5 digits.  Daily mean (00003) is the default.}
+
+\item{override_error}{Logical parameter that allows users to run this
+function during the final stages of NWIS decommission. NWIS servers will be taken
+offline February 22nd, 2027. Setting this parameter to \code{TRUE} should only
+be used as a tool to convert readNWIS to read_waterdata functions.}
 }
 \value{
 A data frame with the following columns:
@@ -70,23 +76,6 @@ More information on the web service can be found here:
 \url{https://waterservices.usgs.gov/test-tools}, choosing the
 "Daily Value Service".
 }
-\examples{
-
-# see ?read_waterdata_daily
-
-#site_id <- "04085427"
-#startDate <- "2012-01-01"
-#endDate <- "2012-06-30"
-#pCode <- "00060"
-#
-#rawDailyQ <- readNWISdv(site_id, pCode, startDate, endDate)
-
-}
 \seealso{
 \code{\link[=read_waterdata_daily]{read_waterdata_daily()}}
 }
-\keyword{USGS}
-\keyword{data}
-\keyword{import}
-\keyword{service}
-\keyword{web}

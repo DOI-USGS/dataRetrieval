@@ -3,8 +3,6 @@
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 name: pkgdown
 
@@ -22,6 +20,7 @@ concurrency:
 
 jobs:
   pkgdown:
+    if: github.repository == 'DOI-USGS/dataRetrieval'
     runs-on: ubuntu-latest
     # Only restrict concurrency for non-PR jobs
     environment: CI_config
@@ -65,12 +64,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-                  run: |
-          python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Create public directory
         run: |
           mkdir public
+          export API_USGS_PAT
       - name: Build site
         run: |
           pkgdown::build_site(override = list(destination = "public")) |

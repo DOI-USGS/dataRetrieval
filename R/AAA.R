@@ -6,7 +6,7 @@ pkg.env <- new.env()
   options(
     "dataRetrieval.nldi_base" = "https://api.water.usgs.gov/nldi/linked-data/"
   )
-  options("dataRetrieval.api_version" = "v0")
+  options("dataRetrieval.api_version" = "v1")
   options("dataRetrieval.api_version_stat" = "v0")
   options("dataRetrieval.attach_request" = TRUE)
   options("dataRetrieval.convertType" = TRUE)
@@ -138,8 +138,7 @@ https://doi-usgs.github.io/dataRetrieval/articles/Status.html"
 
 new_nwis_message <- function() {
   return(
-    "ALERT: All NWIS services are slated for decommission
-and new dataRetrieval functions will be added.
+    "ALERT: All NWIS services are slated for decommission in early 2027.
 For up-to-date information, see: 
 https://doi-usgs.github.io/dataRetrieval/articles/Status.html"
   )

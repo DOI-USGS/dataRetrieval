@@ -13,6 +13,7 @@ read_waterdata_field_meta(
   end = NA_character_,
   last_modified = NA_character_,
   properties = NA_character_,
+  sublocation_identifier = NA_character_,
   skipGeometry = NA,
   bbox = NA,
   limit = NA,
@@ -28,7 +29,7 @@ read_waterdata_field_meta(
 
 Multiple monitoring_location_ids can be requested as a character vector.}
 
-\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://api.waterdata.usgs.gov/ogcapi/v0/collections/parameter-codes/items}.
+\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/parameter-codes/items}.
 
 Multiple parameter_codes can be requested as a character vector.}
 
@@ -63,9 +64,7 @@ Examples:
 \item Duration objects: "P1M" for data from the past month or "PT36H" for the last 36 hours
 }
 
-Only features that have a \code{end_utc} that intersects the value of datetime are selected.
-
-See also Details below for more information.}
+Only features that have a \code{end_utc} that intersects the value of datetime are selected.}
 
 \item{last_modified}{The last time a record was refreshed in our database. This may happen due to regular operational processes and does not necessarily indicate anything about the measurement has changed.
 You can query this field using date-times or intervals, adhering to RFC 3339, or using ISO 8601 duration objects. Intervals may be bounded or half-bounded (double-dots at start or end).
@@ -83,8 +82,12 @@ See also Details below for more information.}
 
 \item{properties}{A vector of requested columns to be returned from the query.
 Available options are:
-geometry, field_measurement_id, reading_type, monitoring_location_id, parameter_code, parameter_name, parameter_description, begin, end, last_modified.
+geometry, field_measurement_id, reading_type, monitoring_location_id, parameter_code, parameter_name, parameter_description, begin, end, last_modified, sublocation_identifier.
 The default (\code{NA}) will return all columns of the data.}
+
+\item{sublocation_identifier}{An optional human-readable identifier used to specify where measurements are recorded at a monitoring location.
+
+See also Details below for more information.}
 
 \item{skipGeometry}{This parameter can be used to skip response geometries for
 each feature. The returning object will be a data frame with no spatial

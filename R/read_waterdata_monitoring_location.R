@@ -149,6 +149,7 @@ read_waterdata_monitoring_location <- function(
   bbox = NA,
   skipGeometry = NA,
   ...,
+  convertType = getOption("dataRetrieval.convertType"),
   limit = getOption("dataRetrieval.limit"),
   no_paging = getOption("dataRetrieval.no_paging"),
   chunk_size = getOption("dataRetrieval.site_chunk_size_meta"),
@@ -159,7 +160,6 @@ read_waterdata_monitoring_location <- function(
   rlang::check_dots_empty()
 
   args <- mget(names(formals()))
-  args[["convertType"]] <- FALSE
 
   return_list <- get_ogc_data(args, output_id, service)
 
