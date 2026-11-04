@@ -35,6 +35,20 @@
 #'     collections = "daily"
 #' )
 #'
+#' # HUCs return all HUCs that start with the entered value
+#' features_huc <- search_stac(
+#'   hydrologic_unit_code = "07090002"
+#' )
+#'
+#' unlist(unique(sapply(features_huc, function(x)
+#'     x[["properties"]]["hydrologic_unit_code"])))
+#'
+#' features_huc2 <- search_stac(
+#'   hydrologic_unit_code = c("0709000203", "0709000204")
+#' )
+#'
+#' unlist(unique(sapply(features_huc2, function(x)
+#'     x[["properties"]]["hydrologic_unit_code"])))
 #'}
 search_stac <- function(
   ...,
@@ -61,7 +75,7 @@ search_stac <- function(
   filter_args <- list(...)
 
   dt_index <- grep("datetime|updated", names(filter_args))
-  datetime_filters <- filter_args[dt_index]
+  like_index <- grep("hydrologic_unit_code", names(filter_args))
 
   if (length(dt_index) > 0) {
     in_filters <- filter_args[-dt_index]
@@ -69,8 +83,15 @@ search_stac <- function(
     in_filters <- filter_args
   }
 
+  if (length(like_index) > 0) {
+    in_filters <- filter_args[-like_index]
+  } else {
+    in_filters <- filter_args
+  }
+
   in_filters <- do.call(add_in_filter, args = in_filters)
-  date_filters <- do.call(add_datetime_filter, args = datetime_filters)
+  date_filters <- do.call(add_datetime_filter, args = filter_args[dt_index])
+  like_filters <- do.call(add_like_filter, args = filter_args[like_index])
 
   if (!all(is.na(date_filters))) {
     request <- httr2::req_url_query(
@@ -92,6 +113,17 @@ search_stac <- function(
   if (!all(is.na(all_filters))) {
     all_filters <- all_filters[!is.na(all_filters)]
     filters <- paste0(all_filters, collapse = " AND ")
+
+    if (length(like_filters) > 0) {
+      filters <- paste0(filters, " OR ", like_filters)
+    }
+
+    request <- request |>
+      httr2::req_url_query(filter = filters)
+  } else {
+    if (length(like_filters) > 0) {
+      filters <- like_filters
+    }
 
     request <- request |>
       httr2::req_url_query(filter = filters)
@@ -250,5 +282,25 @@ add_in_filter <- function(...) {
     }
   }
 
+  return(out)
+}
+
+add_like_filter <- function(...) {
+  args <- list(...)
+  out <- c()
+  for (i in seq_along(args)) {
+    if (length(args[[i]]) > 1) {
+      for (j in seq_along(args[[i]])) {
+        vals <- args[[i]][j]
+        like_single <- sprintf("%s LIKE '%s%%'", names(args[i]), vals)
+        out <- c(out, like_single)
+      }
+    } else {
+      vals <- args[[i]]
+      out <- c(out, sprintf("%s LIKE '%s%%'", names(args[i]), vals))
+    }
+  }
+
+  out <- paste0(out, collapse = " OR ")
   return(out)
 }

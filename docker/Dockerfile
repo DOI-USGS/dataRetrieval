@@ -56,8 +56,3 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
 
 ENV RETICULATE_PYTHON=/usr/bin/python3
 
-COPY *.tar.gz /tmp/pkg.tar.gz
-RUN set -eux; \
-  R CMD INSTALL /tmp/pkg.tar.gz && \
-  Rscript -e "library(dataRetrieval)" && \
-  rm -f /tmp/*.tar.gz

@@ -56,6 +56,20 @@ features_county <- search_stac(
     collections = "daily"
 )
 
+# HUCs return all HUCs that start with the entered value
+features_huc <- search_stac(
+  hydrologic_unit_code = "07090002"
+)
+
+unlist(unique(sapply(features_huc, function(x)
+    x[["properties"]]["hydrologic_unit_code"])))
+
+features_huc2 <- search_stac(
+  hydrologic_unit_code = c("0709000203", "0709000204")
+)
+
+unlist(unique(sapply(features_huc2, function(x)
+    x[["properties"]]["hydrologic_unit_code"])))
 }
 \dontshow{\}) # examplesIf}
 }

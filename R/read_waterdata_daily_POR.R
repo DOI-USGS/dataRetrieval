@@ -104,6 +104,7 @@
 #' )
 #'
 #' # Example of how to use partitioned files:
+#' # These examples will connect to all the daily data in "raw_data_store":
 #' con <- DBI::dbConnect(duckdb::duckdb(), allow_extensions = FALSE)
 #' df_explore <- dplyr::tbl(con,
 #'                          paste0(files_explore,
@@ -129,6 +130,34 @@
 #'       .by = c(monitoring_location_id, parameter_code, month)
 #'       ) |>
 #'    dplyr::arrange(monitoring_location_id, parameter_code, month) |>
+#'    dplyr::collect()
+#'
+#' DBI::dbDisconnect(con)
+#'
+#' # HUC example:
+#' # Here's a GOTCHA!
+#' # If you keep saving the files in the same directory,
+#' # when you pull the data later, if you just generally pull
+#' # from that file, you will get all the data you've ever downloaded,
+#' # not just these 2 HUCs. Therefore, you will want to make a new
+#' # directory when you are specific filters you will be using:
+#' dir.create("raw_HUC", showWarnings = FALSE)
+#' huc_files <- read_waterdata_daily_por(
+#'     hydrologic_unit_code = c("0709000203", "0709000204"),
+#'     file_directory = "raw_HUC",
+#'     download = TRUE,
+#'     load_all = FALSE
+#' )
+#'
+#' con <- DBI::dbConnect(duckdb::duckdb(), allow_extensions = FALSE)
+#'
+#' huc_explore <- dplyr::tbl(con,
+#'                          paste0(huc_files,
+#'                           "/**/*.parquet")) |>
+#'    dplyr::mutate(value = as.numeric(value)) |>
+#'    dplyr::filter(
+#'       parameter_code %in% c("00060", "00065")
+#'      ) |>
 #'    dplyr::collect()
 #'
 #' DBI::dbDisconnect(con)
