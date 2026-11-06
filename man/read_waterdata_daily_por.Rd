@@ -125,6 +125,18 @@ df_4 <- read_waterdata_daily_por(
 )
 nrow(df_4)
 range(df_4$time)
+
+# HUCs
+df_huc <- read_waterdata_daily_por(
+    hydrologic_unit_code = "07090002",
+    parameter_code = "00060"
+)
+
+df_ts_id <- read_waterdata_daily_por(
+    time_series_id = c("5dac1dd9ef6c404a86f98bf922badd36",
+                       "40ccf2569ec54edbbf1f0a1717be1ba1")
+)
+
 }
 \dontshow{\}) # examplesIf}
 }

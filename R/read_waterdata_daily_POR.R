@@ -67,6 +67,18 @@
 #' )
 #' nrow(df_4)
 #' range(df_4$time)
+#'
+#' # HUCs
+#' df_huc <- read_waterdata_daily_por(
+#'     hydrologic_unit_code = "07090002",
+#'     parameter_code = "00060"
+#' )
+#'
+#' df_ts_id <- read_waterdata_daily_por(
+#'     time_series_id = c("5dac1dd9ef6c404a86f98bf922badd36",
+#'                        "40ccf2569ec54edbbf1f0a1717be1ba1")
+#' )
+#'
 #' }
 read_waterdata_daily_por <- function(
   monitoring_location_id = NA_character_,
@@ -88,7 +100,7 @@ read_waterdata_daily_por <- function(
 ) {
   rlang::check_dots_empty()
 
-  search_features <- list(
+  ts_meta <- read_waterdata_combined_meta(
     monitoring_location_id = monitoring_location_id,
     county_name = county_name,
     state_name = state_name,
@@ -96,13 +108,26 @@ read_waterdata_daily_por <- function(
     bbox = bbox,
     hydrologic_unit_code = hydrologic_unit_code,
     site_type_code = site_type_code,
+    id = time_series_id,
+    parameter_code = parameter_code,
+    statistic_id = statistic_id,
+    data_type = "Daily values"
+  )
+
+  if (length(unique(ts_meta$monitoring_location_id)) > site_limits) {
+    stop("Unique monitoring_location_id exceed site_limits")
+  }
+
+  search_features <- list(
+    monitoring_location_id = unique(ts_meta$monitoring_location_id),
     collections = "daily",
-    limit = site_limits
+    limit = site_limits,
+    chunk_size = 50
   )
 
   search_features <- search_features[!is.na(search_features)]
 
-  features <- do.call(search_stac, search_features)
+  features <- suppressMessages(do.call(search_stac, search_features))
 
   con_1 <- initial_connection()
   on.exit(DBI::dbDisconnect(con_1))

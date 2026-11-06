@@ -62,7 +62,8 @@ search_stac <- function(
   collections = c("daily", "continuous", "ratings"),
   bbox = NA,
   limit = getOption("dataRetrieval.limit"),
-  custom_filter = NA_character_
+  custom_filter = NA_character_,
+  chunk_size = 50
 ) {
   match.arg(
     collections,
@@ -70,94 +71,123 @@ search_stac <- function(
     several.ok = TRUE
   )
 
-  request <- httr2::request("https://api.waterdata.usgs.gov/stac") |>
-    httr2::req_url_path_append(getOption("dataRetrieval.api_version_stac")) |>
-    httr2::req_url_path_append("search")
-
-  if (!all(is.na(collections))) {
-    request <- request |>
-      httr2::req_url_query(collections = collections, .multi = "comma")
-  }
-
   filter_args <- list(...)
 
-  dt_index <- grep("datetime|updated", names(filter_args))
-  like_index <- grep("hydrologic_unit_code", names(filter_args))
-
-  if (length(dt_index) > 0) {
-    in_filters <- filter_args[-dt_index]
-  } else {
-    in_filters <- filter_args
-  }
-
-  if (length(like_index) > 0) {
-    in_filters <- in_filters[-grep("hydrologic_unit_code", names(in_filters))]
-  } else {
-    in_filters <- in_filters
-  }
-
-  in_filters <- do.call(add_in_filter, args = in_filters)
-  date_filters <- do.call(add_datetime_filter, args = filter_args[dt_index])
-  like_filters <- do.call(add_like_filter, args = filter_args[like_index])
-
-  if (!all(is.na(date_filters))) {
-    request <- httr2::req_url_query(
-      request,
-      !!!date_filters
+  if (
+    !is.na(chunk_size) &
+      length(filter_args[["monitoring_location_id"]]) > chunk_size
+  ) {
+    ml_splits <- split(
+      filter_args[["monitoring_location_id"]],
+      ceiling(seq_along(filter_args[["monitoring_location_id"]]) / chunk_size)
     )
-  }
 
-  all_filters <- c(in_filters, custom_filter)
+    rl <- lapply(ml_splits, function(x) {
+      do.call(
+        search_stac,
+        list(
+          monitoring_location_id = x,
+          collections = collections,
+          bbox = bbox,
+          limit = limit,
+          custom_filter = custom_filter,
+          chunk_size = chunk_size
+        )
+      )
+    })
 
-  if (all(!is.na(bbox))) {
-    request <- httr2::req_url_query(
-      request,
-      bbox = as.numeric(bbox),
-      .multi = "comma"
-    )
-  }
+    rl_filtered <- rl[sapply(rl, length) > 0]
 
-  if (!all(is.na(all_filters))) {
-    all_filters <- all_filters[!is.na(all_filters)]
-    filters <- paste0(all_filters, collapse = " AND ")
+    return_list <- unlist(rl_filtered, recursive = FALSE)
+    return(return_list)
+  } else {
+    request <- httr2::request("https://api.waterdata.usgs.gov/stac") |>
+      httr2::req_url_path_append(getOption("dataRetrieval.api_version_stac")) |>
+      httr2::req_url_path_append("search")
 
-    if (length(like_filters) > 0) {
-      filters <- paste0(filters, " OR ", like_filters)
+    if (!all(is.na(collections))) {
+      request <- request |>
+        httr2::req_url_query(collections = collections, .multi = "comma")
+    }
+
+    dt_index <- grep("datetime|updated", names(filter_args))
+    like_index <- grep("hydrologic_unit_code", names(filter_args))
+
+    if (length(dt_index) > 0) {
+      in_filters <- filter_args[-dt_index]
+    } else {
+      in_filters <- filter_args
+    }
+
+    if (length(like_index) > 0) {
+      in_filters <- in_filters[-grep("hydrologic_unit_code", names(in_filters))]
+    } else {
+      in_filters <- in_filters
+    }
+
+    in_filters <- do.call(add_in_filter, args = in_filters)
+    date_filters <- do.call(add_datetime_filter, args = filter_args[dt_index])
+    like_filters <- do.call(add_like_filter, args = filter_args[like_index])
+
+    if (!all(is.na(date_filters))) {
+      request <- httr2::req_url_query(
+        request,
+        !!!date_filters
+      )
+    }
+
+    all_filters <- c(in_filters, custom_filter)
+
+    if (all(!is.na(bbox))) {
+      request <- httr2::req_url_query(
+        request,
+        bbox = as.numeric(bbox),
+        .multi = "comma"
+      )
+    }
+
+    if (!all(is.na(all_filters))) {
+      all_filters <- all_filters[!is.na(all_filters)]
+      filters <- paste0(all_filters, collapse = " AND ")
+
+      if (length(like_filters) > 0) {
+        filters <- paste0(filters, " OR ", like_filters)
+      }
+
+      request <- request |>
+        httr2::req_url_query(filter = filters) |>
+        httr2::req_url_query(`filter-lang` = "cql2-text")
+    } else {
+      if (length(like_filters) > 0) {
+        filters <- like_filters
+      }
+
+      request <- request |>
+        httr2::req_url_query(filter = filters) |>
+        httr2::req_url_query(`filter-lang` = "cql2-text")
     }
 
     request <- request |>
-      httr2::req_url_query(filter = filters) |>
-      httr2::req_url_query(`filter-lang` = "cql2-text")
-  } else {
-    if (length(like_filters) > 0) {
-      filters <- like_filters
-    }
+      httr2::req_url_query(limit = limit) |>
+      basic_request()
 
-    request <- request |>
-      httr2::req_url_query(filter = filters) |>
-      httr2::req_url_query(`filter-lang` = "cql2-text")
+    message("Requesting:\n", request$url)
+
+    resps <- httr2::req_perform_iterative(
+      request,
+      next_req = next_req_url,
+      max_reqs = Inf,
+      on_error = "stop"
+    )
+
+    failures <- resps |> httr2::resps_failures()
+
+    features <- resps |>
+      httr2::resps_successes() |>
+      httr2::resps_data(\(resp) get_stac_features(resp))
+
+    return(features)
   }
-
-  request <- request |>
-    httr2::req_url_query(limit = limit) |>
-    basic_request()
-
-  message("Requesting:\n", request$url)
-
-  resps <- httr2::req_perform_iterative(
-    request,
-    next_req = next_req_url,
-    max_reqs = Inf,
-    on_error = "stop"
-  )
-
-  failures <- resps |> httr2::resps_failures()
-
-  features <- resps |>
-    httr2::resps_successes() |>
-    httr2::resps_data(\(resp) get_stac_features(resp))
-
-  return(features)
 }
 
 

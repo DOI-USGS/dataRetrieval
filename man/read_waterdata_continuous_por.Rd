@@ -18,7 +18,7 @@ read_waterdata_continuous_por(
   end_time = NA_character_,
   approval_status = NA_character_,
   ...,
-  site_limits = getOption("dataRetrieval.limit"),
+  site_limits = 1000,
   memory_MB_limit = 1000
 )
 }
@@ -104,6 +104,14 @@ df_4 <- read_waterdata_continuous_por(
 )
 nrow(df_4)
 range(df_4$time)
+
+# HUCs
+df_huc <- read_waterdata_continuous_por(
+    hydrologic_unit_code = "0709000214",
+    parameter_code = "00060",
+    start_time = as.POSIXct("2020-01-01", tz = "UTC")
+)
+nrow(df_huc)
 
 }
 \dontshow{\}) # examplesIf}

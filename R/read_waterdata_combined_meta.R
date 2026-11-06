@@ -9,6 +9,7 @@
 #' @param agency_name `r get_ogc_params("combined-metadata")$agency_name`
 #' @param monitoring_location_number `r get_ogc_params("combined-metadata")$monitoring_location_number`
 #' @param monitoring_location_name `r get_ogc_params("combined-metadata")$monitoring_location_name`
+#' @param id This can be either the time_series_id or field_measurements_series_id.
 #' @param district_code `r get_ogc_params("combined-metadata")$district_code`
 #' @param state_name `r get_ogc_params("combined-metadata")$state_name`
 #' @param county_code `r get_ogc_params("combined-metadata")$county_code`
@@ -193,6 +194,7 @@ read_waterdata_combined_meta <- function(
   properties = NA_character_,
   skipGeometry = NA,
   bbox = NA,
+  id = NA,
   ...,
   convertType = getOption("dataRetrieval.convertType"),
   limit = getOption("dataRetrieval.limit"),

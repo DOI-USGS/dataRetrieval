@@ -9,7 +9,8 @@ search_stac(
   collections = c("daily", "continuous", "ratings"),
   bbox = NA,
   limit = getOption("dataRetrieval.limit"),
-  custom_filter = NA_character_
+  custom_filter = NA_character_,
+  chunk_size = 50
 )
 }
 \arguments{

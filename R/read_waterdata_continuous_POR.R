@@ -66,6 +66,14 @@
 #' nrow(df_4)
 #' range(df_4$time)
 #'
+#' # HUCs
+#' df_huc <- read_waterdata_continuous_por(
+#'     hydrologic_unit_code = "0709000214",
+#'     parameter_code = "00060",
+#'     start_time = as.POSIXct("2020-01-01", tz = "UTC")
+#' )
+#' nrow(df_huc)
+#'
 #' }
 read_waterdata_continuous_por <- function(
   monitoring_location_id = NA_character_,
@@ -81,12 +89,12 @@ read_waterdata_continuous_por <- function(
   end_time = NA_character_,
   approval_status = NA_character_,
   ...,
-  site_limits = getOption("dataRetrieval.limit"),
+  site_limits = 1000,
   memory_MB_limit = 1000 #Stop if expected results exceed approximately 1 GB
 ) {
   rlang::check_dots_empty()
 
-  search_features <- list(
+  ts_meta <- read_waterdata_combined_meta(
     monitoring_location_id = monitoring_location_id,
     county_name = county_name,
     state_name = state_name,
@@ -94,13 +102,25 @@ read_waterdata_continuous_por <- function(
     bbox = bbox,
     hydrologic_unit_code = hydrologic_unit_code,
     site_type_code = site_type_code,
+    id = time_series_id,
+    parameter_code = parameter_code,
+    data_type = "Continuous values"
+  )
+
+  if (length(unique(ts_meta$monitoring_location_id)) > site_limits) {
+    stop("Unique monitoring_location_id exceed site_limits")
+  }
+
+  search_features <- list(
+    monitoring_location_id = unique(ts_meta$monitoring_location_id),
     collections = "continuous",
-    limit = site_limits
+    limit = site_limits,
+    chunk_size = 50
   )
 
   search_features <- search_features[!is.na(search_features)]
 
-  features <- do.call(search_stac, search_features)
+  features <- suppressMessages(do.call(search_stac, search_features))
 
   con_1 <- initial_connection()
   on.exit(DBI::dbDisconnect(con_1))
