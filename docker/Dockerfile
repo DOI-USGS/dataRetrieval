@@ -48,13 +48,11 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
   r-cran-pkgdown \
   r-cran-covr \
   r-cran-readxl \
+  r-cran-dbi \
+  r-cran-duckdb \
+  r-cran-dbplyr \
   r-cran-dt \
   && rm -rf /var/lib/apt/lists/*
 
 ENV RETICULATE_PYTHON=/usr/bin/python3
 
-COPY *.tar.gz /tmp/pkg.tar.gz
-RUN set -eux; \
-  R CMD INSTALL /tmp/pkg.tar.gz && \
-  Rscript -e "library(dataRetrieval)" && \
-  rm -f /tmp/*.tar.gz

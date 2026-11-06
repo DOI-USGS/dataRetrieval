@@ -96,22 +96,6 @@ reference:
       - summarize_waterdata_samples
       - check_waterdata_sample_params
       - get_monitoring_location_arguments
-  - title: RETIRED FUNCTIONS - Discontinue Using!
-    desc:  These functions will be removed after Feburary 22, 2027
-    contents:
-      - readNWISdv
-      - readNWISuv
-      - readNWISsite
-      - readNWISstat
-      - readNWISpCode
-      - readNWISrating
-      - readNWISpeak
-      - readNWISdata
-      - whatNWISsites
-      - whatNWISdata
-      - create_NWIS_bib
-      - constructNWISURL
-      - renameNWISColumns
   - title: Water Quality Portal (WQP)
     desc: Functions to retrieve WQP data.
     contents:
@@ -149,6 +133,16 @@ reference:
       - importWaterML1
       - importWaterML2
       - importWQP
+  - title: STAC Functions
+    desc:  Retrieva full period of record data
+    contents:
+      - read_waterdata_daily_por
+      - read_waterdata_continuous_por
+      - search_stac
+      - download_stac
+      - initial_connection
+      - open_stac
+      - fix_continuous_overlap
   - title: Helper functions
     contents:
       - create_WQP_bib
@@ -173,3 +167,19 @@ reference:
       - is_dataRetrieval_user
       - checkWQPdates
       - get_ogc_params
+  - title: RETIRED FUNCTIONS - Discontinue Using!
+    desc:  These functions will be removed after Feburary 22, 2027
+    contents:
+      - readNWISdv
+      - readNWISuv
+      - readNWISsite
+      - readNWISstat
+      - readNWISpCode
+      - readNWISrating
+      - readNWISpeak
+      - readNWISdata
+      - whatNWISsites
+      - whatNWISdata
+      - create_NWIS_bib
+      - constructNWISURL
+      - renameNWISColumns

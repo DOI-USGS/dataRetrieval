@@ -20,3 +20,5 @@ vignettes/*.R
 .positai
 /.venv/
 .env
+raw_data_store
+raw_HUC

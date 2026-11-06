@@ -17,6 +17,10 @@
 #' the rating for that value of INDEP. If `file_type` is "corr" then the
 #' columns are INDEP, typically the gage height, in feet; CORR, the correction
 #' for that value; and CORRINDEP, the corrected value for CORR.
+#' @param agency_code Agency that operates the monitoring location (e.g. USGS).
+#' @param monitoring_location_number Site number without the agency prefix (e.g. 01451500).
+#' @param updated When the rating file was last updated (ISO 8601, UTC).
+#' Either a date-time or an interval, open or closed. See Details below.
 #' @param file_path Path to save the rating curve rdb files. The
 #' default is `tempdir()`, which will wipe out the files.
 #' @param datetime Only return items that have a temporal property that
@@ -80,7 +84,11 @@
 #'                                      download_and_parse = FALSE)
 #' length(bbox_query)
 #' recent_query <- read_waterdata_ratings(bbox = bbox,
-#'                                        datetime = c(Sys.Date()-7, NA),
+#'                                        datetime = c(Sys.Date()-24, NA),
+#'                                        download_and_parse = FALSE)
+#'
+#' recent_query_up <- read_waterdata_ratings(bbox = bbox,
+#'                                        updated = c(Sys.Date()-24, NA),
 #'                                        download_and_parse = FALSE)
 #'}
 read_waterdata_ratings <- function(
@@ -89,6 +97,9 @@ read_waterdata_ratings <- function(
   file_path = tempdir(),
   bbox = NA,
   datetime = NA_character_,
+  updated = NA_character_,
+  agency_code = NA_character_,
+  monitoring_location_number = NA_character_,
   ...,
   limit = 10000,
   download_and_parse = TRUE
@@ -100,68 +111,17 @@ read_waterdata_ratings <- function(
   )
   rlang::check_dots_empty()
 
-  request <- httr2::request("https://api.waterdata.usgs.gov/stac/v0/") |>
-    httr2::req_url_path_append("search")
+  search_features <- list(
+    monitoring_location_id = monitoring_location_id,
+    file_type = file_type,
+    bbox = bbox,
+    datetime = datetime,
+    collections = "ratings"
+  )
 
-  filter <- NA_character_
+  search_features <- search_features[!is.na(search_features)]
 
-  if (!all(is.na(monitoring_location_id))) {
-    if (length(monitoring_location_id) > 1) {
-      monitoring_location_id <- paste0(
-        monitoring_location_id,
-        collapse = "', '"
-      )
-    }
-
-    filter <- sprintf(
-      "monitoring_location_id IN ('%s')",
-      monitoring_location_id
-    )
-  }
-
-  if (length(file_type) == 1) {
-    filter <- sprintf("%s AND file_type = '%s'", filter, file_type)
-  }
-
-  if (!is.na(filter)) {
-    if (substr(filter, 1, 3) == "AND") {
-      filter <- substr(filter, 4, nchar(filter))
-    }
-
-    request <- request |>
-      httr2::req_url_query(filter = filter)
-  }
-
-  if (!all(is.na(datetime))) {
-    if (any(grepl("P", datetime))) {
-      stop(
-        "Periods are not supported in datetime argument in the rating curve service."
-      )
-    }
-    datetime <- format_api_dates(datetime, date = FALSE)
-
-    request <- request |>
-      httr2::req_url_query(datetime = datetime)
-  }
-
-  if (all(!is.na(bbox))) {
-    request <- httr2::req_url_query(
-      request,
-      bbox = as.numeric(bbox),
-      .multi = "comma"
-    )
-  }
-
-  request <- request |>
-    httr2::req_url_query(limit = limit) |>
-    basic_request()
-
-  message("Requesting:\n", request$url)
-
-  resp <- httr2::req_perform(request)
-  log_rate_limit(resp)
-
-  features <- httr2::resp_body_json(resp)[["features"]]
+  features <- do.call(search_stac, search_features)
 
   if (download_and_parse) {
     return_list <- list()

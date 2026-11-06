@@ -1,3 +1,7 @@
+dataRetrieval 2.7.28
+===================
+* Introduction of STAC service.
+
 dataRetrieval 2.7.27
 ===================
 * All NWIS functions will now error out by default. NWIS servers will be taken offline February 22nd, 2027. Use override_error = TRUE to temporarily override this error. 

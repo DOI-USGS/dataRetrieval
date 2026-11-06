@@ -64,6 +64,7 @@ read_waterdata_combined_meta(
   properties = NA_character_,
   skipGeometry = NA,
   bbox = NA,
+  id = NA,
   ...,
   convertType = getOption("dataRetrieval.convertType"),
   limit = getOption("dataRetrieval.limit"),
@@ -251,6 +252,8 @@ depth). Coordinates are assumed to be in crs 4326. The expected format is a nume
 vector structured: c(xmin,ymin,xmax,ymax).
 Another way to think of it is c(Western-most longitude,
 Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
+
+\item{id}{This can be either the time_series_id or field_measurements_series_id.}
 
 \item{\dots}{Not used. Included to help differentiate official Water Data API arguments
 from more seldom used, optional dataRetrieval-specific arguments.}
