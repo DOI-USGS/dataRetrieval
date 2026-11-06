@@ -62,13 +62,13 @@ Imports:
     data.table,
     rlang,
     DBI,
-    duckdb
+    duckdb,
+    dplyr
 Suggests:
     covr,
     knitr,
     rmarkdown,
     testthat,
-    dplyr,
     dbplyr
 Encoding: UTF-8
 BuildVignettes: true

@@ -1,71 +1,83 @@
 #' Coordinate the request and retrieval of STAC calls
 #'
-#' @param args arguments from individual functions
-#' @param file_directory Where to download
-#' @param download Whether to download data or not
-#' @param load_all Whether to load data or not
+#' @param features return from search_stac
+#' @param con Connection
 #'
-#' @noRd
-get_stac_data <- function(
-  args,
-  file_directory,
-  download,
-  load_all,
-  showWarnings
+#' @export
+#' @examplesIf is_dataRetrieval_user()
+#'
+#' \donttest{
+#'
+#' monitoring_location_id <- c("USGS-01435000", "USGS-05406360")
+#'
+#' features <- search_stac(
+#'     monitoring_location_id = monitoring_location_id,
+#'     collections = c("continuous"))
+#'
+#' ###################################################
+#' # No download, no load: Returns lazy table
+#' con_1 <- initial_connection()
+#' data_tbl <- open_stac(features = features,
+#'                       con = con_1)
+#' head(data_tbl)
+#'
+#' summarize_data <- data_tbl |>
+#'    dplyr::mutate(value = as.numeric(value)) |>
+#'    dplyr::summarize(count = dplyr::n(),
+#'                     start = min(time, na.rm = TRUE),
+#'                     end = max(time, na.rm = TRUE),
+#'                     max_val = max(value, na.rm = TRUE),
+#'                     .by = c(time_series_id, monitoring_location_id, parameter_code)) |>
+#'    dplyr::collect()
+#'
+#' summarize_data
+#'
+#' DBI::dbDisconnect(con_1)
+#'
+#' #########################################################
+#' # Download data locally, no load: Returns lazy table
+#' raw_data_store <- file.path(tempdir(), "test_1")
+#' dir.create(raw_data_store, showWarnings = FALSE)
+#'
+#' local_path <- download_stac(
+#'   features = features,
+#'   file_directory = raw_data_store)
+#'
+#' con_2 <- initial_connection()
+#'
+#' data_tbl <- open_stac(features = local_path,
+#'                       con = con_2)
+#' head(data_tbl)
+#' DBI::dbDisconnect(con_2)
+#'
+#'
+#' }
+open_stac <- function(
+  con,
+  features
 ) {
-  search_features <- args[!is.na(args)]
-
-  features <- do.call(search_stac, search_features)
-
-  if (download) {
-    download_files <- download_stac(
-      features = features,
-      file_directory = file_directory,
-      output_returned = c("partition_folder"),
-      showWarnings = showWarnings
-    )
-
-    if (!load_all) {
-      return(unique(download_files))
-    } else {
-      con <- DBI::dbConnect(duckdb::duckdb(shared_home = TRUE))
-      on.exit(DBI::dbDisconnect(con))
-      # This is all local, so no extra header needed:
-      query <- sprintf(
-        "SELECT * FROM read_parquet('%s/**/*.parquet')",
-        download_files
-      )
-      df_out <- DBI::dbGetQuery(con, query)
-
-      df_out <- clean_stac_cols(df_out)
-
-      attr(df_out, "download_location") <- download_files
-      return(df_out)
-    }
-  } else {
+  if (is.list(features)) {
     assets <- sapply(features, function(x) x[["assets"]])
     urls <- get_all_hrefs(assets)
-
-    if (load_all) {
-      sql_url_array <- paste0(
-        "[",
-        paste(paste0("'", urls, "'"), collapse = ", "),
-        "]"
-      )
-      con <- DBI::dbConnect(duckdb::duckdb(shared_home = TRUE))
-      on.exit(DBI::dbDisconnect(con))
-      add_duck_header(con)
-
-      query <- sprintf("SELECT * FROM read_parquet(%s)", sql_url_array)
-
-      df_out <- DBI::dbGetQuery(con, query)
-      df_out <- clean_stac_cols(df_out)
-
-      return(df_out)
+    path_to_data <- dplyr::sql(sprintf(
+      "SELECT * FROM read_parquet([%s], union_by_name = true)",
+      paste(sprintf("'%s'", urls), collapse = ", ")
+    ))
+  } else {
+    # Check if files exist
+    if (file.exists(features)) {
+      path_to_data <- dplyr::sql(sprintf(
+        "SELECT * FROM read_parquet('%s/**/*.parquet')",
+        features
+      ))
     } else {
-      return(urls)
+      stop("Unknown features.")
     }
   }
+
+  data_con <- dplyr::tbl(con, path_to_data)
+
+  return(data_con)
 }
 
 clean_stac_cols <- function(x) {
@@ -96,25 +108,38 @@ get_all_hrefs <- function(x) {
   unlist(c(current_href, sub_hrefs), use.names = FALSE)
 }
 
-add_duck_header <- function(con) {
-  DBI::dbExecute(con, "INSTALL httpfs; LOAD httpfs;")
+#' Initialize connection using duckdb and USGS API token
+#'
+#' Uses DBI and duckdb to establish a connection with a API_USGS_PAT X-Api-Key.
+#'
+#' @export
+#' @return Database connection
+#'
+#' @examplesIf is_dataRetrieval_user()
+#'
+#' \donttest{
+#' con <- initial_connection()
+#'
+#' DBI::dbDisconnect(con)
+#' }
+initial_connection <- function() {
+  con <- DBI::dbConnect(duckdb::duckdb(shared_home = TRUE))
 
   token <- Sys.getenv("API_USGS_PAT")
   if (token != "") {
-    DBI::dbExecute(
-      con,
-      paste0(
-        "
-CREATE SECRET http_headers (
-    TYPE http,
-    EXTRA_HTTP_HEADERS MAP {
-      'X-Api-Key': '",
-        Sys.getenv("API_USGS_PAT"),
-        "'
-    }
-  );
-"
-      )
+    DBI::dbExecute(con, "INSTALL httpfs; LOAD httpfs;")
+    extra_headers <- paste0(
+      "CREATE
+SECRET http_headers (
+TYPE http,
+EXTRA_HTTP_HEADERS MAP {
+  'X-Api-Key': '",
+      Sys.getenv("API_USGS_PAT"),
+      "'
+});"
     )
+
+    DBI::dbExecute(con, extra_headers)
   }
+  return(con)
 }

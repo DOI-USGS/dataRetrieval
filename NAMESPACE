@@ -25,7 +25,9 @@ export(importRDB1)
 export(importWQP)
 export(importWaterML1)
 export(importWaterML2)
+export(initial_connection)
 export(is_dataRetrieval_user)
+export(open_stac)
 export(pCodeToName)
 export(parameterCdFile)
 export(parse_WQP)
@@ -96,3 +98,4 @@ importFrom(data.table,
   .SD,
   data.table
 )
+importFrom(rlang,.data)

@@ -9,18 +9,17 @@ read_waterdata_daily_por(
   county_name = NA_character_,
   state_name = NA_character_,
   site_type = NA_character_,
-  start_datetime = NA_character_,
-  end_datetime = NA_character_,
-  datetime = NA_character_,
   site_type_code = NA_character_,
   hydrologic_unit_code = NA_character_,
   bbox = NA,
+  time_series_id = NA_character_,
+  parameter_code = NA_character_,
+  start_time = NA_character_,
+  end_time = NA_character_,
+  approval_status = NA_character_,
+  statistic_id = NA_character_,
   ...,
-  site_limits = 1000,
-  download = TRUE,
-  file_directory = tempdir(),
-  load_all = getOption("dataRetrieval.limit"),
-  showWarnings = TRUE
+  site_limits = 1000
 )
 }
 \arguments{
@@ -31,16 +30,6 @@ read_waterdata_daily_por(
 \item{state_name}{The name of the state or state equivalent in which the monitoring location is located.}
 
 \item{site_type}{A description of the hydrologic setting of the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/site-types/items}.}
-
-\item{start_datetime}{Earliest date. Either a date-time or an interval,
-open or closed. See Details below.}
-
-\item{end_datetime}{Latest date. Either a date-time or an interval, open
-or closed. See Details below.}
-
-\item{datetime}{Only return items that have a temporal property that
-intersects this value. Either a date-time or an interval, open or closed.
-See Details below.}
 
 \item{site_type_code}{A code describing the hydrologic setting of the monitoring location. A list of codes is available at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/site-types/items}.}
 
@@ -54,35 +43,28 @@ vector structured: c(xmin,ymin,xmax,ymax).
 Another way to think of it is c(Western-most longitude,
 Southern-most latitude, Eastern-most longitude, Northern-most longitude).}
 
+\item{time_series_id}{A unique identifier representing a single time series. This corresponds to the \code{id} field in the \code{time-series-metadata} endpoint.
+
+Multiple time_series_ids can be requested as a character vector.}
+
+\item{parameter_code}{Parameter codes are 5-digit codes used to identify the constituent measured and the units of measure. A complete list of parameter codes and associated groupings can be found at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/parameter-codes/items}.
+
+Multiple parameter_codes can be requested as a character vector.}
+
+\item{start_time}{Earliest time returned}
+
+\item{end_time}{Latest time returned}
+
+\item{approval_status}{Some of the data that you have obtained from this U.S. Geological Survey database may not have received Director's approval.  Any such data values are qualified as provisional and are subject to revision.  Provisional data are released on the condition that neither the USGS nor the United States Government may be held liable for any damages resulting from its use. This field reflects the approval status of each record, and is either "Approved", meaining processing review has been completed and the data is approved for publication, or "Provisional" and subject to revision. For more information about provisional data, go to \url{https://waterdata.usgs.gov/provisional-data-statement/}.}
+
+\item{statistic_id}{A code corresponding to the statistic an observation represents. Example codes include 00001 (max), 00002 (min), and 00003 (mean). A complete list of codes and their descriptions can be found at \url{https://api.waterdata.usgs.gov/ogcapi/v1/collections/statistic-codes/items}.
+
+Multiple statistic_ids can be requested as a character vector.}
+
 \item{\dots}{Not used.}
 
 \item{site_limits}{Set a limit to how many sites will be returned
 from the STAC search.}
-
-\item{download}{Logical, whether to download the files or not. Default
-is \code{TRUE}.}
-
-\item{file_directory}{Location to download files.}
-
-\item{load_all}{Logical, whether to load data or not. Default is \code{TRUE}.}
-
-\item{showWarnings}{Logical, whether to show a warning if the file_directory
-already contains data for the daily collection. Default is \code{TRUE}.}
-}
-\value{
-What is returned depends on the arguments download and load_all.
-\itemize{
-\item If download = \code{TRUE} and load_all = \code{TRUE}, the data has been downloaded
-locally, and the data is returned as a data frame. An attribute is
-attached to the data frame that shows the path to the downloaded data.
-\item If download = \code{FALSE} and load_all = \code{TRUE}, the data will be returned
-as a data frame. Under the hood, a duckdb connection was created to hit
-the STAC service endpoints.
-\item If download = \code{TRUE} and load_all = \code{FALSE}, the data has been
-downloaded locally. The path to the local data is returned.
-\item If download = \code{FALSE} and load_all = \code{FALSE}, the url(s) to the data
-are returned.
-}
 }
 \description{
 Using the STAC Water Data service, get full period of record
@@ -110,124 +92,34 @@ daily data, which returns time values in local dates.
 
 \donttest{
 
-raw_data_store <- file.path(tempdir(), "test_1")
-dir.create(raw_data_store, showWarnings = FALSE)
-# Download and load data:
 df <- read_waterdata_daily_por(
-    monitoring_location_id = "USGS-0208458892",
-    file_directory = raw_data_store,
-    download = TRUE,
-    load_all = TRUE,
-    showWarnings = FALSE
-)
-nrow(df)
-attr(df, "download_location")
-
-# Just load data:
-df_no_download <- read_waterdata_daily_por(
-    monitoring_location_id = "USGS-0208458892",
-    download = FALSE,
-    load_all = TRUE
-)
-nrow(df_no_download) == nrow(df)
-
-# Just download returns path to partition folder:
-df_only_download <- read_waterdata_daily_por(
-    monitoring_location_id = "USGS-0208458892",
-    download = TRUE,
-    file_directory = raw_data_store,
-    load_all = FALSE,
-    showWarnings = FALSE
-)
-df_only_download
-
-# Don't download or load returns URLs to data:
-feature_urls <- read_waterdata_daily_por(
-    monitoring_location_id = "USGS-0208458892",
-    download = FALSE,
-    load_all = FALSE
-)
-feature_urls
-
-# Multiple features:
-monitoring_location_id <- c("USGS-01435000", "USGS-05406360")
-
-df <- read_waterdata_daily_por(
-    monitoring_location_id = monitoring_location_id,
-    download = FALSE,
-    load_all = TRUE
+    monitoring_location_id = "USGS-0208458892"
 )
 nrow(df)
 
-# Download data, return path to partitioned folder:
-files_explore <- read_waterdata_daily_por(
-    monitoring_location_id = monitoring_location_id,
-    file_directory = raw_data_store,
-    download = TRUE,
-    load_all = FALSE,
-    showWarnings = FALSE
+# Multiple sites:
+df_2 <- read_waterdata_daily_por(
+    monitoring_location_id = c("USGS-01435000", "USGS-05406360")
 )
+nrow(df_2)
 
-# Example of how to use partitioned files:
-# These examples will connect to all the daily data in "raw_data_store":
-con <- DBI::dbConnect(duckdb::duckdb(shared_home = TRUE))
-df_explore <- dplyr::tbl(con,
-                         paste0(files_explore,
-                          "/**/*.parquet")) |>
-   dplyr::mutate(value = as.numeric(value)) |>
-   dplyr::filter(
-      parameter_code == "00095",
-      approval_status == "Approved",
-      time > as.POSIXct("2015-01-01"),
-      value > 2000
-     ) |>
-   dplyr::collect()
-
-df_summarize <- dplyr::tbl(con,
-                         paste0(files_explore,
-                          "/**/*.parquet")) |>
-   dplyr::mutate(value = as.numeric(value),
-                 month = lubridate::month(time)) |>
-   dplyr::summarize(
-      min_val = min(value, na.rm = TRUE),
-      mean_val = mean(value, na.rm = TRUE),
-      max_val = max(value, na.rm = TRUE),
-      .by = c(monitoring_location_id, parameter_code, month)
-      ) |>
-   dplyr::arrange(monitoring_location_id, parameter_code, month) |>
-   dplyr::collect()
-
-DBI::dbDisconnect(con)
-
-# HUC example:
-# Here's a GOTCHA!
-# If you keep saving the files in the same directory,
-# when you pull the data later, if you just generally pull
-# from that file, you will get all the data you've ever downloaded,
-# not just these 2 HUCs. Therefore, you will want to make a new
-# directory when you are specific filters you will be using:
-raw_HUC <- file.path(tempdir(), "test_2")
-dir.create(raw_HUC, showWarnings = FALSE)
-huc_files <- read_waterdata_daily_por(
-    hydrologic_unit_code = c("0709000203", "0709000204"),
-    file_directory = raw_HUC,
-    download = TRUE,
-    load_all = FALSE,
-    showWarnings = FALSE
+# Multiple sites, limited parameter_codes:
+df_3 <- read_waterdata_daily_por(
+    monitoring_location_id = c("USGS-01435000", "USGS-05406360"),
+    parameter_code = c("00060", "00065")
 )
+nrow(df_3)
+range(df_3$time)
 
-con <- DBI::dbConnect(duckdb::duckdb(shared_home = TRUE))
-
-huc_explore <- dplyr::tbl(con,
-                         paste0(huc_files,
-                          "/**/*.parquet")) |>
-   dplyr::mutate(value = as.numeric(value)) |>
-   dplyr::filter(
-      parameter_code \%in\% c("00060", "00065")
-     ) |>
-   dplyr::collect()
-
-DBI::dbDisconnect(con)
+# Multiple sites, limited parameter_codes, limited time:
+df_4 <- read_waterdata_daily_por(
+    monitoring_location_id = c("USGS-01435000", "USGS-05406360"),
+    parameter_code = c("00060", "00065"),
+    start_time = as.POSIXct("1960-01-01", tz = "UTC"),
+    approval_status = "Approved"
+)
+nrow(df_4)
+range(df_4$time)
 }
 \dontshow{\}) # examplesIf}
 }

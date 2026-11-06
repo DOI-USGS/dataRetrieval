@@ -220,6 +220,7 @@ download_stac <- function(
   features,
   file_directory = tempdir(),
   output_returned = c("partition_folder"),
+  # file_structure = c("partitioned", "original"),
   showWarnings = TRUE
 ) {
   match.arg(output_returned, c("partition_folder", "targets"))
