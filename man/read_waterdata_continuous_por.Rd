@@ -61,6 +61,10 @@ Multiple parameter_codes can be requested as a character vector.}
 
 \item{site_limits}{Set a limit to how many sites will be returned
 from the STAC search.}
+
+\item{memory_MB_limit}{If the returned data is roughly bigger than this argument,
+then the function will error out. Increasing this value will allow bigger queries
+to be retrieved.}
 }
 \description{
 Using the STAC Water Data service, get full period of record

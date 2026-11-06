@@ -19,7 +19,8 @@ read_waterdata_daily_por(
   approval_status = NA_character_,
   statistic_id = NA_character_,
   ...,
-  site_limits = 1000
+  site_limits = 1000,
+  memory_MB_limit = 1000
 )
 }
 \arguments{
@@ -63,7 +64,11 @@ Multiple statistic_ids can be requested as a character vector.}
 
 \item{\dots}{Not used.}
 
-\item{site_limits}{Set a limit to how many sites will be returned
+\item{site_limits}{Set a limit to how many sites will be returned}
+
+\item{memory_MB_limit}{If the returned data is roughly bigger than this argument,
+then the function will error out. Increasing this value will allow bigger queries
+to be retrieved.
 from the STAC search.}
 }
 \description{
