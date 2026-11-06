@@ -140,6 +140,8 @@ reference:
       - read_waterdata_continuous_por
       - search_stac
       - download_stac
+      - initial_connection
+      - open_stac
       - fix_continuous_overlap
   - title: Helper functions
     contents:
